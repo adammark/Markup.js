@@ -378,6 +378,7 @@ var result = Mark.up(template, context);
 ```
 
 You can even pipe entire includes, like so:
+
 ``` javascript
 var template = "Hello! {{greeting|upcase}}";
 
