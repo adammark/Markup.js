@@ -206,61 +206,161 @@ Markup.js comes with more than 30 built-in pipes. Below, the first
 argument is always the piped value itself:
 
 `empty` (obj): returns obj if empty, else returns false
+
 `notempty` (obj): returns obj if notempty, else returns false
+
 `more` (a, b): returns a if a > b, else returns false
+
 `less` (a, b): returns a if a < b, else returns false
+
 `ormore` (a, b): returns a if a >= b, else returns false
+
 `orless` (a, b): returns a if a <= b, else returns false
+
 `equals` (a, b): returns a if a == b, else returns false
+
 `notequals` (a, b): returns a if a != b, else returns false
+
 `blank` (str, val): returns val if str is false/null/undefined, else returns str
+
 `like` (str, pattern): returns true if regex pattern matches str, else returns false
+
 `notlike` (str, pattern): opposite of `like`
+
 `upcase` (str): returns str upper-cased
+
 `downcase` (str): returns str down-cased
+
 `chop` (str, n): chops str to n chars followed by "..." if n > str.length
+
 `trim` (str): returns str with leading and trailing white space removed
+
 `pack` (str): returns str with white space packed. ex: `" a  b " > "a b"`
+
 `round` (num): returns num rounded
+
 `style` (str, classes): returns `<span class="classes">str</span>`
+
 `clean` (str): returns str with HTML tags removed
+
 `sub` (str, pattern, replacement): returns str with all instances of pattern replaced
+
 `length` (obj): returns length of string or array
+
 `size` (obj): alias to `length`
+
 `reverse` (arr): returns arr reversed
+
 `join` (arr, separator): returns arr joined by separator
+
 `limit` (arr, count): returns the first count elements of arr
+
 `slice` (arr, start, length): returns a slice of arr (start to start+length)
+
 `split` (str, separator): returns a string split by separator
+
 `choose` (bool, iffy, elsy): returns iffy if bool is true, otherwise returns elsy
+
 `sort` (arr, prop): returns arr sorted. optionally sort by property prop 
+
 `fix` (num, n): returns num to n decimal places
+
 `url` (str): returns str URL-encoded
+
 `call` (obj, fn, arg1, arg2...): power pipe! calls obj fn with zero or more args
 
-*Note arrays are copied before sorting or slicing*
+*Note: Arrays are copied before sorting or slicing*
 
 ### Writing custom pipes
 
-TODO
+You can add your own pipes to Markup.js. Here's an example:
+
+``` javascript
+Mark.pipes.repeat = function (str, count, separator) {
+    var a = [];
+    for (var i = 0, j = count || 2; i < j; i++) {
+        a.push(str);
+    }
+    return a.join(separator || "");
+};
+
+var template = "{{name|repeat>3>, }}!";
+
+var result = Mark.up(template, {name:"Beetlejuice"});
+// "Beetlejuice, Beetlejuice, Beetlejuice!"
+
+```
+
+Alternatively, you can pass pipes into the optional `options` 
+argument of `Mark.up`:
+
+``` javascript
+var options = {
+    pipes: {"repeat": repeat}
+};
+
+var result = Mark.up(template, context, options);
+```
 
 ## Conditional statements
 
-TODO
+If statements follow the same basic rules as above:
 
-*Nested if statements are not currently supported.*
+``` javascript
+var template = "{{if age|more>75}} John is a ripe old {{age|round}}! {{/if}}"
+```
 
-*If/else statements are not currently supported.*
+If the `{{if}}` statement resolves to `true`, the contents will be evaluated.
+
+Pipes can be chained in if statements as well:
+
+``` javascript
+var template = "{{if age|more>50|less>75}} John is middle aged. {{/if}}"
+```
+
+*Note: Nested if statements are not currently supported.*
+
+*Note: If/else statements are not currently supported.*
 
 ## Includes
 
-TODO
+You can include templates in other templates. For example:
 
-TODO
+``` javascript
+Mark.includes.greeting = "My name is {{name|upcase}}!";
+
+var template = "Hello! {{greeting}}";
+
+var result = Mark.up(template, context);
+// "Hello! My name is JOHN DOE!"
+```
+
+You can even pipe entire includes, like so:
+``` javascript
+var template = "Hello! {{greeting|upcase}}";
+
+var result = Mark.up(template, context);
+// "Hello! MY NAME IS JOHN DOE!"
+```
+
+As with custom pipes, includes can be passed into the optional `options` 
+argument of `Mark.up`:
+
+``` javascript
+var options = {
+    pipes: {"repeat": repeat},
+    includes: {
+        "header": header,
+        "footer": footer
+    }
+};
+
+var result = Mark.up(template, context, options);
+```
 
 ## Compatibility
 
-TODO
+TODO Chrome 13+, Safari 5+, etc.
 
 ## License
 
