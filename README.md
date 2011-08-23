@@ -2,17 +2,19 @@
 
 Markup.js is a simple yet surprisingly powerful template system for JavaScript.
 
-## Why Markup.js
+## Why Markup.js?
 
-TODO 
+Modern web apps are built largely with JavaScript. Markup.js takes the
+pain out of compiling long strings of text from structured data and
+helps you separate control logic from view logic.
 
 ## Usage
 
 Include `<script src="markup.min.js"></script>`. With gzip, it's only *1.2KB!*
 
 Markup.js has a single function: `Mark.up(template, context)`. Here's a basic
-example that shows how the `template` string is injected with properties of the 
-`context` object:
+example that shows how `template`, a string, is injected with properties of 
+`context`, an object:
 
 ``` javascript
 var context = {
@@ -43,7 +45,7 @@ var result = Mark.up(template, context); // "Hi, Adam!"
 
 ## Nested objects
 
-Object hierarchies can be expressed with simple dot notation. For example:
+Object hierarchies can be expressed in dot notation. For example:
 
 ``` javascript
 var context = {
@@ -143,6 +145,7 @@ var context = {
     gender: "male",
     age: 33.33,
     brothers: ["Jack", "Joe", "Jim"],
+    sisters: [{name: "Jill"}, {name: "Jen"}],
     jiggy: true
 };
 
@@ -170,6 +173,24 @@ var template = "John is jiggy: {{jiggy|choose>Yes>No}}";
 
 var result = Mark.up(template, context);
 // "John is jiggy: Yes"
+```
+
+Pipes can be applied to any kind of data structure:
+
+``` javascript
+// sort an array of strings, then upcase each string
+var template = "<ul>{{brothers|sort}}<li>{{.|upcase}}</li>{{/brothers}}</ul>";
+
+var result = Mark.up(template, context);
+// "<ul><li>JACK</li><li>JIM</li><li>JOE</li></ul>"
+```
+
+``` javascript
+// reverse an array of objects, then chop each name property
+var template = "<ul>{{sisters|reverse}}<li>{{name|chop>2}}</li>{{/sisters}}</ul>";
+
+var result = Mark.up(template, context);
+// "<ul><li>Je...</li><li>Ji...</li></ul>"
 ```
 
 ### Chaining pipes
@@ -332,8 +353,8 @@ var result = Mark.up(template, {name:"Beetlejuice"});
 
 ```
 
-Alternatively, you can pass pipes into the optional `options` 
-argument of `Mark.up`:
+Alternatively, you can pass pipes into the optional `options` argument
+of `Mark.up`:
 
 ``` javascript
 var options = {
@@ -355,8 +376,8 @@ var template = "{{if age|more>75}} John is a ripe old {{age|round}}! {{/if}}"
 ```
 
 If the `{{if}}` statement is true, the child contents will be evaluated.
-(The context does not change inside the {{if}} statement. In the above
-example, we still have access to `{{age}}` and sibling properties.)
+(Variables inside the `{{if}}` statement are in the same context as the
+statement itself.)
 
 Pipes can be chained in if statements as well:
 
@@ -384,7 +405,7 @@ var result = Mark.up(template, context);
 // "Hello! My name is JOHN DOE!"
 ```
 
-You can even pipe the output of the included template itself:
+You can even pipe the output of an included template:
 
 ``` javascript
 var template = "Hello! {{greeting|upcase}}";
@@ -423,11 +444,12 @@ myapp.templates = {
 };
 ```
 
-You can use jQuery to inject an evaluated template into an element
-in your document:
+You can use jQuery to inject an evaluated template into a document
+element:
 
 ``` javascript
 var template = myapp.templates.user_profile;
+
 var context = user.profileInfo;
 
 $("#sidebar").html(Mark.up(template, context));
@@ -456,7 +478,7 @@ If strings aren't your style, you can embed templates inside HTML
 ... and then reference them by ID:
 
 ``` javascript
-var template = document.getElementById("sidebar_tpl").innerText;
+var template = document.getElementById("sidebar_tpl").innerHTML;
 ```
 
 ## Compatibility
