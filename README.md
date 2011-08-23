@@ -4,9 +4,8 @@ Markup.js is a simple yet surprisingly powerful template system for JavaScript.
 
 ## Why Markup.js?
 
-Modern web apps are built largely with JavaScript. Markup.js takes the
-pain out of compiling long strings of text from structured data and
-helps you separate control logic from view logic.
+Markup.js takes the pain out of converting structured data into markup
+&mdash; plus it's fun to use!
 
 ## Usage
 
@@ -156,7 +155,7 @@ var result = Mark.up(template, context);
 ```
 
 A pipe can accept arguments. For example, the `blank` pipe accepts a
-value to display if the piped variable is null, false or undefined:
+value to display if the input variable is null, false or undefined:
 
 ``` javascript
 var template = "Phone: {{phone|blank>N/A}}";
@@ -364,7 +363,9 @@ var options = {
 var result = Mark.up(template, context, options);
 ```
 
-More pipes are available in `src/pipes`. (These are not included
+### Pipe library
+
+Additional pipes are available in `src/pipes`. (These are not included
 in markup.js.)
 
 ## Conditional statements
@@ -376,17 +377,18 @@ var template = "{{if age|more>75}} John is a ripe old {{age|round}}! {{/if}}"
 ```
 
 If the `{{if}}` statement is true, the child contents will be evaluated.
-(Variables inside the `{{if}}` statement are in the same context as the
-statement itself.)
+(Variables inside the `{{if}}` statement are evaluated in the same
+context as the `{{if}}` statement itself.)
 
-Pipes can be chained in if statements as well:
+Pipes can be chained in `{{if}}` statements, allowing for complex AND
+expressions:
 
 ``` javascript
 var template = "{{if age|more>50|less>75}} John is middle aged. {{/if}}"
 ```
 
-When piping array values, the last pipe should always return its 
-piped input (if true) or false (if false).
+When piping array values, the last pipe should return either its piped
+input (if true) or false (if false).
 
 *Note: Nested if statements are not currently supported.*
 
