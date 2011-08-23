@@ -53,7 +53,7 @@ Mark.up = function (template, context, options) {
     while ((tag = tags[i++])) {
         selfy = tag.indexOf("/}}") > -1;
         prop = tag.substr(2, tag.length - (selfy ? 5 : 4));
-        testy = prop.indexOf("if") === 0;
+        testy = prop.indexOf("if ") === 0;
         filters = prop.split("|").splice(1);
         prop = prop.replace(/^if/, "").split("|").shift().trim();
         endtag = "{{/" + (testy ? "if" : prop.split("|")[0]) + "}}";
