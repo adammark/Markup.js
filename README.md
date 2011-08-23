@@ -115,7 +115,7 @@ var result = Mark.up(template, context);
 // "<ul><li>Jill</li><li>Jen</li></ul>"
 ```
 
-Dot notation applies here as well:
+Dot notation can be used here as well:
 
 ``` javascript
 var context = {
@@ -267,13 +267,50 @@ argument is always the piped value itself:
 
 `url` (str): returns str URL-encoded
 
-`call` (obj, fn, arg1, arg2...): power pipe! calls obj fn with zero or more args
+`call` (obj, fn, arg1, arg2...): power pipe! calls fn on obj with zero or more args
 
 *Note: Arrays are copied before sorting or slicing*
 
+### Power pipe
+
+With great power comes great responsibility.  Thus the `call` pipe,
+which allows you to call a function on any object and pass it zero or
+more scalar values:
+
+``` javascript
+var context = {
+    num: 1.23
+};
+
+var template = "{{num|call>toPrecision>5}}";
+
+var result = Mark.up(template, context);
+// "1.2300"
+```
+
+``` javascript
+function Dog() {
+    var greeting = "Woof!";
+
+    this.bark = function (name) {
+        return greeting;
+    };
+}
+
+var context = {
+    doggy: new Dog()
+};
+
+var template = "{{doggy|call>bark}}";
+
+var result = Mark.up(template, context);
+// "Woof!"
+```
+
 ### Writing custom pipes
 
-You can add your own pipes to Markup.js. Here's an example:
+You can add your own pipes to Markup.js. The first argument should always
+be the piped value. For example:
 
 ``` javascript
 Mark.pipes.repeat = function (str, count, separator) {
@@ -310,13 +347,18 @@ If statements follow the same basic rules as above:
 var template = "{{if age|more>75}} John is a ripe old {{age|round}}! {{/if}}"
 ```
 
-If the `{{if}}` statement resolves to `true`, the contents will be evaluated.
+If the `{{if}}` statement resolves to `true`, the child contents will be 
+evaluated. (The context does not change inside the IF statement. In the 
+above example, we still have access to `{{age}}` and sibling properties.)
 
 Pipes can be chained in if statements as well:
 
 ``` javascript
 var template = "{{if age|more>50|less>75}} John is middle aged. {{/if}}"
 ```
+
+When piping array values, the last pipe should always return its 
+piped input (if true) or false (if false).
 
 *Note: Nested if statements are not currently supported.*
 
