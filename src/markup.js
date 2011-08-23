@@ -139,11 +139,11 @@ Mark.pipes = {
     notequals: function (a, b) {
         return a.toString() !== b.toString() ? a : false;
     },
-    like: function (str, val) {
-        return new RegExp(val).test(str) ? str : false;
+    like: function (str, pattern) {
+        return new RegExp(pattern).test(str) ? str : false;
     },
-    notlike: function (str, val) {
-        return !Mark.pipes.like(str, val) ? str : false;
+    notlike: function (str, pattern) {
+        return !Mark.pipes.like(str, pattern) ? str : false;
     },
     upcase: function (str) {
         return String(str).toUpperCase();
