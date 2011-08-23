@@ -442,7 +442,7 @@ document.getElementById("sidebar").innerHTML = Mark.up(template, context);
 If strings aren't your style, you can embed templates inside HTML 
 `<script>` tags ...
 
-``` javascript
+``` html
 <script type="text/markupjs" id="sidebar_tpl">
     <div>
         Name: {{name.last}}, {{name.first}}
