@@ -82,7 +82,7 @@ var result = Mark.up(template, context);
 // "ZIP: 12345-6789"
 ```
 
-*Note (TODO)*
+TODO note on self-closed tags
 
 ## Loops
 
@@ -343,9 +343,12 @@ var options = {
 var result = Mark.up(template, context, options);
 ```
 
+More pipes are available in `src/pipes`. (These are not included
+in markup.js.)
+
 ## Conditional statements
 
-If statements follow the same basic rules as above:
+"If" statements follow the same basic rules as above:
 
 ``` javascript
 var template = "{{if age|more>75}} John is a ripe old {{age|round}}! {{/if}}"
@@ -381,7 +384,7 @@ var result = Mark.up(template, context);
 // "Hello! My name is JOHN DOE!"
 ```
 
-You can even pipe the output of the included template, like so:
+You can even pipe the output of the included template itself:
 
 ``` javascript
 var template = "Hello! {{greeting|upcase}}";
@@ -405,9 +408,65 @@ var options = {
 var result = Mark.up(template, context, options);
 ```
 
+*Be careful to avoid naming conflicts with other variables names.*
+
+## Implementation
+
+HTML templates tend to be longer than the examples shown here. In your app,
+you might consider putting all your templates into a single JS file:
+
+``` javascript
+// templates.js
+myapp.templates = {
+    "user_profile": "...",
+    "user_sidebar": "...",
+};
+```
+
+You can use jQuery to inject an evaluated template into an element
+in your document:
+
+``` javascript
+var template = myapp.templates.user_profile;
+var context = user.profileInfo;
+
+$("#sidebar").html(Mark.up(template, context));
+```
+
+Or, without jQuery:
+
+``` javascript
+document.getElementById("sidebar").innerHTML = Mark.up(template, context);
+```
+
+If strings aren't your style, you can embed templates inside HTML 
+`<script>` tags ...
+
+``` javascript
+<script type="text/markupjs" id="sidebar_tpl">
+    <div>
+        Name: {{name.last}}, {{name.first}}
+    </div>
+    <div>
+        Addr: {{addr}}{{street}}<br>{{city}},{{state}} {{zip}}{{/addr}}
+    </div>
+</script>
+```
+
+... and then reference them by ID:
+
+``` javascript
+var template = document.getElementById("sidebar_tpl").innerText;
+```
+
 ## Compatibility
 
 TODO Chrome 13+, Safari 5+, etc.
+
+## Next Steps
+
+- Nested IF expressions
+- ELSE expressions
 
 ## License
 
