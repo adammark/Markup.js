@@ -269,7 +269,7 @@ argument is always the piped value itself:
 
 `call` (obj, fn, arg1, arg2...): power pipe! calls fn on obj with zero or more args
 
-*Note: Arrays are copied before sorting or slicing*
+*Note: Arrays are copied before sorting or slicing.*
 
 ### Power pipe
 
@@ -292,8 +292,12 @@ var result = Mark.up(template, context);
 function Dog() {
     var greeting = "Woof!";
 
-    this.bark = function (name) {
-        return greeting;
+    this.bark = function (count) {
+        var response = [];
+        for (var i = 0; i < count; i++) {
+            response.push(greeting);
+        }
+        return response.join(" ");
     };
 }
 
@@ -301,10 +305,10 @@ var context = {
     doggy: new Dog()
 };
 
-var template = "{{doggy|call>bark}}";
+var template = "{{doggy|call>bark>3}}";
 
 var result = Mark.up(template, context);
-// "Woof!"
+// "Woof! Woof! Woof!"
 ```
 
 ### Writing custom pipes
@@ -347,9 +351,9 @@ If statements follow the same basic rules as above:
 var template = "{{if age|more>75}} John is a ripe old {{age|round}}! {{/if}}"
 ```
 
-If the `{{if}}` statement resolves to `true`, the child contents will be 
-evaluated. (The context does not change inside the IF statement. In the 
-above example, we still have access to `{{age}}` and sibling properties.)
+If the `{{if}}` statement is true, the child contents will be evaluated.
+(The context does not change inside the {{if}} statement. In the above
+example, we still have access to `{{age}}` and sibling properties.)
 
 Pipes can be chained in if statements as well:
 
@@ -366,7 +370,7 @@ piped input (if true) or false (if false).
 
 ## Includes
 
-You can include templates in other templates. For example:
+You can include templates inside other templates. For example:
 
 ``` javascript
 Mark.includes.greeting = "My name is {{name|upcase}}!";
@@ -377,7 +381,7 @@ var result = Mark.up(template, context);
 // "Hello! My name is JOHN DOE!"
 ```
 
-You can even pipe entire includes, like so:
+You can even pipe the output of the included template, like so:
 
 ``` javascript
 var template = "Hello! {{greeting|upcase}}";
@@ -386,7 +390,7 @@ var result = Mark.up(template, context);
 // "Hello! MY NAME IS JOHN DOE!"
 ```
 
-As with custom pipes, includes can be passed into the optional `options` 
+As with custom pipes, includes can be passed into the optional `options`
 argument of `Mark.up`:
 
 ``` javascript
