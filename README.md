@@ -5,7 +5,7 @@ Markup.js is a simple yet surprisingly powerful template system for JavaScript.
 ## Why Markup.js?
 
 Markup.js takes the pain out of converting structured data into markup
-&mdash; plus it's fun to use!
+or other text formats &mdash; plus it's fun to use!
 
 ## Usage
 
@@ -155,7 +155,7 @@ var result = Mark.up(template, context);
 ```
 
 A pipe can accept arguments. For example, the `blank` pipe accepts a
-value to display if the input variable is null, false or undefined:
+value to display if the piped value is null, false or undefined:
 
 ``` javascript
 var template = "Phone: {{phone|blank>N/A}}";
