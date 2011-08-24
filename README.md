@@ -243,9 +243,9 @@ argument is always the piped value itself:
 
 `blank` (str, val): returns val if str is false/null/undefined, else returns str
 
-`like` (str, pattern): returns true if regex pattern matches str, else returns false
+`like` (str, pattern): returns str if regex pattern matches str, else returns false
 
-`notlike` (str, pattern): opposite of `like`
+`notlike` (str, pattern): returns str if regex pattern does not match str, else returns false
 
 `upcase` (str): returns str upper-cased
 
