@@ -10,6 +10,8 @@ var Mark = {
 };
 
 Mark.up = function (template, context, options) {
+    context = context || {};
+
     var tags = template.match(/\{\{\w*[^}]+\w*\}\}/g) || [],
         tag,
         endtag,

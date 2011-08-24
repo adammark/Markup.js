@@ -104,7 +104,18 @@ describe("Markup core spec", function () {
         result = Mark.up(template, context);
         expect(result).toEqual("First sister: JILL");
     });
-    
+
+    it("resolves template with no context object", function () {
+        template = "La la la";
+        result = Mark.up(template);
+        expect(result).toEqual("La la la");
+
+        // should fail gracefully
+        template = "La la {{la}}";
+        result = Mark.up(template);
+        expect(result).toEqual("La la ???");
+    });
+
     it("resolves single pipe on scalar value", function () {
         template = "gender: {{gender|upcase}}";
         result = Mark.up(template, context);
