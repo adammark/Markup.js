@@ -91,6 +91,20 @@ describe("Markup core spec", function () {
         //expect(result).toEqual("Jake");
     });
 
+    it("resolves array index notation", function () {
+        template = "First brother: {{brothers.0}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("First brother: Jack");
+
+        template = "First sister: {{sisters.0.name}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("First sister: Jill");
+
+        template = "First sister: {{sisters.0.name|upcase}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("First sister: JILL");
+    });
+    
     it("resolves single pipe on scalar value", function () {
         template = "gender: {{gender|upcase}}";
         result = Mark.up(template, context);
