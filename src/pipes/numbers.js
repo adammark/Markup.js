@@ -1,9 +1,17 @@
 Mark.pipes.dollars = function (num) {
-    var n = num.toFixed(2).toString(), i = n.indexOf(".");
+    var n = (+num).toFixed(2).toString(), i = n.indexOf(".");
     while ((i -= 3) > 0) {
         n = n.substr(0, i) + "," + n.substr(i);
     }
     return "$" + n;
+};
+
+Mark.pipes.euros = function (num) {
+    var n = (+num).toFixed(2).toString(), i = n.indexOf(".");
+    while ((i -= 3) > 0) {
+        n = n.substr(0, i) + "." + n.substr(i);
+    }
+    return n.replace(/\.(\d{2})$/, ",$1") + " \u20AC";
 };
 
 Mark.pipes.phone = function (str) {
