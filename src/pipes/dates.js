@@ -54,5 +54,26 @@ Mark.pipes.datetime = function (date, format) {
         .replace(/%y%/, Y.toString().substr(-2));
 };
 
-//Mark.pipes.timeago = function (date) {
-//};
+Mark.pipes.timeago = function (date) {
+    var out = "";
+    var diff = new Date().getTime() - date.getTime();
+    var h = Math.floor(diff / 3600000);
+    var to_s = function (n, label) {
+        return Math.floor(n) + " " + label + (n > 1 ? "s" : "") + " ago";
+    };
+
+    if (h === 0) {
+        h = Math.floor(diff / 60000);
+        out = h < 2 ? "Just now" : to_s(h, "minute");
+    } else if (h < 24) {
+        out = to_s(h, "hour");
+    } else if (h < 168) {
+        out = to_s(h / 24, "day");
+    } else if (h < 744) {
+        out = to_s(h / 168, "week");
+    } else {
+        out = to_s(h / 744, "month");
+    }
+
+    return out;
+};
