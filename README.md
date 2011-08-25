@@ -44,7 +44,7 @@ var result = Mark.up(template, context); // "Hi, Adam!"
 
 ## Nested objects
 
-Object hierarchies can be expressed in dot notation. For example:
+Object hierarchies can be expressed with dot notation. For example:
 
 ``` javascript
 var context = {
@@ -144,7 +144,7 @@ var result = Mark.up(template, context);
 // "<ul><li>Jill</li><li>Jen</li></ul>"
 ```
 
-Dot notation can be used here as well:
+Dot notation can be used inside an array as well:
 
 ``` javascript
 var context = {
@@ -553,8 +553,8 @@ myapp.templates = {
 ``` javascript
 // templates.es.js
 myapp.templates = {
-    hello: "¡Hola, {{user.name}}!",
-    goodbye: "¡Adios, {{user.name}}!"
+    hello: "\u00A1Hola, {{user.name}}!",
+    goodbye: "\u00A1Adios, {{user.name}}!"
 };
 ```
 
@@ -562,19 +562,19 @@ You can load the appropriate bundle with a <a
 href="http://yepnopejs.com/">conditional script loader</a> or other
 mechanism.
 
-For simple apps, it might be easier to include all the templates in
-a single data structure:
+For simple apps, it might be easier to include all the strings in a
+single data structure:
 
 ``` javascript
 // templates.js
 myapp.templates = {
     hello: {
         en: "Welcome, {{user.name}}!",
-        es: "¡Hola, {{user.name}}!"
+        es: "\u00A1Hola, {{user.name}}!"
     },
     goodbye: {
         en: "Bye, {{user.name}}!",
-        es: "¡Adios, {{user.name}}!"
+        es: "\u00A1Adios, {{user.name}}!"
     }
 };
 ```
@@ -612,9 +612,9 @@ var goodbye_html = Mark.up(templates.goodbye_tpl);
 
 ```
 
-Note the last example requires neither a context object (since
-`goodbye_msg` has no variables) nor options (since they were set in the
-previous function call).
+Notice the last example requires neither a context object (since
+`goodbye_msg` contains no variables) nor options (since they were set in
+the previous function call).
 
 *Internationalization requires careful planning, especially when dealing
 with context-sensitive strings. In the above example, `hello_msg`
