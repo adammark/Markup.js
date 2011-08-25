@@ -85,7 +85,7 @@ var result = Mark.up(template, context);
 
 ## Array notation
 
-Array items can be accessed individually by index. For example:
+Array members can be accessed by index. For example:
 
 ``` javascript
 var context = {
@@ -99,7 +99,7 @@ var result = Mark.up(template, context);
 // "Favorite color: Red"
 ```
 
-You can mix index notation and property notation in the same expression:
+You can mix array index notation and object property notation in the same expression:
 
 ``` javascript
 var context = {
@@ -144,7 +144,7 @@ var result = Mark.up(template, context);
 // "<ul><li>Jill</li><li>Jen</li></ul>"
 ```
 
-Dot notation can be used inside an array as well:
+Dot notation can be used inside loops as well:
 
 ``` javascript
 var context = {
@@ -292,7 +292,7 @@ argument is always the piped value itself:
 
 `trim` (str): returns str with leading and trailing white space removed
 
-`pack` (str): returns str with white space packed. ex: `" a  b " > "a b"`
+`pack` (str): returns str with white space trimmed and normalized
 
 `round` (num): returns num rounded
 
@@ -316,13 +316,15 @@ argument is always the piped value itself:
 
 `split` (str, separator): returns a string split by separator
 
-`choose` (bool, iffy, elsy): returns iffy if bool is true, otherwise returns elsy
+`choose` (bool, iffy, elsy): returns iffy if bool is true, else returns elsy
 
 `sort` (arr, prop): returns arr sorted. optionally sort by property prop 
 
 `fix` (num, n): returns num to n decimal places
 
 `url` (str): returns str URL-encoded
+
+`bool` (obj): casts obj to boolean, returning true or false
 
 `call` (obj, fn, arg1, arg2...): power pipe! calls fn on obj with zero or more args
 
@@ -394,7 +396,9 @@ of `Mark.up`:
 
 ``` javascript
 var options = {
-    pipes: {"repeat": repeat}
+    pipes: {
+        repeat: function () { ... }
+    }
 };
 
 var result = Mark.up(template, context, options);
@@ -458,7 +462,9 @@ argument of `Mark.up`:
 
 ``` javascript
 var options = {
-    pipes: {"repeat": repeat},
+    pipes: {
+        repeat: function () { ... }
+    },
     includes: {
         header: "<div> ... </div>",
         footer: "<div> ... </div>"

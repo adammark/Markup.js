@@ -210,6 +210,9 @@ Mark.pipes = {
     url: function (str) {
         return encodeURI(str);
     },
+    bool: function (obj) {
+        return !!obj;
+    },
     call: function (obj, fn) {
         return obj[fn].apply(obj, [].slice.call(arguments, 2));
     }

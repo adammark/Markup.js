@@ -548,6 +548,20 @@ describe("Markup core spec", function () {
         expect(result).toEqual("example.com?a=b%20c=d");
     });
 
+    it("resolves pipe: bool", function () {
+        template = "{{name.first|empty|bool}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("false");
+
+        template = "{{name.first|notempty|bool}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("true");
+
+        template = "{{brothers|empty|bool}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("false");
+    });
+
     it("resolves pipe: call", function () {
         function Doggy() {
             this.TYPE_MUTT = "Mutt";
