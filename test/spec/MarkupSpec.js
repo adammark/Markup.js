@@ -176,7 +176,7 @@ describe("Markup core spec", function () {
         expect(result).toEqual("brothers: JackJoeJim JackJoeJim");
     });
 
-    it("resolves self (dot) reference", function () {
+    it("resolves self reference in iteration", function () {
         template = "brothers: {{brothers}}+{{.}}+{{/brothers}}";
         result = Mark.up(template, context);
         expect(result).toEqual("brothers: +Jack++Joe++Jim+");
@@ -184,6 +184,23 @@ describe("Markup core spec", function () {
         template = "brothers: {{brothers}}+{{.|upcase}}+{{/brothers}}";
         result = Mark.up(template, context);
         expect(result).toEqual("brothers: +JACK++JOE++JIM+");
+    });
+
+    it("resolves object self reference", function () {
+        function Adam() {
+            this.getName = function () {
+                return "Adam";
+            };
+            this.age = 36;
+        };
+
+        template = "Name: {{adam}}{{.|call>getName}}{{/adam}}";
+        result = Mark.up(template, { adam: new Adam() });
+        expect(result).toEqual("Name: Adam");
+
+        template = "Num: {{num}}{{.|call>toFixed>1}}{{/num}}";
+        result = Mark.up(template, { num: 123 });
+        expect(result).toEqual("Num: 123.0");
     });
 
     it("resolves multiple pipes on simple array", function () {
