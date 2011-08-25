@@ -42,7 +42,7 @@ var context = new Person("Adam");
 var result = Mark.up(template, context); // "Hi, Adam!"
 ```
 
-## Nested objects
+## Object notation
 
 Object hierarchies can be expressed with dot notation. For example:
 
@@ -83,9 +83,9 @@ var result = Mark.up(template, context);
 // "ZIP: 12345-6789"
 ```
 
-## Arrays
+## Array notation
 
-Array members can be accessed by index. For example:
+Array items can be accessed individually by index. For example:
 
 ``` javascript
 var context = {
@@ -99,7 +99,7 @@ var result = Mark.up(template, context);
 // "Favorite color: Red"
 ```
 
-You can mix array index notation and object property notation:
+You can mix index notation and property notation in the same expression:
 
 ``` javascript
 var context = {
@@ -553,8 +553,8 @@ myapp.templates = {
 ``` javascript
 // templates.es.js
 myapp.templates = {
-    hello: "\u00A1Hola, {{user.name}}!",
-    goodbye: "\u00A1Adios, {{user.name}}!"
+    hello: "&iexcl;Hola, {{user.name}}!",
+    goodbye: "&iexcl;Adios, {{user.name}}!"
 };
 ```
 
@@ -570,11 +570,11 @@ single data structure:
 myapp.templates = {
     hello: {
         en: "Welcome, {{user.name}}!",
-        es: "\u00A1Hola, {{user.name}}!"
+        es: "&iexcl;Hola, {{user.name}}!"
     },
     goodbye: {
         en: "Bye, {{user.name}}!",
-        es: "\u00A1Adios, {{user.name}}!"
+        es: "&iexcl;Adios, {{user.name}}!"
     }
 };
 ```
