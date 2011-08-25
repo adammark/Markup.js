@@ -83,11 +83,39 @@ var result = Mark.up(template, context);
 // "ZIP: 12345-6789"
 ```
 
-TODO note on self-closed tags
+## Arrays
+
+Array members can be accessed by index. For example:
+
+``` javascript
+var context = {
+    name: "John Doe",
+    colors: ["Red", "Blue", "Green"]
+};
+
+var template = "Favorite color: {{colors.0}}";
+
+var result = Mark.up(template, context);
+// "Favorite color: Red"
+```
+
+You can mix array index notation and object property notation:
+
+``` javascript
+var context = {
+    name: "John Doe",
+    friends: [{name: "Bob"}, {name: "Fred"}]
+};
+
+var template = "Best friend: {{friends.0.name}}";
+
+var result = Mark.up(template, context);
+// "Best friend: Bob"
+```
 
 ## Loops
 
-Arrays are expressed in the same fashion. The special notation `{{.}}` 
+If a tag resolves to an array, the array is iterated. A single dot
 refers to the current iteration context:
 
 ``` javascript
@@ -101,8 +129,8 @@ var template = "<ul>{{brothers}}<li>{{.}}</li>{{/brothers}}</ul>";
 var result = Mark.up(template, context);
 // "<ul><li>Jack</li><li>Joe</li><li>Jim</li></ul>"
 ```
-
-In arrays of objects, object values are expressed by property name:
+When iterating through an array of objects, the object's properties can
+be referenced by name:
 
 ``` javascript
 var context = {
@@ -143,6 +171,7 @@ var context = {
     phone: null,
     gender: "male",
     age: 33.33,
+    vitals: [68, 162.5, "AB"],
     brothers: ["Jack", "Joe", "Jim"],
     sisters: [{name: "Jill"}, {name: "Jen"}],
     jiggy: true
@@ -175,6 +204,14 @@ var result = Mark.up(template, context);
 ```
 
 Pipes can be applied to any kind of data structure:
+
+``` javascript
+// get the second value in an array and round it
+var template = "Weight: {{vitals.1|round}} lbs.";
+
+var result = Mark.up(template, context);
+// "Weight: 163 lbs."
+```
 
 ``` javascript
 // sort an array of strings, then upcase each string
@@ -295,7 +332,7 @@ argument is always the piped value itself:
 
 With great power comes great responsibility.  Thus the `call` pipe,
 which allows you to call a function on any object and pass it zero or
-more scalar values:
+more scalar arguments:
 
 ``` javascript
 var context = {
@@ -423,8 +460,8 @@ argument of `Mark.up`:
 var options = {
     pipes: {"repeat": repeat},
     includes: {
-        "header": header,
-        "footer": footer
+        header: "<div> ... </div>",
+        footer: "<div> ... </div>"
     }
 };
 
@@ -441,8 +478,8 @@ you might consider putting all your templates into a single JS file:
 ``` javascript
 // templates.js
 myapp.templates = {
-    "user_profile": "...",
-    "user_sidebar": "...",
+    user_details: "<div> ... </div>",
+    user_sidebar: "<div> ... </div>"
 };
 ```
 
@@ -450,9 +487,9 @@ You can use jQuery to inject an evaluated template into a document
 element:
 
 ``` javascript
-var template = myapp.templates.user_profile;
+var template = myapp.templates.user_sidebar;
 
-var context = user.profileInfo;
+var context = user.data;
 
 $("#sidebar").html(Mark.up(template, context));
 ```
@@ -463,25 +500,125 @@ Or, without jQuery:
 document.getElementById("sidebar").innerHTML = Mark.up(template, context);
 ```
 
-If strings aren't your style, you can embed templates inside HTML 
-`<script>` tags ...
-
-``` html
-<script type="text/markupjs" id="sidebar_tpl">
-    <div>
-        Name: {{name.last}}, {{name.first}}
-    </div>
-    <div>
-        Addr: {{addr}}{{street}}<br>{{city}},{{state}} {{zip}}{{/addr}}
-    </div>
-</script>
-```
-
-... and then reference them by ID:
+You can also load templates as plain text via AJAX. Here's how to do it
+with jQuery:
 
 ``` javascript
-var template = document.getElementById("sidebar_tpl").innerHTML;
+$.get("templates/sidebar.txt", function (txt) {
+    // do stuff
+});
 ```
+
+The right strategy depends on many factors, including the speed of your
+app, the number of templates you're handling, and the cumulative weight
+of the templates. To reduce the number of network requests, you could 
+concatenate multiple templates into a single file:
+
+```
+>>> user_detail
+<div class="user-details"> ... </div>
+
+>>> user_profile
+<div class="user-profile"> ... </div>
+```
+
+``` javascript
+var templates = {};
+
+$.get("user-templates.txt", function (txt) {
+    txt = txt.split(">>>").splice(1);
+ 
+    for (var t in txt) {
+        var i = txt[t].indexOf("\n");
+        var key = txt[t].substr(0, i).trim();
+        var val = txt[t].substr(i).trim();
+        templates[key] = val;
+    }
+});
+```
+
+### i18n
+
+Markup.js can support internationalization of your UI. Here's a basic
+approach to creating a resource "bundle" for each target language:
+
+``` javascript
+// templates.en.js
+myapp.templates = {
+    hello: "Welcome, {{user.name}}!",
+    goodbye: "Bye, {{user.name}}!"
+};
+```
+
+``` javascript
+// templates.es.js
+myapp.templates = {
+    hello: "¡Hola, {{user.name}}!",
+    goodbye: "¡Adios, {{user.name}}!"
+};
+```
+
+You can load the appropriate bundle with a <a
+href="http://yepnopejs.com/">conditional script loader</a> or other
+mechanism.
+
+For simple apps, it might be easier to include all the templates in
+a single data structure:
+
+``` javascript
+// templates.js
+myapp.templates = {
+    hello: {
+        en: "Welcome, {{user.name}}!",
+        es: "¡Hola, {{user.name}}!"
+    },
+    goodbye: {
+        en: "Bye, {{user.name}}!",
+        es: "¡Adios, {{user.name}}!"
+    }
+};
+```
+
+``` javascript
+var template = myapp.templates.hello[LANG];
+```
+
+If you use Markup.js for both HTML composition *and* translation, you
+might benefit from using includes. Here's one way to go about it:
+
+``` javascript
+// english resource bundle
+var bundle = {
+    hello_msg: "Welcome, {{user.name}}!",
+    goodbye_msg: "See ya!"
+};
+
+// html templates
+var templates = {
+    hello_tpl: "<div class='hello'>{{hello_msg}}</div>",
+    goodbye_tpl: "<div class='goodbye'>{{goodbye_msg}}</div>"
+};
+
+// context object
+var context = {
+    user: { name: "Adam" }
+};
+
+var hello_html = Mark.up(templates.hello_tpl, context, {includes: bundle});
+// "<div class='hello'>Welcome, Adam!</div>"
+
+var goodbye_html = Mark.up(templates.goodbye_tpl);
+// "<div class='goodbye'>See ya!</div>"
+
+```
+
+Note the last example requires neither a context object (since
+`goodbye_msg` has no variables) nor options (since they were set in the
+previous function call).
+
+*Internationalization requires careful planning, especially when dealing
+with context-sensitive strings. In the above example, `hello_msg`
+expects to receive a `user` object.*
 
 ## Compatibility
 
@@ -491,6 +628,7 @@ TODO Chrome 13+, Safari 5+, etc.
 
 - Nested IF expressions
 - ELSE expressions
+- Inject iteration index into loops
 
 ## License
 
