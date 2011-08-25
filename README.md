@@ -545,16 +545,16 @@ approach to creating a resource "bundle" for each target language:
 ``` javascript
 // templates.en.js
 myapp.templates = {
-    hello: "Welcome, {{user.name}}!",
-    goodbye: "Bye, {{user.name}}!"
+    hello: "Welcome, {{user.name}}.",
+    goodbye: "Bye, {{user.name}}."
 };
 ```
 
 ``` javascript
 // templates.es.js
 myapp.templates = {
-    hello: "&iexcl;Hola, {{user.name}}!",
-    goodbye: "&iexcl;Adios, {{user.name}}!"
+    hello: "Hola, {{user.name}}.",
+    goodbye: "Adios, {{user.name}}."
 };
 ```
 
@@ -570,11 +570,11 @@ single data structure:
 myapp.templates = {
     hello: {
         en: "Welcome, {{user.name}}!",
-        es: "&iexcl;Hola, {{user.name}}!"
+        es: "Hola, {{user.name}}!"
     },
     goodbye: {
         en: "Bye, {{user.name}}!",
-        es: "&iexcl;Adios, {{user.name}}!"
+        es: "Adios, {{user.name}}!"
     }
 };
 ```
@@ -589,7 +589,7 @@ might benefit from using includes. Here's one way to go about it:
 ``` javascript
 // english resource bundle
 var bundle = {
-    hello_msg: "Welcome, {{user.name}}!",
+    hello_msg: "Welcome, {{user.name}}.",
     goodbye_msg: "See ya!"
 };
 
@@ -605,7 +605,7 @@ var context = {
 };
 
 var hello_html = Mark.up(templates.hello_tpl, context, {includes: bundle});
-// "<div class='hello'>Welcome, Adam!</div>"
+// "<div class='hello'>Welcome, Adam.</div>"
 
 var goodbye_html = Mark.up(templates.goodbye_tpl);
 // "<div class='goodbye'>See ya!</div>"
@@ -616,7 +616,7 @@ Notice the last example requires neither a context object (since
 `goodbye_msg` contains no variables) nor options (since they were set in
 the previous function call).
 
-*Internationalization requires careful planning, especially when dealing
+*Internationalization requires careful design, especially when dealing
 with context-sensitive strings. In the above example, `hello_msg`
 expects to receive a `user` object.*
 
