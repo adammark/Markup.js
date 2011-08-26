@@ -148,10 +148,6 @@ Mark.pipes = {
         a = Mark._size(a);
         return a >= b && a <= c ? a : false;
     },
-    inside: function (a, b, c) {
-        a = Mark._size(a);
-        return a > b && a < c ? a : false;
-    },
     equals: function (a, b) {
         return a.toString() === b.toString() ? a : false;
     },
