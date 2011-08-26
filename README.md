@@ -129,8 +129,8 @@ var template = "<ul>{{brothers}}<li>{{.}}</li>{{/brothers}}</ul>";
 var result = Mark.up(template, context);
 // "<ul><li>Jack</li><li>Joe</li><li>Jim</li></ul>"
 ```
-When iterating through an array of objects, the object's properties can
-be referenced by name:
+When iterating through an array of objects, object properties can be
+referenced by name:
 
 ``` javascript
 var context = {
@@ -259,7 +259,7 @@ var result = Mark.up(template, context);
 
 ### Built-in pipes
 
-Markup.js comes with more than 30 built-in pipes. Below, the first
+Markup.js comes with more than 35 built-in pipes. Below, the first
 argument is always the piped value itself:
 
 `empty` (obj): returns obj if empty, else returns false
@@ -273,6 +273,8 @@ argument is always the piped value itself:
 `ormore` (a, b): returns a if a >= b, else returns false
 
 `orless` (a, b): returns a if a <= b, else returns false
+
+`between` (a, b, c): returns a if a is between b and c, inclusive, else returns false
 
 `equals` (a, b): returns a if a == b, else returns false
 
@@ -320,7 +322,9 @@ argument is always the piped value itself:
 
 `sort` (arr, prop): returns arr sorted. optionally sort by property prop 
 
-`fix` (num, n): returns num to n decimal places
+`fix` (num, n): returns num formatted to n decimal places
+
+`mod` (num, n): returns num % n
 
 `url` (str): returns str URL-encoded
 
@@ -545,8 +549,8 @@ $.get("user-templates.txt", function (txt) {
 
 ### i18n
 
-Markup.js can support internationalization of your UI. Here's a basic
-approach to creating a resource "bundle" for each target language:
+Markup.js can help support internationalization of your UI. Here's a
+basic approach to creating a resource "bundle" for each target language:
 
 ``` javascript
 // templates.en.js
