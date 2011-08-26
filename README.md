@@ -9,7 +9,7 @@ or other text formats &mdash; plus it's fun to use!
 
 ## Usage
 
-Include `<script src="markup.min.js"></script>`. With gzip, it's only *1.2KB!*
+Include `<script src="markup.min.js"></script>`. With gzip, it's only *1.3KB!*
 
 Markup.js has a single function: `Mark.up(template, context)`. Here's a basic
 example that shows how `template`, a string, is injected with properties of 
@@ -158,7 +158,19 @@ var template = "<ul>{{sisters}}<li>{{name.first}}</li>{{/sisters}}</ul>";
 
 var result = Mark.up(template, context);
 // "<ul><li>Jill</li><li>Jen</li></ul>"
+
+## Loop counters
+
+Inside a loop, a hash sign refers to the current iteration count
+(starting at 0):
+
+``` javascript
+var template = "{{sisters}}{{#}}-{{name.first}} {{/sisters}}";
+// "0-Jill 1-Jen "
 ```
+
+This is mostly useful for applying conditional formatting, as described
+below.
 
 ## Pipes
 
@@ -227,6 +239,18 @@ var template = "<ul>{{sisters|reverse}}<li>{{name|chop>2}}</li>{{/sisters}}</ul>
 
 var result = Mark.up(template, context);
 // "<ul><li>Je...</li><li>Ji...</li></ul>"
+```
+
+Pipes can even be applied to iteration counters:
+
+``` javascript
+// print a table header every five rows
+var template = "{{rows}}{{if #|mod>5|equals>0}}<thead>...</thead>{{/if}} ...{{/rows}}";
+```
+
+``` javascript
+// do one thing if even, another if odd
+var template = "{{rows}}{{if #|even}}...{{/if}} {{if #|odd}}...{{/if}}{{/rows}}";
 ```
 
 ### Chaining pipes
@@ -326,7 +350,11 @@ argument is always the piped value itself:
 
 `mod` (num, n): returns num % n
 
-`url` (str): returns str URL-encoded
+`even` (num): returns num if num is even, else returns false
+
+`even` (num): returns num if num is odd, else returns false
+
+`url` (str): returns URL-encoded str
 
 `bool` (obj): casts obj to boolean, returning true or false
 
@@ -419,6 +447,10 @@ in markup.js.)
 
 ``` javascript
 var template = "{{if age|more>75}} John is a ripe old {{age|round}}! {{/if}}"
+```
+
+``` javascript
+var template = "{{if age|between>50>75}} John is middle aged. {{/if}}"
 ```
 
 If the `{{if}}` statement is true, the child contents will be evaluated.

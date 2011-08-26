@@ -315,7 +315,7 @@ describe("Markup core spec", function () {
         expect(result).toEqual("Hello! MY NAME IS JOHN!");
     });
 
-    it("resolves iteration variable", function () {
+    it("resolves iteration counter", function () {
         template = "{{brothers}}{{#}}-{{.}} {{/brothers}}";
         result = Mark.up(template, context);
         expect(result).toEqual("0-Jack 1-Joe 2-Jim ");
@@ -329,6 +329,14 @@ describe("Markup core spec", function () {
         expect(result).toEqual("2-Jim-2");
 
         template = "{{brothers}}{{if #|more>0|less>2}}{{.}}{{/if}}{{/brothers}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("Joe");
+
+        template = "{{brothers}}{{if #|even}}{{.}}{{/if}}{{/brothers}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("JackJim");
+
+        template = "{{brothers}}{{if #|odd}}{{.}}{{/if}}{{/brothers}}";
         result = Mark.up(template, context);
         expect(result).toEqual("Joe");
 
@@ -599,6 +607,26 @@ describe("Markup core spec", function () {
         template = "{{weight|mod>50}}";
         result = Mark.up(template, context);
         expect(result).toEqual("45");
+    });
+
+    it("resolves pipe: even", function () {
+        template = "{{num|even}}";
+        result = Mark.up(template, {num: 222});
+        expect(result).toEqual("222");
+
+        template = "{{num|even}}";
+        result = Mark.up(template, {num: 333});
+        expect(result).toEqual("false");
+    });
+
+    it("resolves pipe: odd", function () {
+        template = "{{num|odd}}";
+        result = Mark.up(template, {num: 222});
+        expect(result).toEqual("false");
+
+        template = "{{num|odd}}";
+        result = Mark.up(template, {num: 333});
+        expect(result).toEqual("333");
     });
 
     it("resolves pipe: url", function () {
