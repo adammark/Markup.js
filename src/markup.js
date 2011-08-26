@@ -219,6 +219,9 @@ Mark.pipes = {
     fix: function (num, n) {
         return num.toFixed(n);
     },
+    mod: function (a, b) {
+        return (+a) % (+b);
+    },
     url: function (str) {
         return encodeURI(str);
     },

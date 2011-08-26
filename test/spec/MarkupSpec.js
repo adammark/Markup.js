@@ -4,6 +4,7 @@ describe("Markup core spec", function () {
     var context = {
         name: {first: "John", middle: "", last: "Doe"},
         age: 33.3,
+        weight: 145,
         gender: "male",
         alias: " J. Doe ",
         phone: "",
@@ -588,6 +589,12 @@ describe("Markup core spec", function () {
         template = "{{age|fix>3}}";
         result = Mark.up(template, context);
         expect(result).toEqual("33.300");
+    });
+
+    it("resolves pipe: mod", function () {
+        template = "{{weight|mod>50}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("45");
     });
 
     it("resolves pipe: url", function () {
