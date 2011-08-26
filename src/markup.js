@@ -6,6 +6,9 @@ var Mark = {
         }
         return b;
     },
+    _size: function (a) {
+        return a instanceof Array ? a.length : a;
+    },
     includes: {}
 };
 
@@ -130,20 +133,19 @@ Mark.pipes = {
         return obj && (obj + "").trim().length ? obj : false;
     },
     more: function (a, b) {
-        return (a instanceof Array ? a.length : a) > b ? a : false;
+        return Mark._size(a) > b ? a : false;
     },
     less: function (a, b) {
-        return (a instanceof Array ? a.length : a) < b ? a : false;
+        return Mark._size(a) < b ? a : false;
     },
     ormore: function (a, b) {
-        return (a instanceof Array ? a.length : a) >= b ? a : false;
+        return Mark._size(a) >= b ? a : false;
     },
     orless: function (a, b) {
-        return (a instanceof Array ? a.length : a) <= b ? a : false;
+        return Mark._size(a) <= b ? a : false;
     },
     between: function (a, b, c) {
-        a = a instanceof Array ? a.length : a;
-        return a >= b && a <= c ? a : false;
+        return Mark._size(a) >= b && Mark._size(a) <= c ? a : false;
     },
     equals: function (a, b) {
         return a.toString() === b.toString() ? a : false;
