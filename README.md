@@ -158,6 +158,7 @@ var template = "<ul>{{sisters}}<li>{{name.first}}</li>{{/sisters}}</ul>";
 
 var result = Mark.up(template, context);
 // "<ul><li>Jill</li><li>Jen</li></ul>"
+```
 
 ## Loop counters
 
