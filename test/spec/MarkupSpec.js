@@ -244,6 +244,10 @@ describe("Markup core spec", function () {
         template = "{{if gender|equals>male}}{{age}}!{{/if}}";
         result = Mark.up(template, context);
         expect(result).toEqual("33.3!");
+
+        template = "{{name}}{{first}}{{if .|equals>John}}***{{/if}}{{/first}}{{/name}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("***");
     });
 
     it("resolves if false", function () {

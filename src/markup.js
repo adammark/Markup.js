@@ -50,8 +50,11 @@ Mark.up = function (template, context, options) {
         return val;
     }
 
-    function test(evaled, child, context, options) {
-        return evaled !== false ? Mark.up(child, context, options) : "";
+    function test(obj, child, context, options) {
+        if (testy) {
+            return obj !== false ? Mark.up(child, context, options) : "";
+        }
+        return obj;
     }
 
     // TODO comments
@@ -77,23 +80,16 @@ Mark.up = function (template, context, options) {
             result = pipe(Mark.up(Mark.includes[prop], context), filters);
         }
         else if (prop === ".") {
-            result = pipe(context, filters);
+            result = test(pipe(context, filters), child, context);
         }
         else if (prop === "#") {
-            result = pipe(+options.iter, filters);
-            if (testy) {
-                result = test(result, child, context, options);
-            }
+            result = test(pipe(+options.iter, filters), child, context, options);
         }
         else if ((prop = prop.split(".")).length > 1) {
             for (x = 0, evaled = context; x < prop.length; x++) {
                 evaled = evaled[prop[x]];
             }
-            result = pipe(evaled, filters);
-
-            if (testy) {
-                result = test(result, child, context);
-            }
+            result = test(pipe(evaled, filters), child, context);
         }
         else if (context.hasOwnProperty(prop)) {
             if (testy) {
