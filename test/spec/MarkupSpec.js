@@ -382,6 +382,14 @@ describe("Markup core spec", function () {
         template = "{{if brothers|ormore>3}}***{{/if}}";
         result = Mark.up(template, context);
         expect(result).toEqual("***");
+
+        expect(Mark.up("{{n|more>123}}", {n: 124})).toEqual("124");
+        expect(Mark.up("{{n|more>125}}", {n: 124})).toEqual("false");
+        expect(Mark.up("{{n|more>123}}", {n: "124"})).toEqual("124");
+        expect(Mark.up("{{n|more>125}}", {n: "124"})).toEqual("false");
+        expect(Mark.up("{{n|more>a}}", {n: "b"})).toEqual("b");
+        expect(Mark.up("{{n|more>c}}", {n: "b"})).toEqual("false");
+        expect(Mark.up("{{n|ormore>b}}", {n: "b"})).toEqual("b");
     });
 
     it("resolves pipe: less", function () {
