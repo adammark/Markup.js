@@ -47,8 +47,8 @@ Mark.up = function (template, context, options) {
         return val;
     }
 
-    function test(evaled, child, context) {
-        return evaled !== false ? Mark.up(child, context) : "";
+    function test(evaled, child, context, options) {
+        return evaled !== false ? Mark.up(child, context, options) : "";
     }
 
     // TODO comments
@@ -76,6 +76,12 @@ Mark.up = function (template, context, options) {
         else if (prop === ".") {
             result = pipe(context, filters);
         }
+        else if (prop == "#") {
+            result = pipe(+options.iter, filters);
+            if (testy) {
+                result = test(result, child, context, options);
+            }
+        }
         else if ((prop = prop.split(".")).length > 1) {
             for (x = 0, evaled = context; x < prop.length; x++) {
                 evaled = evaled[prop[x]];
@@ -95,7 +101,7 @@ Mark.up = function (template, context, options) {
                 if (evaled instanceof Array) {
                     result = "";
                     for (x in evaled) {
-                        result += child ? Mark.up(child, evaled[x]) : evaled[x];
+                        result += child ? Mark.up(child, evaled[x], {iter: x}) : evaled[x];
                     }
                 }
             }

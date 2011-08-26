@@ -310,6 +310,28 @@ describe("Markup core spec", function () {
         expect(result).toEqual("Hello! MY NAME IS JOHN!");
     });
 
+    it("resolves iteration variable", function () {
+        template = "{{brothers}}{{#}}-{{.}} {{/brothers}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("0-Jack 1-Joe 2-Jim ");
+
+        template = "{{brothers|limit>1}}{{#}}-{{.}}{{/brothers}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("0-Jack");
+
+        template = "{{brothers}}{{if #|ormore>2}}{{#}}-{{.}}-{{#}}{{/if}}{{/brothers}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("2-Jim-2");
+
+        template = "{{brothers}}{{if #|more>0|less>2}}{{.}}{{/if}}{{/brothers}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("Joe");
+
+        template = "{{sisters}}{{#|fix>2}} {{/sisters}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("0.00 1.00 ");
+    });
+
     it("resolves pipe: blank", function () {
         template = "{{name.middle|blank>N/A}}";
         result = Mark.up(template, context);
@@ -632,9 +654,6 @@ describe("Markup core spec", function () {
     });
 
     it("handles if/else statements", function () {
-    });
-
-    it("injects iterator variable", function () {
     });
     */
 
