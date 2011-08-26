@@ -206,7 +206,7 @@ Mark.pipes = {
     },
     sort: function (arr, prop) {
         var fn = function (a, b) {
-            return a[prop] > b[prop];
+            return a[prop] > b[prop] ? 1 : -1;
         };
         return Mark._copy(arr).sort(prop ? fn : undefined);
     },
