@@ -141,6 +141,10 @@ Mark.pipes = {
     orless: function (a, b) {
         return (a instanceof Array ? a.length : a) <= b ? a : false;
     },
+    between: function (a, b, c) {
+        a = a instanceof Array ? a.length : a;
+        return a >= b && a <= c ? a : false;
+    },
     equals: function (a, b) {
         return a.toString() === b.toString() ? a : false;
     },
