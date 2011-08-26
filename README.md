@@ -160,9 +160,9 @@ var result = Mark.up(template, context);
 // "<ul><li>Jill</li><li>Jen</li></ul>"
 ```
 
-## Loop counters
+### Loop counters
 
-Inside a loop, a hash sign refers to the current iteration count
+Inside a loop, a hash sign refers to the current iteration counter
 (starting at 0):
 
 ``` javascript
