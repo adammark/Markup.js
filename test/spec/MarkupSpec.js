@@ -423,6 +423,16 @@ describe("Markup core spec", function () {
         expect(result).toEqual("");
     });
 
+    it("resolves pipe: inside", function () {
+        template = "{{if brothers|inside>2>4}}***{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("***");
+
+        template = "{{if brothers|inside>2>3}}***{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("");
+    });
+
     it("resolves pipe: equals", function () {
         template = "{{if age|equals>33.3}}{{age}}{{/if}}";
         result = Mark.up(template, context);
