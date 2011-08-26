@@ -216,8 +216,14 @@ Mark.pipes = {
     fix: function (num, n) {
         return num.toFixed(n);
     },
-    mod: function (a, b) {
-        return (+a) % (+b);
+    mod: function (num, n) {
+        return (+num) % (+n);
+    },
+    even: function (num) {
+        return (+num) % 2 === 0 ? num : false;
+    },
+    odd: function (num) {
+        return (+num) % 2 === 1 ? num : false;
     },
     url: function (str) {
         return encodeURI(str);
