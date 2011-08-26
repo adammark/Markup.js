@@ -76,7 +76,7 @@ Mark.up = function (template, context, options) {
         else if (prop === ".") {
             result = pipe(context, filters);
         }
-        else if (prop == "#") {
+        else if (prop === "#") {
             result = pipe(+options.iter, filters);
             if (testy) {
                 result = test(result, child, context, options);
