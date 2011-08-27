@@ -82,8 +82,9 @@ Mark.up = function (template, context, options) {
         else if (prop === ".") {
             result = test(pipe(context, filters), child, context);
         }
-        else if (prop === "#") {
-            result = test(pipe(+options.iter, filters), child, context, options);
+        else if (prop === "#" || prop === "##") {
+            x = options.iter + prop.length - 1;
+            result = test(pipe(x, filters), child, context, options);
         }
         else if ((prop = prop.split(".")).length > 1) {
             for (x = 0, evaled = context; x < prop.length; x++) {
@@ -100,7 +101,7 @@ Mark.up = function (template, context, options) {
                 if (evaled instanceof Array) {
                     result = "";
                     for (x in evaled) {
-                        result += child ? Mark.up(child, evaled[x], {iter: x}) : evaled[x];
+                        result += child ? Mark.up(child, evaled[x], {iter: +x}) : evaled[x];
                     }
                 }
             }
@@ -219,11 +220,14 @@ Mark.pipes = {
     mod: function (num, n) {
         return (+num) % (+n);
     },
+    divisible: function (num, n) {
+        return typeof num == "number" && num % n === 0 ? num : false;
+    },
     even: function (num) {
-        return (+num) % 2 === 0 ? num : false;
+        return typeof num == "number" && num % 2 === 0 ? num : false;
     },
     odd: function (num) {
-        return (+num) % 2 === 1 ? num : false;
+        return typeof num == "number" && num % 2 === 1 ? num : false;
     },
     url: function (str) {
         return encodeURI(str);
