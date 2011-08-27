@@ -450,7 +450,7 @@ Mark.pipes.add = function (a, b, c) {
 Mark.pipes.add = function (a, b, c) {
     return a + parseInt(b) + parseInt(c);
 };
-...
+```
 
 ### More pipes!
 
