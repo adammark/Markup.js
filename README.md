@@ -5,9 +5,9 @@ JavaScript.
 
 ## Why Markup.js?
 
-Markup.js takes the pain out of converting structured data into markup
-or other text formats. Its intuitive syntax and small footprint (only
-*1.3KB* minified and gzipped) make it the perfect choice for your 
+Markup.js takes the pain out of converting structured data into HTML
+markup or other text formats. Its intuitive syntax and small footprint
+(only *1.4KB* minified and gzipped) make it the perfect choice for your
 Javascript app. Plus there are *no dependencies.*
 
 ## Usage
@@ -31,23 +31,22 @@ var template = "Hi, {{name.first}}!";
 var result = Mark.up(template, context); // "Hi, John!"
 ```
 
-Alternatively, `context` can be a Function object:
+You can format any kind of objects, including Functions with exposed
+properties:
 
 ``` javascript
-function Person(name) {
-    this.name = name;
-}
+var context = {
+    person: new Person("Adam")
+};
 
-var template = "Hi, {{name}}!";
-
-var context = new Person("Adam");
+var template = "Hi, {{person.name}}!";
 
 var result = Mark.up(template, context); // "Hi, Adam!"
 ```
 
 ## Object notation
 
-Objects can be traversed with dot notation. For example:
+You can access object properties with simple dot notation:
 
 ``` javascript
 var context = {
@@ -68,7 +67,7 @@ var result = Mark.up(template, context);
 // "John Doe lives on 1 Maple Street in Pleasantville."
 ```
 
-You can do the same thing with nested tags:
+Or you can use nested tags:
 
 ``` javascript
 var template = "{{name}} lives on {{addr}}{{street}} in {{city}}.{{/addr}}";
@@ -77,7 +76,7 @@ var result = Mark.up(template, context);
 // "John Doe lives on 1 Maple Street in Pleasantville."
 ```
 
-Or you can use a combination of these techniques:
+Or you can use a combination of nested tags and dot notation:
 
 ``` javascript
 var template = "ZIP: {{addr}}{{zip.main}}-{{zip.ext}}{{/addr}}";
@@ -102,7 +101,8 @@ var result = Mark.up(template, context);
 // "Favorite color: Red"
 ```
 
-You can mix array index notation and object property notation in the same expression:
+You can mix array index notation and object property notation in the
+same expression:
 
 ``` javascript
 var context = {
@@ -170,17 +170,17 @@ Inside a loop, a single hash sign refers to the current iteration index
 (1...n):
 
 ``` javascript
-var template = "{{sisters}}{{#}}-{{name.first}} {{/sisters}}";
-// "0-Jill 1-Jen "
+var template = "{{sisters}} {{#}}-{{name.first}} {{/sisters}}";
+// " 0-Jill  1-Jen "
 ```
 
 ``` javascript
-var template = "{{sisters}}{{##}}-{{name.first}} {{/sisters}}";
-// "1-Jill 2-Jen "
+var template = "{{sisters}} {{##}}-{{name.first}} {{/sisters}}";
+// " 1-Jill  2-Jen "
 ```
 
 This is useful for applying conditional formatting, as described below,
-or creating numbered lists.
+and for creating numbered lists.
 
 ## Pipes
 
@@ -206,7 +206,7 @@ var result = Mark.up(template, context);
 ```
 
 A pipe can accept arguments. For example, the `blank` pipe accepts a
-value to display if the piped value is null, false or undefined:
+value to display if the piped input is null, false or undefined:
 
 ``` javascript
 var template = "Phone: {{phone|blank>N/A}}";
@@ -215,8 +215,8 @@ var result = Mark.up(template, context);
 // "Phone: N/A"
 ```
 
-The `choose` pipe accepts two arguments and returns the first one if the
-value is true or the second one if the value is false:
+The `choose` pipe accepts two strings and returns one of them depending
+on whether the piped input is true or false:
 
 ``` javascript
 var template = "John is jiggy: {{jiggy|choose>Yes>No}}";
@@ -249,18 +249,6 @@ var template = "<ul>{{sisters|reverse}}<li>{{name|chop>2}}</li>{{/sisters}}</ul>
 
 var result = Mark.up(template, context);
 // "<ul><li>Je...</li><li>Ji...</li></ul>"
-```
-
-Pipes can even be applied to iteration counters:
-
-``` javascript
-// print a table header every five rows
-var template = "{{rows}}{{if #|divisible>5}}<thead>...</thead>{{/if}} ...{{/rows}}";
-```
-
-``` javascript
-// do one thing if even, another if odd
-var template = "{{rows}}{{if #|even}}...{{/if}} {{if #|odd}}...{{/if}}{{/rows}}";
 ```
 
 ### Chaining pipes
@@ -416,8 +404,8 @@ var result = Mark.up(template, context);
 
 ### Writing custom pipes
 
-You can add your own pipes to Markup.js. The first argument should always
-be the piped value. For example:
+You can add your own pipes to Markup.js. The first argument is the piped
+value and any subsequent arguments are strings. For example:
 
 ``` javascript
 Mark.pipes.repeat = function (str, count, separator) {
@@ -441,24 +429,46 @@ of `Mark.up`:
 ``` javascript
 var options = {
     pipes: {
-        repeat: function () { ... }
+        mypipe: function (str) { ... }
     }
 };
 
 var result = Mark.up(template, context, options);
 ```
 
-*All arguments after the piped value are strings. In the above example,
-`count` is a string even though it is treated as a number.*
+Note! All pipe arguments are passed as strings. For example, in the
+expression `{{num|add>23>45}}`, "23" and "45" are strings. Therefore,
+you should cast data types as necessary in your custom pipes:
 
-### Pipe library
+``` javascript
+// WRONG! 1 + "23" + "45" returns "12345"
+Mark.pipes.add = function (a, b, c) {
+    return a + b + c;
+};
+
+// RIGHT! 1 + "23" + "45" returns 69
+Mark.pipes.add = function (a, b, c) {
+    return a + parseInt(b) + parseInt(c);
+};
+...
+
+### More pipes!
 
 Additional pipes are available in `src/pipes` for your piping pleasure. 
 (These are not included in markup.js.)
 
-## Conditional statements
+## IF and IF/ELSE statements
 
-"If" statements follow the same basic rules as above:
+IF statements are formatted as `{{if expression}} ... {{/if}}`, where
+*expression* is a boolean test with optional pipes:
+
+``` javascript
+var template = "{{if brothers|notempty}} John has {{brothers|size}} brothers! {{/if}}"
+```
+
+``` javascript
+var template = "{{if children|empty}} John has no kids. {{/if}}"
+```
 
 ``` javascript
 var template = "{{if age|more>75}} John is a ripe old {{age|round}}! {{/if}}"
@@ -468,35 +478,60 @@ var template = "{{if age|more>75}} John is a ripe old {{age|round}}! {{/if}}"
 var template = "{{if age|between>50>75}} John is middle aged. {{/if}}"
 ```
 
-If the `if` statement is true, the child contents will be evaluated.
-(Child variables are evaluated in the same context.)
+IF/ELSE statements work as you would expect:
 
-Pipes can be chained in `if` statements, allowing for arbitrarily
-complex AND expressions:
+``` javascript
+var template = "{{if speed|more>65}} Too fast! {{else}} Too slow! {{/if}}"
+```
+
+Pipes can be chained in IF statements, allowing for arbitrarily complex
+AND expressions:
 
 ``` javascript
 // test if weight in kgs is greater than 500
 var template = "{{if weight|kgs|more>500}} Lighten up! {{/if}}"
 ```
 
+IF and IF/ELSE statements also work inside loops:
+
+``` javascript
+// show only users with email addresses
+var template = "{{users}} {{if user.email}} ... {{/if}} {{/users}}";
+```
+
+``` javascript
+// show different content in even and odd rows
+var template = "{{users}} {{if #|even}} ... {{else}} ... {{/if}} {{/users}}";
+```
+
+``` javascript
+// print a table header every five rows starting at zero
+var template = "{{users}} {{if #|divisible>5}} <thead>...</thead> {{/if}} ... {{/users}}";
+```
+
 ``` javascript
 // print a table header every three rows after the tenth row
-var template = "{{rows}}{{if ##|more>10|divisible>3}}<thead>...</thead>{{/if}} ...{{/rows}}";
+var template = "{{users}} {{if ##|more>10|divisible>3}} <thead>...</thead> {{/if}} ... {{/users}}";
 ```
 
-Custom pipes in `if` statements should return either the piped value
-(if true) or false (if false), such that pipes can be chained together.
-For example:
+*Note: IF and IF/ELSE statements cannot be nested.*
+
+### Writing boolean pipes
+
+Boolean pipes should return either the piped value (if true) or *false*
+(if false), such that the output of one pipe can serve as the input of
+another. For example:
 
 ``` javascript
-Mark.pipes.happy = function (str) {
-    return str.toString() === "happy" ? str : false;
+Mark.pipes.big = function (num) {
+    return num > 1000000 ? num : false;
 };
+
+var context = { salary: 5000000 };
+
+var template = "{{if salary|big|even}} A nice round number! {{/if}}";
+
 ```
-
-*Note: Nested if statements are not currently supported.*
-
-*Note: If/else statements are not currently supported.*
 
 ## Includes
 
