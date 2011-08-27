@@ -446,10 +446,10 @@ var options = {
 };
 
 var result = Mark.up(template, context, options);
+```
 
 *All arguments after the piped value are strings. In the above example,
 `count` is a string even though it is treated as a number.*
-```
 
 ### Pipe library
 
@@ -484,9 +484,9 @@ var template = "{{if weight|kgs|more>500}} Lighten up! {{/if}}"
 var template = "{{rows}}{{if ##|more>10|divisible>3}}<thead>...</thead>{{/if}} ...{{/rows}}";
 ```
 
-*Custom pipes in `if` statements should return either the piped value
+Custom pipes in `if` statements should return either the piped value
 (if true) or false (if false), such that pipes can be chained together.
-For example:*
+For example:
 
 ``` javascript
 Mark.pipes.happy = function (str) {
@@ -542,7 +542,7 @@ var result = Mark.up(template, context, options);
 ## Implementation
 
 HTML templates tend to be longer than the examples shown here, so it's a
-good idea to separate them from the rest of your code.  In small apps,
+good idea to segregate them from the rest of your code. In small apps,
 you can put all your templates into a single file:
 
 ``` javascript
@@ -553,7 +553,7 @@ myapp.templates = {
 };
 ```
 
-In big apps, you can divide your templates according to functional area:
+In big apps, you can split up your templates according to functional area:
 
 ``` javascript
 // templates-registration.js
