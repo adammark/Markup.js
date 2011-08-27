@@ -1,7 +1,7 @@
 var Mark = {
-    _copy: function (a) {
-        var i, b = [];
-        for (i in a) {
+    _copy: function (a, b) {
+        b = b || [];
+        for (var i in a) {
             b[i] = a[i];
         }
         return b;
@@ -31,12 +31,8 @@ Mark.up = function (template, context, options) {
 
     // set options if any. only need to do once!
     if (options) {
-        for (x in options.pipes) {
-            Mark.pipes[x] = options.pipes[x];
-        }
-        for (x in options.includes) {
-            Mark.includes[x] = options.includes[x];
-        }
+        Mark._copy(options.pipes, Mark.pipes);
+        Mark._copy(options.includes, Mark.includes);
     }
 
     // pipe a string value. ex: pipe("adam", ["upcase","chop>50"])
@@ -50,11 +46,12 @@ Mark.up = function (template, context, options) {
         return val;
     }
 
-    function test(obj, child, context, options) {
+    function test(result, child, context, options) {
+        var a = child.split("{{else}}");
         if (testy) {
-            return obj !== false ? Mark.up(child, context, options) : "";
+            return Mark.up(result !== false ? a[0] : a[1] || "", context, options);
         }
-        return obj;
+        return result;
     }
 
     // TODO comments

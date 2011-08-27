@@ -256,6 +256,24 @@ describe("Markup core spec", function () {
         expect(result).toEqual("");
     });
 
+    it("resolves if/else", function () {
+        template = "{{if brothers|more>1}}yes!{{else}}no!{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("yes!");
+
+        template = "{{if brothers|less>1}}yes!{{else}}no!{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("no!");
+
+        template = "{{if brothers|more>1}}{{brothers.0}}{{else}}no!{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("Jack");
+
+        template = "{{if brothers|less>1}}yes!{{else}}{{brothers.1}}{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("Joe");
+    });
+
     it("resolves empty or not empty", function () {
         template = "{{if brothers|empty}}***{{/if}}";
         result = Mark.up(template, context);
