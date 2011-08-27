@@ -1,19 +1,22 @@
 # Markup.js — Powerful JavaScript templates
 
-Markup.js is a simple yet surprisingly powerful template system for JavaScript.
+Markup.js is a simple yet surprisingly powerful template system for
+JavaScript.
 
 ## Why Markup.js?
 
 Markup.js takes the pain out of converting structured data into markup
-or other text formats &mdash; plus it's fun to use!
+or other text formats. Its intuitive syntax and small footprint (only
+*1.3KB* minified and gzipped) make it the perfect choice for your 
+Javascript app. Plus there are *no dependencies.*
 
 ## Usage
 
-Include `<script src="markup.min.js"></script>`. With gzip, it's only *1.3KB!*
+Include `<script src="markup.min.js"></script>`.
 
-Markup.js has a single function: `Mark.up(template, context)`. Here's a basic
-example that shows how `template`, a string, is injected with properties of 
-`context`, an object:
+Markup.js has a single function: `Mark.up(template, context)`. Here's a
+basic example that shows how `template`, a string, is injected with
+properties of `context`, an object:
 
 ``` javascript
 var context = {
@@ -33,7 +36,7 @@ Alternatively, `context` can be a Function object:
 ``` javascript
 function Person(name) {
     this.name = name;
-};
+}
 
 var template = "Hi, {{name}}!";
 
@@ -44,7 +47,7 @@ var result = Mark.up(template, context); // "Hi, Adam!"
 
 ## Object notation
 
-Object hierarchies can be expressed with dot notation. For example:
+Objects can be traversed with dot notation. For example:
 
 ``` javascript
 var context = {
@@ -65,7 +68,7 @@ var result = Mark.up(template, context);
 // "John Doe lives on 1 Maple Street in Pleasantville."
 ```
 
-The same structure can be expressed with nested tags:
+You can do the same thing with nested tags:
 
 ``` javascript
 var template = "{{name}} lives on {{addr}}{{street}} in {{city}}.{{/addr}}";
@@ -129,7 +132,7 @@ var template = "<ul>{{brothers}}<li>{{.}}</li>{{/brothers}}</ul>";
 var result = Mark.up(template, context);
 // "<ul><li>Jack</li><li>Joe</li><li>Jim</li></ul>"
 ```
-When iterating through an array of objects, object properties can be
+When looping through an array of objects, object properties can be
 referenced by name:
 
 ``` javascript
@@ -144,7 +147,7 @@ var result = Mark.up(template, context);
 // "<ul><li>Jill</li><li>Jen</li></ul>"
 ```
 
-Dot notation can be used inside loops as well:
+Dot notation works inside loops as well:
 
 ``` javascript
 var context = {
@@ -162,16 +165,22 @@ var result = Mark.up(template, context);
 
 ### Loop counters
 
-Inside a loop, a hash sign refers to the current iteration counter
-(starting at 0):
+Inside a loop, a single hash sign refers to the current iteration index
+(0...n) and a double hash sign refers to the current iteration count
+(1...n):
 
 ``` javascript
 var template = "{{sisters}}{{#}}-{{name.first}} {{/sisters}}";
 // "0-Jill 1-Jen "
 ```
 
-This is mostly useful for applying conditional formatting, as described
-below.
+``` javascript
+var template = "{{sisters}}{{##}}-{{name.first}} {{/sisters}}";
+// "1-Jill 2-Jen "
+```
+
+This is useful for applying conditional formatting, as described below,
+or creating numbered lists.
 
 ## Pipes
 
@@ -206,8 +215,8 @@ var result = Mark.up(template, context);
 // "Phone: N/A"
 ```
 
-The `choose` pipe accepts two arguments and returns one of them
-depending on whether the piped value is true or false:
+The `choose` pipe accepts two arguments and returns the first one if the
+value is true or the second one if the value is false:
 
 ``` javascript
 var template = "John is jiggy: {{jiggy|choose>Yes>No}}";
@@ -246,7 +255,7 @@ Pipes can even be applied to iteration counters:
 
 ``` javascript
 // print a table header every five rows
-var template = "{{rows}}{{if #|mod>5|equals>0}}<thead>...</thead>{{/if}} ...{{/rows}}";
+var template = "{{rows}}{{if #|divisible>5}}<thead>...</thead>{{/if}} ...{{/rows}}";
 ```
 
 ``` javascript
@@ -351,9 +360,11 @@ argument is always the piped value itself:
 
 `mod` (num, n): returns num % n
 
+`divisible` (num, n): returns num if num % n === 0, else returns false
+
 `even` (num): returns num if num is even, else returns false
 
-`even` (num): returns num if num is odd, else returns false
+`odd` (num): returns num if num is odd, else returns false
 
 `url` (str): returns URL-encoded str
 
@@ -367,7 +378,7 @@ argument is always the piped value itself:
 
 With great power comes great responsibility.  Thus the `call` pipe,
 which allows you to call a function on any object and pass it zero or
-more scalar arguments:
+more arguments:
 
 ``` javascript
 var context = {
@@ -424,7 +435,7 @@ var result = Mark.up(template, {name:"Beetlejuice"});
 
 ```
 
-Alternatively, you can pass pipes into the optional `options` argument
+If you prefer, you can pass pipes into the optional `options` argument
 of `Mark.up`:
 
 ``` javascript
@@ -435,12 +446,15 @@ var options = {
 };
 
 var result = Mark.up(template, context, options);
+
+*All arguments after the piped value are strings. In the above example,
+`count` is a string even though it is treated as a number.*
 ```
 
 ### Pipe library
 
-Additional pipes are available in `src/pipes`. (These are not included
-in markup.js.)
+Additional pipes are available in `src/pipes` for your piping pleasure. 
+(These are not included in markup.js.)
 
 ## Conditional statements
 
@@ -454,19 +468,31 @@ var template = "{{if age|more>75}} John is a ripe old {{age|round}}! {{/if}}"
 var template = "{{if age|between>50>75}} John is middle aged. {{/if}}"
 ```
 
-If the `{{if}}` statement is true, the child contents will be evaluated.
-(Variables inside the `{{if}}` statement are evaluated in the same
-context as the `{{if}}` statement itself.)
+If the `if` statement is true, the child contents will be evaluated.
+(Child variables are evaluated in the same context.)
 
-Pipes can be chained in `{{if}}` statements, allowing for complex AND
-expressions:
+Pipes can be chained in `if` statements, allowing for arbitrarily
+complex AND expressions:
 
 ``` javascript
-var template = "{{if age|more>50|less>75}} John is middle aged. {{/if}}"
+// test if weight in kgs is greater than 500
+var template = "{{if weight|kgs|more>500}} Lighten up! {{/if}}"
 ```
 
-When piping array values, the last pipe should return either its piped
-input (if true) or false (if false).
+``` javascript
+// print a table header every three rows after the tenth row
+var template = "{{rows}}{{if ##|more>10|divisible>3}}<thead>...</thead>{{/if}} ...{{/rows}}";
+```
+
+*Custom pipes in `if` statements should return either the piped value
+(if true) or false (if false), such that pipes can be chained together.
+For example:*
+
+``` javascript
+Mark.pipes.happy = function (str) {
+    return str.toString() === "happy" ? str : false;
+};
+```
 
 *Note: Nested if statements are not currently supported.*
 
@@ -511,18 +537,35 @@ var options = {
 var result = Mark.up(template, context, options);
 ```
 
-*Be careful to avoid naming conflicts with other variables names.*
+*Be careful to avoid naming conflicts with `context` variables.*
 
 ## Implementation
 
-HTML templates tend to be longer than the examples shown here. In your app,
-you might consider putting all your templates into a single JS file:
+HTML templates tend to be longer than the examples shown here, so it's a
+good idea to separate them from the rest of your code.  In small apps,
+you can put all your templates into a single file:
 
 ``` javascript
 // templates.js
 myapp.templates = {
     user_details: "<div> ... </div>",
     user_sidebar: "<div> ... </div>"
+};
+```
+
+In big apps, you can divide your templates according to functional area:
+
+``` javascript
+// templates-registration.js
+myapp.templates.registration = {
+    reg_intro: "<div> ... </div>",
+    reg_error: "<div> ... </div>"
+};
+
+// templates-cart.js
+myapp.templates.cart = {
+    cart_proceed: "<div> ... </div>",
+    cart_cancel: "<div> ... </div>"
 };
 ```
 
@@ -543,8 +586,11 @@ Or, without jQuery:
 document.getElementById("sidebar").innerHTML = Mark.up(template, context);
 ```
 
-You can also load templates as plain text via AJAX. Here's how to do it
-with jQuery:
+### Loading templates with AJAX
+
+Large chunks of HTML can be cumbersome to write as JavaScript strings.
+To get around this, you can write your templates in plain text files
+and load them via AJAX. Here's how to do it with jQuery:
 
 ``` javascript
 $.get("templates/sidebar.txt", function (txt) {
@@ -552,17 +598,19 @@ $.get("templates/sidebar.txt", function (txt) {
 });
 ```
 
-The right strategy depends on many factors, including the speed of your
-app, the number of templates you're handling, and the cumulative weight
-of the templates. To reduce the number of network requests, you could 
-concatenate multiple templates into a single file:
+To reduce the number of network requests, you could concatenate multiple
+templates into a single file:
 
 ```
 >>> user_detail
-<div class="user-details"> ... </div>
+<div class="user-details">
+    ...
+</div>
 
 >>> user_profile
-<div class="user-profile"> ... </div>
+<div class="user-profile">
+    ...
+</div>
 ```
 
 ``` javascript
@@ -579,6 +627,10 @@ $.get("user-templates.txt", function (txt) {
     }
 });
 ```
+
+The right strategy depends on many factors, including the speed of your
+app, the number of templates you're handling, and the cumulative weight
+of the templates. 
 
 ### i18n
 
@@ -671,7 +723,6 @@ TODO Chrome 13+, Safari 5+, etc.
 
 - Nested IF expressions
 - ELSE expressions
-- Inject iteration index into loops
 
 ## License
 
