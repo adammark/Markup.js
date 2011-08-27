@@ -320,6 +320,10 @@ describe("Markup core spec", function () {
         result = Mark.up(template, context);
         expect(result).toEqual("0-Jack 1-Joe 2-Jim ");
 
+        template = "{{brothers}}{{##}}-{{.}} {{/brothers}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("1-Jack 2-Joe 3-Jim ");
+
         template = "{{brothers|limit>1}}{{#}}-{{.}}{{/brothers}}";
         result = Mark.up(template, context);
         expect(result).toEqual("0-Jack");
@@ -335,6 +339,10 @@ describe("Markup core spec", function () {
         template = "{{brothers}}{{if #|even}}{{.}}{{/if}}{{/brothers}}";
         result = Mark.up(template, context);
         expect(result).toEqual("JackJim");
+
+        template = "{{brothers}}{{if ##|even}}{{.}}{{/if}}{{/brothers}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("Joe");
 
         template = "{{brothers}}{{if #|odd}}{{.}}{{/if}}{{/brothers}}";
         result = Mark.up(template, context);
@@ -607,6 +615,28 @@ describe("Markup core spec", function () {
         template = "{{weight|mod>50}}";
         result = Mark.up(template, context);
         expect(result).toEqual("45");
+    });
+
+    it("resolves pipe: divisible", function () {
+        template = "{{if weight|divisible>5}}***{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("***");
+
+        template = "{{if weight|more>200|divisible>5}}***{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("");
+
+        template = "{{if weight|divisible>7}}***{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("");
+
+        template = "{{if falsy|divisible>7}}***{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("");
+
+        template = "{{n}}{{if ##|more>5|divisible>3}}{{##}}{{/if}}.{{/n}}";
+        result = Mark.up(template, {n:[1,2,3,4,5,6,7,8,9,10,11,12]});
+        expect(result).toEqual(".....6...9...12.");
     });
 
     it("resolves pipe: even", function () {
