@@ -233,6 +233,14 @@ describe("Markup core spec", function () {
     });
 
     it("resolves if true", function () {
+        template = "{{if brothers}}{{brothers|size}} brothers{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("3 brothers");
+
+        template = "{{if brothers|empty}}***{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("");
+
         template = "{{if brothers|more>2}}yes!{{/if}}";
         result = Mark.up(template, context);
         expect(result).toEqual("yes!");
