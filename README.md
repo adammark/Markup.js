@@ -206,7 +206,7 @@ var result = Mark.up(template, context);
 ```
 
 A pipe can accept arguments. For example, the `blank` pipe accepts a
-value to display if the piped input is null, false or undefined:
+value to display if the piped input is *null*, *false* or *undefined*:
 
 ``` javascript
 var template = "Phone: {{phone|blank>N/A}}";
@@ -492,12 +492,15 @@ AND expressions:
 var template = "{{if weight|kgs|more>500}} Lighten up! {{/if}}"
 ```
 
-IF and IF/ELSE statements also work inside loops:
+IF and IF/ELSE statements work inside loops:
 
 ``` javascript
 // show only users with email addresses
 var template = "{{users}} {{if user.email}} ... {{/if}} {{/users}}";
 ```
+
+You can even test the value of an iteration counter to apply conditional
+formatting:
 
 ``` javascript
 // show different content in even and odd rows
@@ -516,11 +519,11 @@ var template = "{{users}} {{if ##|more>10|divisible>3}} <thead>...</thead> {{/if
 
 *Note: IF and IF/ELSE statements cannot be nested.*
 
-### Writing boolean pipes
+### Custom pipes in conditional expressions
 
-Boolean pipes should return either the piped value (if true) or *false*
-(if false), such that the output of one pipe can serve as the input of
-another. For example:
+Custom pipes used in boolean tests should return either the piped value
+(if true) or *false* (if false), such that the output of one pipe can
+serve as the input to another. For example:
 
 ``` javascript
 Mark.pipes.big = function (num) {
@@ -753,11 +756,6 @@ expects to receive a `user` object.*
 ## Compatibility
 
 TODO Chrome 13+, Safari 5+, etc.
-
-## Next Steps
-
-- Nested IF expressions
-- ELSE expressions
 
 ## License
 
