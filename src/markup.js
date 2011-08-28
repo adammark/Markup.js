@@ -155,10 +155,10 @@ Mark.pipes = {
         return a >= b && a <= c ? a : false;
     },
     equals: function (a, b) {
-        return a.toString() === b.toString() ? a : false;
+        return a == b ? a : false;
     },
     notequals: function (a, b) {
-        return a.toString() !== b.toString() ? a : false;
+        return a != b ? a : false;
     },
     like: function (str, pattern) {
         return new RegExp(pattern).test(str) ? str : false;
