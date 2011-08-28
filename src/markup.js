@@ -239,7 +239,7 @@ Mark.pipes = {
         return num !== false && num % 2 === 1 ? num : false;
     },
     number: function (str) {
-        return parseFloat(str.replace(/[^\d\.]/g, ""));
+        return parseFloat(str.replace(/[^\-\d\.]/g, ""));
     },
     url: function (str) {
         return encodeURI(str);

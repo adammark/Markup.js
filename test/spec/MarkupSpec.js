@@ -708,6 +708,10 @@ describe("Markup core spec", function () {
         template = "{{num|number}}";
         result = Mark.up(template, {num: "25px"});
         expect(result).toEqual("25");
+
+        template = "{{num|number}}";
+        result = Mark.up(template, {num: "-25px"});
+        expect(result).toEqual("-25");
     });
 
     it("resolves pipe: url", function () {
