@@ -232,10 +232,14 @@ describe("Markup core spec", function () {
         expect(result).toEqual("obj: [OBJECT OBJECT]");
     });
 
-    it("resolves if true", function () {
+    it("resolves if", function () {
         template = "{{if brothers}}{{brothers|size}} brothers{{/if}}";
         result = Mark.up(template, context);
         expect(result).toEqual("3 brothers");
+
+        template = "{{if brothers}}***{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("***");
 
         template = "{{if brothers|empty}}***{{/if}}";
         result = Mark.up(template, context);
@@ -244,6 +248,10 @@ describe("Markup core spec", function () {
         template = "{{if brothers|more>2}}yes!{{/if}}";
         result = Mark.up(template, context);
         expect(result).toEqual("yes!");
+
+        template = "{{if brothers|more>4}}no!{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("");
 
         template = "{{if gender|equals>male}}{{gender}}!{{/if}}";
         result = Mark.up(template, context);
@@ -256,12 +264,6 @@ describe("Markup core spec", function () {
         template = "{{name}}{{first}}{{if .|equals>John}}***{{/if}}{{/first}}{{/name}}";
         result = Mark.up(template, context);
         expect(result).toEqual("***");
-    });
-
-    it("resolves if false", function () {
-        template = "{{if brothers|more>4}}no!{{/if}}";
-        result = Mark.up(template, context);
-        expect(result).toEqual("");
     });
 
     it("resolves if/else", function () {
@@ -281,6 +283,11 @@ describe("Markup core spec", function () {
         result = Mark.up(template, context);
         expect(result).toEqual("Joe");
     });
+
+    /*
+    it("resolves nested if statements", function () {
+    });
+    */
 
     it("resolves empty or not empty", function () {
         template = "{{if brothers|empty}}***{{/if}}";
@@ -373,6 +380,10 @@ describe("Markup core spec", function () {
         template = "{{brothers}}{{if #|odd}}{{.}}{{/if}}{{/brothers}}";
         result = Mark.up(template, context);
         expect(result).toEqual("Joe");
+
+        template = "{{brothers}}{{if #|divisible>2}}{{.}}${{/if}}{{/brothers}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("Jack$Jim$");
 
         template = "{{sisters}}{{#|fix>2}} {{/sisters}}";
         result = Mark.up(template, context);
@@ -705,6 +716,36 @@ describe("Markup core spec", function () {
         expect(result).toEqual("false");
     });
 
+    it("resolves pipe: first", function () {
+        template = "{{brothers}}{{if #|first}}{{.}}{{/if}}{{/brothers}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("Jack");
+
+        template = "{{brothers|reverse}}{{if #|first}}{{.}}{{/if}}{{/brothers}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("Jim");
+    });
+
+    it("resolves pipe: last", function () {
+        template = "{{brothers}}{{if #|last}}{{.}}{{/if}}{{/brothers}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("Jim");
+
+        template = "{{brothers|reverse}}{{if #|last}}{{.}}{{/if}}{{/brothers}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("Jack");
+    });
+
+    it("resolves pipe: falsy", function () {
+        template = "{{if falsy|falsy}}***{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("***");
+
+        template = "{{brothers}}{{.}}{{if #|last|falsy}}@{{/if}}{{/brothers}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("Jack@Joe@Jim");
+    });
+
     it("resolves pipe: call", function () {
         function Doggy() {
             this.TYPE_MUTT = "Mutt";
@@ -766,16 +807,5 @@ describe("Markup core spec", function () {
         result = Mark.up(template, context);
         expect(result).toEqual("No");
     });
-
-    /*
-    it("handles nested tags with same property name", function () {
-    });
-
-    it("handles nested if statements", function () {
-    });
-
-    it("handles if/else statements", function () {
-    });
-    */
 
 });

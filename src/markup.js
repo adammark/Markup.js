@@ -46,6 +46,7 @@ Mark.up = function (template, context, options) {
         return val;
     }
 
+    // TODO comments
     function test(result, child, context, options) {
         var a = child.split("{{else}}");
         if (testy) {
@@ -53,6 +54,17 @@ Mark.up = function (template, context, options) {
         }
         return result;
     }
+
+    // TODO comments
+    function Iterator(idx, size) {
+        this.idx = idx;
+        this.size = size;
+        this.sign = "#";
+    }
+    Iterator.prototype = new Number();
+    Iterator.prototype.toString = Iterator.prototype.valueOf = function () {
+        return this.idx + this.sign.length - 1;
+    };
 
     // TODO comments
     while ((tag = tags[i++])) {
@@ -80,8 +92,8 @@ Mark.up = function (template, context, options) {
             result = test(pipe(context, filters), child, context);
         }
         else if (prop === "#" || prop === "##") {
-            x = options.iter + prop.length - 1;
-            result = test(pipe(x, filters), child, context, options);
+            options.iter.sign = prop;
+            result = test(pipe(options.iter, filters), child, context, options);
         }
         else if ((prop = prop.split(".")).length > 1) {
             for (x = 0, evaled = context; x < prop.length; x++) {
@@ -98,7 +110,7 @@ Mark.up = function (template, context, options) {
                 if (evaled instanceof Array) {
                     result = "";
                     for (x in evaled) {
-                        result += child ? Mark.up(child, evaled[x], {iter: +x}) : evaled[x];
+                        result += child ? Mark.up(child, evaled[x], {iter: new Iterator(+x, evaled.length)}) : evaled[x];
                     }
                 }
             }
@@ -170,7 +182,7 @@ Mark.pipes = {
         return str.trim().replace(/\s{2,}/g, " ");
     },
     round: function (num) {
-        return Math.round(parseFloat(num));
+        return Math.round(+(num));
     },
     style: function (str, classes) {
         return '<span class="' + classes + '">' + str + '</span>';
@@ -212,25 +224,34 @@ Mark.pipes = {
         return Mark._copy(arr).sort(prop ? fn : undefined);
     },
     fix: function (num, n) {
-        return num.toFixed(n);
+        return (+num).toFixed(n);
     },
     mod: function (num, n) {
         return (+num) % (+n);
     },
     divisible: function (num, n) {
-        return typeof num == "number" && num % n === 0 ? num : false;
+        return num !== false && num % n === 0 ? num : false;
     },
     even: function (num) {
-        return typeof num == "number" && num % 2 === 0 ? num : false;
+        return num !== false && num % 2 === 0 ? num : false;
     },
     odd: function (num) {
-        return typeof num == "number" && num % 2 === 1 ? num : false;
+        return num !== false && num % 2 === 1 ? num : false;
     },
     url: function (str) {
         return encodeURI(str);
     },
     bool: function (obj) {
         return !!obj;
+    },
+    falsy: function (obj) {
+        return !obj;
+    },
+    first: function (iter) {
+        return iter.idx === 0;
+    },
+    last: function (iter) {
+        return iter.idx === iter.size - 1;
     },
     call: function (obj, fn) {
         return obj[fn].apply(obj, [].slice.call(arguments, 2));

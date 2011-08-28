@@ -7,7 +7,7 @@ JavaScript.
 
 Markup.js takes the pain out of converting structured data into HTML
 markup or other text formats. Its intuitive syntax and small footprint
-(only *1.4KB* minified and gzipped) make it the perfect choice for your
+(only *1.5KB* minified and gzipped) make it the perfect choice for your
 Javascript app. Plus there are *no dependencies.*
 
 ## Usage
@@ -281,7 +281,7 @@ var result = Mark.up(template, context);
 
 ### Built-in pipes
 
-Markup.js comes with more than 35 built-in pipes. Below, the first
+Markup.js comes with more than 40 built-in pipes. Below, the first
 argument is always the piped value itself:
 
 `empty` (obj): returns obj if empty, else returns false
@@ -357,6 +357,12 @@ argument is always the piped value itself:
 `url` (str): returns URL-encoded str
 
 `bool` (obj): casts obj to boolean, returning true or false
+
+`falsy` (obj): returns true if false, else returns false
+
+`first` (iter): returns true if iterator (# or ##) is the first item, else returns false
+
+`last` (iter): returns true if iterator (# or ##) is the last item, else returns false
 
 `call` (obj, fn, arg1, arg2...): power pipe! calls fn on obj with zero or more args
 
