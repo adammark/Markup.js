@@ -354,6 +354,8 @@ argument is always the piped value itself:
 
 `odd` (num): returns num if num is odd, else returns false
 
+`number` (str): returns str as a number, e.g. "$1,234.56" > 1234.56
+
 `url` (str): returns URL-encoded str
 
 `bool` (obj): casts obj to boolean, returning true or false

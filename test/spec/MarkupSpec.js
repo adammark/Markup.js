@@ -700,6 +700,16 @@ describe("Markup core spec", function () {
         expect(result).toEqual("333");
     });
 
+    it("resolves pipe: number", function () {
+        template = "{{num|number}}";
+        result = Mark.up(template, {num: "$1,234.56"});
+        expect(result).toEqual("1234.56");
+
+        template = "{{num|number}}";
+        result = Mark.up(template, {num: "25px"});
+        expect(result).toEqual("25");
+    });
+
     it("resolves pipe: url", function () {
         template = "{{path|url}}";
         result = Mark.up(template, context);
