@@ -501,7 +501,12 @@ IF and IF/ELSE statements work the same way inside loops:
 var template = "{{users}} {{if email}} ... {{/if}} {{/users}}";
 ```
 
-You can even test the value of a loop counter:
+*Note: IF and IF/ELSE statements cannot be nested.*
+
+### Testing loop counters
+
+You can easily apply conditional formatting by testing the value of a
+loop counter:
 
 ``` javascript
 // show different content in even and odd rows
@@ -516,9 +521,11 @@ var template = "{{users}} {{if #|divisible>5}} <thead>...</thead> {{/if}} ... {{
 ``` javascript
 // print a table header every three rows after the tenth row
 var template = "{{users}} {{if ##|more>10|divisible>3}} <thead>...</thead> {{/if}} ... {{/users}}";
-```
 
-*Note: IF and IF/ELSE statements cannot be nested.*
+``` javascript
+// do something on the first pass
+var template = "{{users}} {{if #|first}} ... {{/if}} ... {{/users}}";
+```
 
 ### Custom pipes in conditional expressions
 
