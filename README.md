@@ -521,6 +521,7 @@ var template = "{{users}} {{if #|divisible>5}} <thead>...</thead> {{/if}} ... {{
 ``` javascript
 // print a table header every three rows after the tenth row
 var template = "{{users}} {{if ##|more>10|divisible>3}} <thead>...</thead> {{/if}} ... {{/users}}";
+```
 
 ``` javascript
 // do something on the first pass
