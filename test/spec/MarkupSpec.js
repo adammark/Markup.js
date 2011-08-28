@@ -381,6 +381,10 @@ describe("Markup core spec", function () {
         result = Mark.up(template, context);
         expect(result).toEqual("Joe");
 
+        template = "{{brothers}}{{if #|equals>1}}{{.}}${{/if}}{{/brothers}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("Joe$");
+
         template = "{{brothers}}{{if #|divisible>2}}{{.}}${{/if}}{{/brothers}}";
         result = Mark.up(template, context);
         expect(result).toEqual("Jack$Jim$");
