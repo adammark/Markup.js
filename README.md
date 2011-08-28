@@ -492,11 +492,11 @@ AND expressions:
 var template = "{{if weight|kgs|more>500}} Lighten up! {{/if}}"
 ```
 
-IF and IF/ELSE statements work inside loops:
+IF and IF/ELSE statements work the same way inside loops:
 
 ``` javascript
 // show only users with email addresses
-var template = "{{users}} {{if user.email}} ... {{/if}} {{/users}}";
+var template = "{{users}} {{if email}} ... {{/if}} {{/users}}";
 ```
 
 You can even test the value of an iteration counter to apply conditional
