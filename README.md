@@ -354,7 +354,7 @@ argument is always the piped value itself:
 
 `odd` (num): returns num if num is odd, else returns false
 
-`number` (str): returns str as a number, e.g. "$1,234.56" > 1234.56
+`number` (str): returns number from str, e.g. "$1,234.56" > 1234.56 or "30px" > 30
 
 `url` (str): returns URL-encoded str
 
