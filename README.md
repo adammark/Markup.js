@@ -383,12 +383,8 @@ var result = Mark.up(template, context);
 function Dog() {
     var greeting = "Woof!";
 
-    this.bark = function (count) {
-        var response = [];
-        for (var i = 0; i < count; i++) {
-            response.push(greeting);
-        }
-        return response.join(" ");
+    this.bark = function (times) {
+        ...
     };
 }
 
@@ -499,8 +495,7 @@ IF and IF/ELSE statements work the same way inside loops:
 var template = "{{users}} {{if email}} ... {{/if}} {{/users}}";
 ```
 
-You can even test the value of an iteration counter to apply conditional
-formatting:
+You can even test the value of a loop counter:
 
 ``` javascript
 // show different content in even and odd rows
@@ -591,7 +586,7 @@ myapp.templates = {
 };
 ```
 
-In big apps, you can split up your templates according to functional area:
+In big apps, you can split up your templates by functional area:
 
 ``` javascript
 // templates-registration.js
