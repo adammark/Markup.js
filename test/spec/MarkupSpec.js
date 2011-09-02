@@ -22,6 +22,7 @@ describe("Markup core spec", function () {
         parents: undefined,
         truthy: true,
         falsy: false,
+        friend: { name: "Justin", friend: { name: "Jeremy" } },
         obj: { truthy: true, falsy: false }
     };
 
@@ -82,14 +83,6 @@ describe("Markup core spec", function () {
         template = "{{cousin}}{{name.first}}{{/cousin}}";
         result = Mark.up(template, context);
         expect(result).toEqual("Jake");
-
-        template = "{{cousin}}{{name.last}}{{/cousin}}";
-        result = Mark.up(template, context);
-        expect(result).toEqual("???");
-
-        //template = "{{cousin.name}}{{first}}{{/cousin.name}}";
-        //result = Mark.up(template, context);
-        //expect(result).toEqual("Jake");
     });
 
     it("resolves array index notation", function () {
@@ -110,11 +103,120 @@ describe("Markup core spec", function () {
         template = "La la la";
         result = Mark.up(template);
         expect(result).toEqual("La la la");
+    });
 
-        // should fail gracefully
+    it("resolves nested objects with same name", function () {
+        template = "friend's friend: {{friend}}{{friend.name/}}{{/friend}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("friend's friend: Jeremy");
+
+        template = "friend's friend: {{friend}}{{friend}}{{name}}{{/friend}}{{/friend}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("friend's friend: Jeremy");
+    });
+
+    it("resolves nested if statements", function () {
+        template = "{{if truthy}}x{{if falsy}}y{{else}}{{if truthy}}Y{{/if}}{{/if}}z{{/if}}@";
+        result = Mark.up(template, context);
+        expect(result).toEqual("xYz@");
+
+        template = "{{if truthy}}x{{if falsy}}y{{else}}{{if falsy}}Y{{else}}3{{/if}}{{/if}}z{{/if}}%";
+        result = Mark.up(template, context);
+        expect(result).toEqual("x3z%");
+
+        template = "{{if truthy}}x{{if truthy}}y{{else}}Y{{/if}}z{{/if}}#";
+        result = Mark.up(template, context);
+        expect(result).toEqual("xyz#");
+
+        template = "{{if truthy}}x{{if falsy}}y{{else}}Y{{/if}}z{{/if}}!";
+        result = Mark.up(template, context);
+        expect(result).toEqual("xYz!");
+
+        template = "{{if truthy}}{{if truthy}}abc{{/if}}{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("abc");
+
+        template = "{{if truthy}}{{if falsy}}abc{{/if}}{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("");
+
+        template = "{{if falsy}}{{if truthy}}abc{{/if}}{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("");
+
+        template = "{{if truthy}}x{{if truthy}}y{{/if}}z{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("xyz");
+
+        template = "{{if truthy}}x{{if truthy}}y{{else}}Y{{/if}}z{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("xyz");
+
+        template = "{{if truthy}}x{{if falsy}}y{{else}}Y{{/if}}z{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("xYz");
+
+        template = "{{if truthy}}a{{if falsy}}b{{/if}}c{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("ac");
+
+        template = "{{if age|more>10}}x{{if age|less>10}}y{{/if}}z{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("xz");
+
+        template = "{{if falsy}}x{{if truthy}}y{{/if}}z{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("");
+
+        template = "{{if truthy}}{{if truthy}}{{if truthy}}x{{/if}}{{weight}}{{/if}}{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("x145");
+
+        template = "{{if truthy}}1{{/if}}2{{if falsy}}3{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("12");
+
+        template = "{{weight}}{{weight}}{{if truthy}}{{if truthy}}abc{{/if}}{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("145145abc");
+
+        template = "{{brother}}{{brother}}{{name}}{{/brother}}{{/brother}}";
+        result = Mark.up(template, {brother: {brother:{name:"David"}}});
+        expect(result).toEqual("David");
+    });
+
+    it("resolves undefined values", function () {
+        template = "{{if parents}}+++{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("");
+
+        template = "{{if foo}}!!!{{else}}%%%{{/if}}";
+        result = Mark.up(template, {});
+        expect(result).toEqual("%%%");
+
+        template = "{{if foo}}@@@{{else}}###{{/if}}";
+        result = Mark.up(template, {foo: undefined});
+        expect(result).toEqual("###");
+
+        template = "{{if foo}}@@@{{else}}foo: {{foo}}{{/if}}";
+        result = Mark.up(template, {foo: undefined});
+        expect(result).toEqual("foo: ???");
+
+        template = "{{if foo|empty}}foo: {{foo}}{{else}}@@@{{foo}}{{/if}}";
+        result = Mark.up(template, {foo: undefined});
+        expect(result).toEqual("foo: ???");
+
+        template = "whatever: {{whatever|upcase}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("whatever: ???");
+
         template = "La la {{la}}";
         result = Mark.up(template);
         expect(result).toEqual("La la ???");
+
+        template = "{{cousin}}{{name.last}}{{/cousin}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("???");
     });
 
     it("resolves single pipe on scalar value", function () {
@@ -131,12 +233,6 @@ describe("Markup core spec", function () {
         template = "race: {{race|blank>N/A}}";
         result = Mark.up(template, context);
         expect(result).toEqual("race: N/A");
-    });
-
-    it("resolves undefined value", function () {
-        template = "whatever: {{whatever|blank>N/A}}";
-        result = Mark.up(template, context);
-        expect(result).toEqual("whatever: ???");
     });
 
     it("resolves boolean values", function () {
@@ -175,6 +271,10 @@ describe("Markup core spec", function () {
         template = "brothers: {{brothers}} {{brothers}}";
         result = Mark.up(template, context);
         expect(result).toEqual("brothers: JackJoeJim JackJoeJim");
+
+        template = "brothers: {{brothers/}} {{brothers}}x{{/brothers}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("brothers: JackJoeJim xxx");
     });
 
     it("resolves self reference in iteration", function () {
@@ -241,6 +341,10 @@ describe("Markup core spec", function () {
         result = Mark.up(template, context);
         expect(result).toEqual("***");
 
+        template = "{{if children}}***{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("");
+
         template = "{{if brothers|empty}}***{{/if}}";
         result = Mark.up(template, context);
         expect(result).toEqual("");
@@ -284,25 +388,20 @@ describe("Markup core spec", function () {
         expect(result).toEqual("Joe");
     });
 
-    /*
-    it("resolves nested if statements", function () {
-    });
-    */
-
     it("resolves empty or not empty", function () {
-        template = "{{if brothers|empty}}***{{/if}}";
+        template = "{{if brothers|empty}}***1{{/if}}";
         result = Mark.up(template, context);
         expect(result).toEqual("");
 
-        template = "{{if brothers|notempty}}***{{/if}}";
+        template = "{{if brothers|notempty}}***2{{/if}}";
         result = Mark.up(template, context);
-        expect(result).toEqual("***");
+        expect(result).toEqual("***2");
 
-        template = "{{if parents|empty}}***{{/if}}";
+        template = "{{if parents|empty}}***3{{/if}}";
         result = Mark.up(template, context);
-        expect(result).toEqual("***");
+        expect(result).toEqual("***3");
 
-        template = "{{if parents|notempty}}***{{/if}}";
+        template = "{{if parents|notempty}}***4{{/if}}";
         result = Mark.up(template, context);
         expect(result).toEqual("");
     });
@@ -767,21 +866,13 @@ describe("Markup core spec", function () {
     it("resolves pipe: call", function () {
         function Doggy() {
             this.TYPE_MUTT = "Mutt";
-            this.TYPE_GOLDEN = "Golden Retriever";
 
             this.greet = function () {
                 return "Woof!";
             };
 
             this.getBreed = function (name) {
-                switch (name) {
-                    case "Milo":
-                        return this.TYPE_MUTT;
-                        break;
-                    case "Barkley":
-                        return this.TYPE_GOLDEN;
-                }
-                return "N/A";
+                return !!name ? this.TYPE_MUTT : "N/A";
             };
         }
 
