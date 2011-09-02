@@ -7,7 +7,7 @@ JavaScript.
 
 Markup.js takes the pain out of converting structured data into HTML
 markup or other text formats. Its intuitive syntax and small footprint
-(only *1.5KB* minified and gzipped) make it the perfect choice for your
+(only 1.7KB minified and gzipped) make it the perfect choice for your
 Javascript app. Plus there are *no dependencies.*
 
 ## Usage
