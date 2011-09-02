@@ -1,4 +1,9 @@
 var Mark = {
+    // comment
+    includes: {
+    },
+
+    // comment
     _copy: function (a, b) {
         b = b || [];
         for (var i in a) {
@@ -6,120 +11,183 @@ var Mark = {
         }
         return b;
     },
+
+    // comment
     _size: function (a) {
         return a instanceof Array ? a.length : a;
     },
-    includes: {}
+
+    // comment
+    _iter: function (idx, size) {
+        this.idx = idx;
+        this.size = size;
+        this.sign = "#";
+        this.prototype = Number;
+        this.toString = this.valueOf = function () {
+            return this.idx + this.sign.length - 1;
+        };
+    },
+
+    // comment
+    _pipe: function (val, filters) {
+        var filter = filters.shift(), fn, args;
+        if (filter) {
+            fn = filter.split(">").shift().trim();
+            args = filter.split(">").splice(1);
+            val = Mark._pipe(Mark.pipes[fn].apply(null, [val].concat(args)), filters);
+        }
+        return val;
+    },
+
+    // comment
+    _bridge: function (tpl, tkn) {
+        var exp = "{{" + tkn + "([^/}]+\\w*)?}}|{{/" + tkn + "}}",
+            re = new RegExp(exp, "g"),
+            tags = tpl.match(re),
+            t,
+            a = 0,
+            b = 0,
+            c = -1,
+            d = 0;
+
+        for (t in tags) {
+            c = tpl.indexOf(tags[t], c + 1);
+
+            if (tags[t].match("{{/")) {
+                b++;
+            }
+            else {
+                a++;
+            }
+
+            if (a === b) {
+                break;
+            }
+        }
+
+        a = tpl.indexOf(tags[0]);
+        b = a + tags[0].length;
+        d = c + tags[t].length;
+
+        return [tpl.substring(a, d), tpl.substring(b, c)];
+    }
 };
 
-Mark.up = function (template, context, options) {
+Mark.up = function (template, context, options, undefined) {
     context = context || {};
 
-    var tags = template.match(/\{\{\w*[^}]+\w*\}\}/g) || [],
+    var re = /\{\{\w*[^}]+\w*\}\}/g,
+        tags = template.match(re) || [],
+        pipe = Mark._pipe,
         tag,
-        endtag,
         prop,
+        token,
         filters = [],
         selfy,
         testy,
         child,
-        evaled,
+        tmp,
         result,
         i = 0,
-        x,
-        a, b;
+        x;
 
-    // set options if any. only need to do once!
+    // comment
     if (options) {
         Mark._copy(options.pipes, Mark.pipes);
         Mark._copy(options.includes, Mark.includes);
     }
 
-    // pipe a string value. ex: pipe("adam", ["upcase","chop>50"])
-    function pipe(val, filters) {
-        var filter = filters.shift(), fn, args;
-        if (filter) {
-            fn = filter.split(">").shift().trim();
-            args = filter.split(">").splice(1);
-            return pipe(Mark.pipes[fn].apply(null, [val].concat(args)), filters);
-        }
-        return val;
-    }
-
-    // TODO comments
+    // comment
     function test(result, child, context, options) {
-        var a = child.split("{{else}}");
+        child = Mark.up(child, context, options).split("{{else}}");
+
         if (testy) {
-            return Mark.up(result !== false ? a[0] : a[1] || "", context, options);
+            result = child[result === false ? 1 : 0];
+            result = Mark.up(result || "", context, options);
         }
+
         return result;
     }
 
-    // TODO comments
-    function Iterator(idx, size) {
-        this.idx = idx;
-        this.size = size;
-        this.sign = "#";
-    }
-    Iterator.prototype = new Number();
-    Iterator.prototype.toString = Iterator.prototype.valueOf = function () {
-        return this.idx + this.sign.length - 1;
-    };
-
-    // TODO comments
+    // comment
     while ((tag = tags[i++])) {
+        result = undefined;
+        child = "";
         selfy = tag.indexOf("/}}") > -1;
         prop = tag.substr(2, tag.length - (selfy ? 5 : 4));
         testy = prop.indexOf("if ") === 0;
         filters = prop.split("|").splice(1);
         prop = prop.replace(/^if/, "").split("|").shift().trim();
-        endtag = "{{/" + (testy ? "if" : prop.split("|")[0]) + "}}";
-        child = "";
-        result = undefined;
+        token = testy ? "if" : prop.split("|")[0];
 
-        if (!selfy && tags.indexOf(endtag, i) > -1) {
-            i = tags.indexOf(endtag, i) + 1; // fast forward
-            a = template.indexOf(tag);
-            b = template.indexOf(endtag);
-            child = template.substring(a + tag.length, b);
-            tag = template.substring(a, b + endtag.length);
+        // comment
+        if (!selfy && tags.indexOf("{{/" + token + "}}") > -1) {
+            result = Mark._bridge(template, token);
+            tag = result[0];
+            child = result[1];
+            i += tag.match(re).length - 1;
         }
 
+        // comment
         if (Mark.includes[prop]) {
             result = pipe(Mark.up(Mark.includes[prop], context), filters);
         }
+
+        // comment
         else if (prop === ".") {
             result = test(pipe(context, filters), child, context);
         }
-        else if (prop === "#" || prop === "##") {
+
+        // comment
+        else if (prop.match(/#{1,2}/)) {
             options.iter.sign = prop;
             result = test(pipe(options.iter, filters), child, context, options);
         }
-        else if ((prop = prop.split(".")).length > 1) {
-            for (x = 0, evaled = context; x < prop.length; x++) {
-                evaled = evaled[prop[x]];
-            }
-            result = test(pipe(evaled, filters), child, context);
+
+        // comment
+        else if (tag === "{{else}}") {
+            continue;
         }
-        else if (context.hasOwnProperty(prop)) {
-            if (testy) {
-                result = test(pipe(context[prop], filters), child, context);
+
+        // comment
+        else if (prop.match(/\./)) {
+            prop = prop.split(".");
+            for (x = 0, tmp = context; x < prop.length; x++) {
+                tmp = tmp[prop[x]];
             }
-            else if (context[prop] instanceof Array) {
-                result = evaled = pipe(context[prop], filters);
-                if (evaled instanceof Array) {
-                    result = "";
-                    for (x in evaled) {
-                        result += child ? Mark.up(child, evaled[x], {iter: new Iterator(+x, evaled.length)}) : evaled[x];
-                    }
+            result = test(pipe(tmp, filters), child, context);
+        }
+
+        // comment
+        else if (testy) {
+            result = true;
+            if (!filters.length) {
+                if (context[prop] === undefined || (context[prop] instanceof Array && !context[prop].length)) {
+                    result = false;
                 }
             }
-            else if (child) {
-                result = Mark.up(child, context[prop]);
+            result = test(result && pipe(context[prop], filters), child, context);
+        }
+
+        // comment
+        else if (context[prop] instanceof Array) {
+            result = tmp = pipe(context[prop], filters);
+            if (tmp instanceof Array) {
+                result = "";
+                for (x in tmp) {
+                    result += child ? Mark.up(child, tmp[x], {iter: new Mark._iter(+x, tmp.length)}) : tmp[x];
+                }
             }
-            else {
-                result = pipe(context[prop], filters);
-            }
+        }
+
+        // comment
+        else if (child) {
+            result = Mark.up(child, context[prop]);
+        }
+
+        // comment
+        else if (context.hasOwnProperty(prop)) {
+            result = pipe(context[prop], filters);
         }
 
         template = template.replace(tag, result === undefined ? "???" : result);
