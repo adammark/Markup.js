@@ -503,12 +503,19 @@ IF and IF/ELSE statements work the same way inside loops:
 var template = "{{users}} {{if email}} ... {{/if}} {{/users}}";
 ```
 
-*Note: IF and IF/ELSE statements cannot be nested.*
+IF and IF/ELSE statements can be nested:
+
+``` javascript
+var template = "{{if age|more>100}} {{if gender|equals>male}} Old man! {{/if}} {{/if}}";
+```
+
+``` javascript
+var template = "{{if ...}} ... {{else}} {if ...}} ... {{else}} ... {{/if}} {{/if}}";
+```
 
 ### Testing loop counters
 
-You can easily apply conditional formatting by testing the value of a
-loop counter:
+You can use loop counters to apply conditional formatting:
 
 ``` javascript
 // show different content in even and odd rows
