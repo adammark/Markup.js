@@ -655,7 +655,7 @@ The above method can be unwieldy if you're dealing with large chunks of
 HTML. Instead, you might want to embed templates in the HTML code
 itself:
 
-```
+``` html
 <!-- menu.html -->
 ...
 <div id="menu">
