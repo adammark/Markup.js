@@ -597,9 +597,15 @@ var result = Mark.up(template, context, options);
 
 ## Implementation
 
-HTML templates tend to be longer than the examples shown here, so it's a
-good idea to segregate them from the rest of your code. In small apps,
-you can put all your templates into a single file:
+You can implement Markup.js in a few different ways. The right strategy
+depends on many factors, including the speed and size of your app, the
+number of templates you're handling, and whether you want the templates
+to be reusable throughout your codebase.
+
+### 1. Templates as JavaScript strings
+
+Templates can be written as JavaScript string literals, as shown above.
+It's a good idea to put all your templates together in one file:
 
 ``` javascript
 // templates.js
@@ -609,7 +615,8 @@ myapp.templates = {
 };
 ```
 
-In big apps, you can split up your templates by functional area:
+As your app grows, you might consider splitting up your templates by
+functional area:
 
 ``` javascript
 // templates-registration.js
@@ -636,17 +643,55 @@ var context = user.data;
 $("#sidebar").html(Mark.up(template, context));
 ```
 
-Or, without jQuery:
+Or do it without jQuery:
 
 ``` javascript
 document.getElementById("sidebar").innerHTML = Mark.up(template, context);
 ```
 
-### Loading templates with AJAX
+### 2. Embedding templates in HTML
 
-Large chunks of HTML can be cumbersome to write as JavaScript strings.
-To get around this, you can write your templates in plain text files
-and load them via AJAX. Here's how to do it with jQuery:
+The above method can be unwieldy if you're dealing with large chunks of
+HTML. Instead, you might want to embed templates in the HTML code
+itself:
+
+```
+<!-- menu.html -->
+...
+<div id="menu">
+    <h1>Menu</h1>
+    <ul>
+        {{menu|sort>price}}
+            <li>
+                {{desc}} - {{price|dollars}}
+                {{if .|onsale}}
+                    <span class="sale">(SALE! {{saleprice|dollars}})</span>
+                {{/if}}
+            </li>
+        {{/menu}}
+    </ul>
+</div>
+...
+```
+
+Then, simply replace the HTML contents:
+
+```
+var elem = document.getElementById("menu");
+
+elem.innerHTML = Mark.up(elem.innerHTML, context);
+```
+
+If you intend to evaluate embedded templates more than once during the
+lifetime of the HTML page, you'll need to store the original template
+text for later lookup.
+
+### 3. Loading templates with AJAX
+
+The above method makes it easy to write templates but hard to reuse them
+throughout your app. A compromise solution is to write your templates
+in plain text files and load them via AJAX. Here's how to do it with
+jQuery:
 
 ``` javascript
 $.get("templates/sidebar.txt", function (txt) {
@@ -684,11 +729,12 @@ $.get("user-templates.txt", function (txt) {
 });
 ```
 
-The right strategy depends on many factors, including the speed of your
-app, the number of templates you're handling, and the cumulative weight
-of the templates. 
+You can also cache templates in 
+<a href="http://diveintohtml5.org/storage.html">Local Storage</a> or the
+<a href="http://www.html5rocks.com/en/tutorials/appcache/beginner/">Application 
+Cache</a> for instantaneous retrieval.
 
-### i18n
+## Internationalization (i18n)
 
 Markup.js can help support internationalization of your UI. Here's a
 basic approach to creating a resource "bundle" for each target language:
