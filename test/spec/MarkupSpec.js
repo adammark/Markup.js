@@ -185,8 +185,12 @@ describe("Markup core spec", function () {
         expect(result).toEqual("David");
     });
 
-    it("resolves undefined values", function () {
+    it("resolves undefined/empty values", function () {
         template = "{{if parents}}+++{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("");
+
+        template = "{{if phone}}+++{{/if}}";
         result = Mark.up(template, context);
         expect(result).toEqual("");
 

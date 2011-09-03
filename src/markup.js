@@ -86,7 +86,7 @@ Mark.up = function (template, context, options, undefined) {
         selfy,
         testy,
         child,
-        tmp,
+        ctx,
         result,
         i = 0,
         x;
@@ -152,17 +152,17 @@ Mark.up = function (template, context, options, undefined) {
         // comment
         else if (prop.match(/\./)) {
             prop = prop.split(".");
-            for (x = 0, tmp = context; x < prop.length; x++) {
-                tmp = tmp[prop[x]];
+            for (x = 0, ctx = context; x < prop.length; x++) {
+                ctx = ctx[prop[x]];
             }
-            result = test(pipe(tmp, filters), child, context);
+            result = test(pipe(ctx, filters), child, context);
         }
 
         // comment
         else if (testy) {
             result = true;
             if (!filters.length) {
-                if (context[prop] === undefined || (context[prop] instanceof Array && !context[prop].length)) {
+                if (context[prop] === undefined || context[prop].length === 0) {
                     result = false;
                 }
             }
@@ -171,11 +171,12 @@ Mark.up = function (template, context, options, undefined) {
 
         // comment
         else if (context[prop] instanceof Array) {
-            result = tmp = pipe(context[prop], filters);
-            if (tmp instanceof Array) {
+            result = ctx = pipe(context[prop], filters);
+            if (ctx instanceof Array) {
                 result = "";
-                for (x in tmp) {
-                    result += child ? Mark.up(child, tmp[x], {iter: new Mark._iter(+x, tmp.length)}) : tmp[x];
+                for (x in ctx) {
+                    options = { iter: new Mark._iter(+x, ctx.length) };
+                    result += child ? Mark.up(child, ctx[x], options) : ctx[x];
                 }
             }
         }
