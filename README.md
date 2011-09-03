@@ -556,7 +556,7 @@ var template = "{{if salary|big|even}} A nice round number! {{/if}}";
 ```
 
 In the above example, `salary|big|even` returns *5000000*, which
-resolves to *true* in the IF statement. *You should follow this
+resolves to *true* inside the IF statement. *You should follow this
 convention if you write boolean pipes.*
 
 ## Includes
@@ -604,8 +604,8 @@ var result = Mark.up(template, context, options);
 
 You can implement Markup.js in a few different ways. The right strategy
 depends on many factors, including the speed and size of your app, the
-number of templates you're handling, and whether you want the templates
-to be reusable throughout your codebase.
+number of templates you're handling, and whether the templates should be
+reusable throughout your codebase.
 
 ### 1. Writing templates as JavaScript strings
 
@@ -648,7 +648,7 @@ var context = user.data;
 $("#sidebar").html(Mark.up(template, context));
 ```
 
-Or do it without jQuery:
+Or, without jQuery:
 
 ``` javascript
 document.getElementById("sidebar").innerHTML = Mark.up(template, context);
