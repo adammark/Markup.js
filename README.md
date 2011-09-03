@@ -602,9 +602,9 @@ depends on many factors, including the speed and size of your app, the
 number of templates you're handling, and whether you want the templates
 to be reusable throughout your codebase.
 
-### 1. Templates as JavaScript strings
+### 1. Writing templates as JavaScript strings
 
-Templates can be written as JavaScript string literals, as shown above.
+You can write templates as JavaScript string literals, as shown above.
 It's a good idea to put all your templates together in one file:
 
 ``` javascript
@@ -616,7 +616,7 @@ myapp.templates = {
 ```
 
 As your app grows, you might consider splitting up your templates by
-functional area:
+functional area and loading only some of them at a time:
 
 ``` javascript
 // templates-registration.js
@@ -676,7 +676,7 @@ itself:
 
 Then, simply replace the HTML contents:
 
-```
+``` javascript
 var elem = document.getElementById("menu");
 
 elem.innerHTML = Mark.up(elem.innerHTML, context);
