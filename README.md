@@ -537,13 +537,15 @@ var template = "{{users}} {{if ##|more>10|divisible>3}} <thead>...</thead> {{/if
 var template = "{{users}} {{if #|first}} ... {{/if}} ... {{/users}}";
 ```
 
-### Custom pipes in conditional expressions
+### Pipes in conditional expressions
 
-Custom pipes used in boolean tests should return either the piped value
-(if true) or *false* (if false), such that the output of one pipe can
-serve as the input to another. For example:
+Boolean pipes, such as `between` or `more`, return the *inputted value*
+if the expression is true. Otherwise they return *false*. This way,
+pipes can be chained together to form complex AND statements. For
+example:
 
 ``` javascript
+// a custom pipe
 Mark.pipes.big = function (num) {
     return num > 1000000 ? num : false;
 };
@@ -551,8 +553,11 @@ Mark.pipes.big = function (num) {
 var context = { salary: 5000000 };
 
 var template = "{{if salary|big|even}} A nice round number! {{/if}}";
-
 ```
+
+In the above example, `salary|big|even` returns *5000000*, which
+resolves to *true* in the IF statement. *You should follow this
+convention if you write boolean pipes.*
 
 ## Includes
 
