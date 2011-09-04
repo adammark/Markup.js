@@ -1,25 +1,27 @@
 var Mark = {
-    // comment
+    // templates to include, by name
     includes: {},
     
-    // comment
+    // templates to cache, by name
     cache: {},
 
-    // comment
+    // copy array a, or copy array a into b. returns b
     _copy: function (a, b) {
         b = b || [];
+
         for (var i in a) {
             b[i] = a[i];
         }
+
         return b;
     },
 
-    // comment
+    // get the size of array or number a
     _size: function (a) {
         return a instanceof Array ? a.length : a;
     },
 
-    // comment
+    // an iterator with an index (0...n-1) ("#") and size (n) ("##")
     _iter: function (idx, size) {
         this.idx = idx;
         this.size = size;
@@ -30,18 +32,20 @@ var Mark = {
         };
     },
 
-    // comment
+    // pipe an obj through multiple filters. e.g. _pipe(123, "add>10|times>5")
     _pipe: function (val, filters) {
         var filter = filters.shift(), fn, args;
+
         if (filter) {
             fn = filter.split(">").shift().trim();
             args = filter.split(">").splice(1);
             val = Mark._pipe(Mark.pipes[fn].apply(null, [val].concat(args)), filters);
         }
+
         return val;
     },
 
-    // comment
+    // get the full extent of a block tag. e.g. _bridge("...{{if a}} ...", "if").
     _bridge: function (tpl, tkn) {
         var exp = "{{" + tkn + "([^/}]+\\w*)?}}|{{/" + tkn + "}}",
             re = new RegExp(exp, "g"),
@@ -71,10 +75,12 @@ var Mark = {
         b = a + tags[0].length;
         d = c + tags[t].length;
 
+        // return block "{{if abc}}123{{/abc}}" and child of block "123"
         return [tpl.substring(a, d), tpl.substring(b, c)];
     }
 };
 
+// fill a template string with context data. options: pipes, includes, cache
 Mark.up = function (template, context, options, undefined) {
     context = context || {};
     options = options || {};
@@ -94,18 +100,22 @@ Mark.up = function (template, context, options, undefined) {
         i = 0,
         x;
 
-    // comment
+    // set custom pipes, if any
     if (options.pipes) {
         Mark._copy(options.pipes, Mark.pipes);
     }
+
+    // set included templates, if any
     if (options.includes) {
         Mark._copy(options.includes, Mark.includes);
     }
+
+    // set cached templates, if any
     if (options.cache) {
         Mark.cache[options.cache] = template;
     }
 
-    // comment
+    // test an "if" statement given an eval'd expression. return if str, else str, or ""
     function test(result, child, context, options) {
         child = Mark.up(child, context, options).split("{{else}}");
 
@@ -117,7 +127,7 @@ Mark.up = function (template, context, options, undefined) {
         return result;
     }
 
-    // comment
+    // loop through tags, e.g. {{a}}, {{b}}, {{c}}, {{/c}}
     while ((tag = tags[i++])) {
         result = undefined;
         child = "";
@@ -128,7 +138,7 @@ Mark.up = function (template, context, options, undefined) {
         prop = prop.replace(/^if/, "").split("|").shift().trim();
         token = testy ? "if" : prop.split("|")[0];
 
-        // comment
+        // get the full extent of a block tag, and fast forward
         if (!selfy && tags.indexOf("{{/" + token + "}}") > -1) {
             result = Mark._bridge(template, token);
             tag = result[0];
@@ -136,28 +146,28 @@ Mark.up = function (template, context, options, undefined) {
             i += tag.match(re).length - 1;
         }
 
-        // comment
+        // tag refers to included template
         if (Mark.includes[prop]) {
             result = pipe(Mark.up(Mark.includes[prop], context), filters);
         }
 
-        // comment
+        // tag refers to current context
         else if (prop === ".") {
             result = test(pipe(context, filters), child, context);
         }
 
-        // comment
+        // tag refers to loop counter
         else if (prop.match(/#{1,2}/)) {
             options.iter.sign = prop;
             result = test(pipe(options.iter, filters), child, context, options);
         }
 
-        // comment
+        // skip "else" tags. these will be pulled out in test()
         else if (tag === "{{else}}") {
             continue;
         }
 
-        // comment
+        // tag has dot notation, e.g. "a.b.c". traverse it to get the actual context
         else if (prop.match(/\./)) {
             prop = prop.split(".");
             for (x = 0, ctx = context; x < prop.length; x++) {
@@ -166,9 +176,10 @@ Mark.up = function (template, context, options, undefined) {
             result = test(pipe(ctx, filters), child, context);
         }
 
-        // comment
+        // tag is otherwise testable
         else if (testy) {
             result = true;
+            // allow test for empty/undefined without filter (e.g "{{if foo}}...{{/if}}")
             if (!filters.length) {
                 if (context[prop] === undefined || context[prop].length === 0) {
                     result = false;
@@ -177,7 +188,7 @@ Mark.up = function (template, context, options, undefined) {
             result = test(result && pipe(context[prop], filters), child, context);
         }
 
-        // comment
+        // context is an array. pipe and loop through result (if array). pass iteration obj
         else if (context[prop] instanceof Array) {
             result = ctx = pipe(context[prop], filters);
             if (ctx instanceof Array) {
@@ -199,12 +210,14 @@ Mark.up = function (template, context, options, undefined) {
             result = pipe(context[prop], filters);
         }
 
+        // comment
         template = template.replace(tag, result === undefined ? "???" : result);
     }
 
     return template;
 };
 
+// "out of the box" pipes
 Mark.pipes = {
     blank: function (str, val) {
         return !!str || str === 0 ? str : val;
