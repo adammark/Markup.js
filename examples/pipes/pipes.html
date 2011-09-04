@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Markup.js examples</title>
+
+<link rel="stylesheet" type="text/css" href="../examples.css" />
+
+<style type="text/css">
+    .money {
+        color: white;
+        background-color: #6C0;
+        padding: 0 2px;
+    }
+    .sale {
+        color: green;
+        font-weight: bold;
+    }
+</style>
+
+<script src="../../src/markup.min.js"></script>
+
+<script>
+function init() {
+    var elem;
+    var context = {
+        name: { first: "John", last: "Doe" },
+        homepage: {
+            link: "  http://www.example.com?q=12345 67890  ",
+            title: "A really, really long title here here here"
+        },
+        age: 24.75,
+        salary: "$12,345",
+        married: true,
+        anniversary: null,
+        spouse: { name: { first: "Jane", last: "Doe" } }
+    }
+
+    // ......................... A .........................
+    elem = document.getElementById("A");
+
+    elem.innerHTML = Mark.up(elem.innerHTML, context);
+
+    // ......................... B .........................
+    elem = document.getElementById("B");
+
+    elem.innerHTML = Mark.up(elem.innerHTML, context);
+
+    // ......................... D .........................
+    function Doggy() {
+        this.bark = function (count) {
+            var str = "";
+            for (var i = 0; i < count; i++) {
+                str += "Woof! ";
+            }
+            return str;
+        }
+    }
+
+    elem = document.getElementById("D");
+
+    elem.innerHTML = Mark.up(elem.innerHTML, { dog: new Doggy() });;
+
+    // ......................... E .........................
+    elem = document.getElementById("E");
+
+    elem.innerHTML = Mark.up(elem.innerHTML, context);
+
+    // ......................... F .........................
+    var my_pipes = {
+        // convert a number to dollar notation
+        // returns num formatted as string
+        dollars: function (num) {
+            var n = (+num).toFixed(2).toString(), i = n.indexOf(".");
+            while ((i -= 3) > 0) {
+                n = n.substr(0, i) + "," + n.substr(i);
+            }
+            return "$" + n;
+        },
+
+        // determine if a menu item is on sale
+        // returns inputted value (item) if true, else returns false
+        onsale: function (item) {
+            return item.price - item.saleprice > 0 ? item : false;
+        }
+    };
+
+    var menu = {
+        menu: [
+            { desc: "Filet Mignon", price: 69, saleprice: 59 },
+            { desc: "Prime Rib", price: 49, saleprice: 49 },
+            { desc: "Dom Perignon", price: 109.99, saleprice: 99.99 },
+            { desc: "Mashed Potatoes", price: 11.5, saleprice: 11.5 },
+            { desc: "Caesar Salad", price: 13, saleprice: 13 }
+        ]
+    };
+    
+    elem = document.getElementById("F");
+
+    elem.innerHTML = Mark.up(elem.innerHTML, menu, { pipes: my_pipes });
+}
+</script>
+</head>
+
+<body onload="init()">
+
+    <h1>Markup.js: Pipes</h1>
+
+    <p>Markup.js comes with more than 40 built-in pipes &mdash; plus
+    it's easy to add your own. Here are just a few examples. (See the
+    README file for complete documentation.):</p>
+
+    <h2>A. Piped strings</h2>
+
+    <div id="A">
+        <div>Name: {{name.first|upcase}} ({{name.first|size}} letters)</div>
+        <div>Salary: {{salary|style>money}}</div>
+        <div>Home page: <a href="{{homepage.link|trim|url}}">{{homepage.title|chop>30}}</a></div>
+    </div>
+
+    <h2>B. Piped numbers</h2>
+
+    <div id="B">
+        Age: {{age|round}} ({{age|fix>3}}) (Old?: {{age|more>80|choose>Yes>No}})
+    </div>
+
+    <h2>C. Piped arrays</h2>
+
+    <div id="C">
+        See <a href="../arrays/arrays.html">array examples</a>
+    </div>
+
+    <h2>D. Piped functions</h2>
+
+    <div id="D">
+        Bark: <em>{{dog|call>bark>3}}</em>
+    </div>
+
+    <h2>E. Testing for empty</h2>
+
+    <div id="E">
+        Married?: {{married|choose>Yes>No}}
+        {{if spouse}}
+            (Spouse: {{spouse.name.first}})
+            (Anniversary: {{anniversary|blank>N/A}})
+        {{/if}}
+    </div>
+
+    <h2>F. Custom pipes</h2>
+
+    <div id="F">
+        <ul>
+            {{menu|sort>price}}
+                <li>
+                    {{desc}} - {{price|dollars}}
+                    {{if .|onsale}}
+                        <span class="sale">(SALE! {{saleprice|dollars}})</span>
+                    {{/if}}
+                </li>
+            {{/menu}}
+        </ul>
+    </div>
+
+</body>
+</html>

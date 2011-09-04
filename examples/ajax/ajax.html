@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Markup.js examples</title>
+
+<link rel="stylesheet" type="text/css" href="../examples.css" />
+
+<script src="../../src/markup.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script>
+$(document).ready(function () {
+    var template;
+    var context;
+    var render = function () {
+        if (template && context) {
+            $("#result").html(Mark.up(template, context));
+        }
+    };
+
+    $.get("data.json", function (data) {
+        context = data;
+        render();
+    });
+
+    $.get("template.html", function (html) {
+        template = html;
+        render();
+    });
+});
+</script>
+</head>
+
+<body>
+
+    <h1>Markup.js: Loading templates via AJAX</h1>
+
+    <p>This example demonstrates how to use AJAX to load both JSON data
+    <em>and</em> a template. <strong>Note: this example will only work
+    when running from a web server.</strong></p>
+
+    <div id="result"></div>
+
+    <script>
+    if (location.href.match("file:")) {
+        document.write("<span class=\"error\">Oops! This example must be run from a web server.</span>");
+    }
+    </script>
+
+</body>
+</html>

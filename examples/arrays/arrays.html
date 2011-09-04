@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Markup.js examples</title>
+
+<link rel="stylesheet" type="text/css" href="../examples.css" />
+
+<style type="text/css">
+    .boy {
+        color: #36C;
+    }
+    .girl {
+        color: #F69;
+    }
+    .major {
+        color: red;
+        font-weight: bold;
+    }
+    .minor {
+        color: #CCC;
+    }
+</style>
+
+<script src="../../src/markup.min.js"></script>
+<script>
+function init() {
+    var context = {
+        name: { first: "John", last: "Doe" },
+        age: 21,
+        siblings: ["Jack", "Jake", "Jim"],
+        friends: [
+            { name: "Jamie", age: 12, gender: "M" },
+            { name: "Jenny", age: 15, gender: "F" },
+            { name: "Julie", age: 8, gender: "F" },
+            { name: "Jackie", age: 32, gender: "F" },
+            { name: "Joey", age: 14, gender: "M" }
+        ]
+    };
+
+    var elems = document.getElementsByClassName("example");
+
+    for (var i = 0; i < elems.length; i++) {
+        elems[i].innerHTML = Mark.up(elems[i].innerHTML, context);
+    }
+}
+</script>
+</head>
+
+<body onload="init()">
+
+    <h1>Markup.js: Arrays</h1>
+
+    <h2><strong>A.</strong> A simple array</h2>
+
+    <div class="example">
+        <p>{{siblings|join> + }}</p>
+    </div>
+
+    <div class="example">
+        <p>{{siblings|reverse|join> + }}</p>
+    </div>
+
+    <div class="example">
+        <ol>
+            {{siblings}}
+                <li>{{.}}-{{#}}</li>
+            {{/siblings}}
+        </ol>
+    </div>
+
+    <div class="example">
+        <ol>
+            {{siblings|reverse}}
+                <li>{{.|upcase}}-{{##}}</li>
+            {{/siblings}}
+        </ol>
+    </div>
+
+    <h2><strong>B.</strong> An array of objects</h2>
+
+    <div class="example">
+        <ol>
+            {{friends}}
+                <li>{{name}} ({{age}})</li>
+            {{/friends}}
+        </ol>
+    </div>
+
+    <h2><strong>C.</strong> The array sorted by <em>name</em></h2>
+
+    <div class="example">
+        <ol>
+            {{friends|sort>name}}
+                <li>{{name}} ({{age}})</li>
+            {{/friends}}
+        </ol>
+    </div>
+
+    <h2><strong>D.</strong> The array sorted by <em>age</em></h2>
+
+    <div class="example">
+        <ol>
+            {{friends|sort>age}}
+                <li>{{name}} ({{age}})</li>
+            {{/friends}}
+        </ol>
+    </div>
+
+    <h2><strong>E.</strong> The array sorted by <em>age</em>, then reversed</h2>
+
+    <div class="example">
+        <ol>
+            {{friends|sort>age|reverse}}
+                <li>{{name}} ({{age}})</li>
+            {{/friends}}
+        </ol>
+    </div>
+
+    <h2><strong>F.</strong> The array sorted and color-coded by gender</h2>
+
+    <div class="example">
+        <ol>
+            {{friends|sort>gender}}
+                <li class="{{gender|equals>M|choose>boy>girl}}">
+                    {{name}} ({{age}})
+                </li>
+            {{/friends}}
+        </ol>
+    </div>
+
+    <h2><strong>G.</strong> The array limited to the first three items</h2>
+
+    <div class="example">
+        <ol>
+            {{friends|limit>3}}
+                <li>{{name}} ({{age}})</li>
+            {{/friends}}
+        </ol>
+    </div>
+
+    <h2><strong>H.</strong> The array reduced to girls only</h2>
+
+    <div class="example">
+        <ol>
+            {{friends}}
+                {{if gender|equals>F}}
+                    <li class="girl">{{name}} ({{age}})</li>
+                {{/if}}
+            {{/friends}}
+        </ol>
+    </div>
+
+    <h2><strong>I.</strong> The array reduced to girls older than 10</h2>
+
+    <div class="example">
+        <ol>
+            {{friends}}
+                {{if gender|equals>F}}
+                    {{if age|more>10}}
+                        <li class="girl">{{name}} ({{age}})</li>
+                    {{/if}}
+                {{/if}}
+            {{/friends}}
+        </ol>
+    </div>
+
+    <h2><strong>J.</strong> The array reduced to names like "Ja..."</h2>
+
+    <div class="example">
+        <ol>
+            {{friends}}
+                {{if name|like>Ja}}
+                    <li>{{name}} ({{age}})</li>
+                {{/if}}
+            {{/friends}}
+        </ol>
+    </div>
+
+    <h2><strong>K.</strong> Testing for the first and last items in the list</h2>
+
+    <div class="example">
+        <ol>
+            {{friends|sort>age}}
+                <li>
+                    {{name}} ({{age}})
+                    {{if #|first}}
+                        <strong>(Youngest)</strong>
+                    {{/if}}
+                    {{if #|last}}
+                        <strong>(Oldest)</strong>
+                    {{/if}}
+                </li>
+            {{/friends}}
+        </ol>
+    </div>
+
+    <h2><strong>L.</strong> Testing for every third item in the list</h2>
+
+    <div class="example">
+        <ol>
+            {{friends|sort>age}}
+                <li class="{{# |divisible>3|choose>major>minor}}">
+                    {{name}} ({{age}})
+                </li>
+            {{/friends}}
+        </ol>
+    </div>
+
+</body>
+</html>

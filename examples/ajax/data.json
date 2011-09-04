@@ -1,0 +1,12 @@
+{
+    "name": { "first": "John", "last": "Doe" },
+    "age": 21,
+    "siblings": ["Jack", "Jake", "Jim"],
+    "friends": [
+        { "name": "Jamie", "age": 12, "gender": "M" },
+        { "name": "Jenny", "age": 15, "gender": "F" },
+        { "name": "Julie", "age": 8, "gender": "F" },
+        { "name": "Jackie", "age": 32, "gender": "F" },
+        { "name": "Joey", "age": 14, "gender": "M" }
+    ]
+}

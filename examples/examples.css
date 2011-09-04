@@ -1,0 +1,29 @@
+* {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    margin: 15px;
+}
+
+h1, h2 {
+    font-weight: normal;
+}
+
+h1 {
+    font-size: 175%;
+}
+
+h2 {
+    font-size: 115%;
+    color: #333;
+    background-color: #FFC;
+    border-bottom: 1px solid #FC0;
+    padding: 3px;
+}
+
+.error {
+    color: white;
+    background-color: red;
+    padding: 0 2px;
+}
