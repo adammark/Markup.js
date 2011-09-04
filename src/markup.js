@@ -1,7 +1,9 @@
 var Mark = {
     // comment
-    includes: {
-    },
+    includes: {},
+    
+    // comment
+    cache: {},
 
     // comment
     _copy: function (a, b) {
@@ -75,6 +77,7 @@ var Mark = {
 
 Mark.up = function (template, context, options, undefined) {
     context = context || {};
+    options = options || {};
 
     var re = /\{\{\w*[^}]+\w*\}\}/g,
         tags = template.match(re) || [],
@@ -92,9 +95,14 @@ Mark.up = function (template, context, options, undefined) {
         x;
 
     // comment
-    if (options) {
+    if (options.pipes) {
         Mark._copy(options.pipes, Mark.pipes);
+    }
+    if (options.includes) {
         Mark._copy(options.includes, Mark.includes);
+    }
+    if (options.cache) {
+        Mark.cache[options.cache] = template;
     }
 
     // comment
