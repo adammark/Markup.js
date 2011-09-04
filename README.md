@@ -604,8 +604,8 @@ var result = Mark.up(template, context, options);
 
 You can implement Markup.js in a few different ways. The right strategy
 depends on many factors, including the speed and size of your app, the
-number of templates you're handling, and whether the templates should be
-reusable throughout your codebase.
+number of templates you're handling, and whether you want the templates
+to be reusable throughout your codebase.
 
 ### 1. Writing templates as JavaScript strings
 
@@ -689,14 +689,37 @@ elem.innerHTML = Mark.up(elem.innerHTML, context);
 
 If you intend to evaluate embedded templates more than once during the
 lifetime of the HTML page, you'll need to store the original template
-text for later lookup.
+text for later lookup. Markup.js provides a `cache` variable for this 
+reason:
+
+``` javascript
+var elem = document.getElementById("menu");
+
+Mark.cache.menu_tpl = elem.innerHTML;
+
+// now
+elem.innerHTML = Mark.up(Mark.cache.menu_tpl, context1);
+
+// later
+elem.innerHTML = Mark.up(Mark.cache.menu_tpl, context2);
+```
+
+Or you can cache templates via the `options` arguments:
+
+``` javascript
+// now
+elem.innerHTML = Mark.up(elem.innerHTML, context1, { cache: "menu_tpl" });
+
+// later
+elem.innerHTML = Mark.up(Mark.cache.menu_tpl, context2);
+```
 
 ### 3. Loading templates with AJAX
 
-The above method makes it easy to write templates but hard to reuse them
-throughout your app. A compromise solution is to write your templates
-in plain text files and load them via AJAX. Here's how to do it with
-jQuery:
+The above method makes it easier to write templates but harder to reuse
+them throughout your app. A compromise solution is to write your
+templates in plain text files and load them via AJAX. Here's how to do
+it with jQuery:
 
 ``` javascript
 $.get("templates/sidebar.txt", function (txt) {
