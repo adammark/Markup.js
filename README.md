@@ -166,7 +166,7 @@ var result = Mark.up(template, context);
 ### Loop counters
 
 Inside a loop, a single hash sign refers to the current iteration index
-(0...n) and a double hash sign refers to the current iteration count
+(0...n-1) and a double hash sign refers to the current iteration count
 (1...n):
 
 ``` javascript
