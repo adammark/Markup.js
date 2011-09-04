@@ -5,7 +5,7 @@ var Mark = {
     // templates to cache, by name
     cache: {},
 
-    // copy array a, or copy array a into b. returns b
+    // helper fn: copy array a, or copy array a into b. return b
     _copy: function (a, b) {
         b = b || [];
 
@@ -16,7 +16,7 @@ var Mark = {
         return b;
     },
 
-    // get the size of array or number a
+    // helper fn: get the size of an array or number
     _size: function (a) {
         return a instanceof Array ? a.length : a;
     },
@@ -32,7 +32,7 @@ var Mark = {
         };
     },
 
-    // pipe an obj through multiple filters. e.g. _pipe(123, "add>10|times>5")
+    // pipe an obj through filters. e.g. _pipe(123, "add>10|times>5")
     _pipe: function (val, filters) {
         var filter = filters.shift(), fn, args;
 
@@ -45,7 +45,7 @@ var Mark = {
         return val;
     },
 
-    // get the full extent of a block tag. e.g. _bridge("...{{if a}} ...", "if").
+    // get the full extent of a block tag given a template and token (e.g. "if")
     _bridge: function (tpl, tkn) {
         var exp = "{{" + tkn + "([^/}]+\\w*)?}}|{{/" + tkn + "}}",
             re = new RegExp(exp, "g"),
@@ -80,7 +80,7 @@ var Mark = {
     }
 };
 
-// fill a template string with context data. options: pipes, includes, cache
+// fill a template string with context data. return transformed template
 Mark.up = function (template, context, options, undefined) {
     context = context || {};
     options = options || {};
@@ -105,17 +105,17 @@ Mark.up = function (template, context, options, undefined) {
         Mark._copy(options.pipes, Mark.pipes);
     }
 
-    // set included templates, if any
+    // set templates to include, if any
     if (options.includes) {
         Mark._copy(options.includes, Mark.includes);
     }
 
-    // set cached templates, if any
+    // cache this template by name, if provided
     if (options.cache) {
         Mark.cache[options.cache] = template;
     }
 
-    // test an "if" statement given an eval'd expression. return if str, else str, or ""
+    // get "if" or "else" string from piped result
     function test(result, child, context, options) {
         child = Mark.up(child, context, options).split("{{else}}");
 
@@ -138,12 +138,12 @@ Mark.up = function (template, context, options, undefined) {
         prop = prop.replace(/^if/, "").split("|").shift().trim();
         token = testy ? "if" : prop.split("|")[0];
 
-        // get the full extent of a block tag, and fast forward
+        // determine the full extent of a block tag and its child
         if (!selfy && tags.indexOf("{{/" + token + "}}") > -1) {
             result = Mark._bridge(template, token);
             tag = result[0];
             child = result[1];
-            i += tag.match(re).length - 1;
+            i += tag.match(re).length - 1; // fast forward
         }
 
         // tag refers to included template
@@ -188,36 +188,37 @@ Mark.up = function (template, context, options, undefined) {
             result = test(result && pipe(context[prop], filters), child, context);
         }
 
-        // context is an array. pipe and loop through result (if array). pass iteration obj
+        // context is an array. loop through piped array
         else if (context[prop] instanceof Array) {
             result = ctx = pipe(context[prop], filters);
             if (ctx instanceof Array) {
                 result = "";
                 for (x in ctx) {
+                    // for each, new iterator
                     options = { iter: new Mark._iter(+x, ctx.length) };
                     result += child ? Mark.up(child, ctx[x], options) : ctx[x];
                 }
             }
         }
 
-        // comment
+        // if a block tag, process child contents, e.g. {{foo}}child{{/foo}}
         else if (child) {
             result = Mark.up(child, context[prop]);
         }
 
-        // comment
+        // property exists
         else if (context.hasOwnProperty(prop)) {
             result = pipe(context[prop], filters);
         }
 
-        // comment
+        // replace the tag, e.g. "{{name}}", with the result, e.g. "Adam"
         template = template.replace(tag, result === undefined ? "???" : result);
     }
 
     return template;
 };
 
-// "out of the box" pipes
+// "out of the box" pipes. see README
 Mark.pipes = {
     blank: function (str, val) {
         return !!str || str === 0 ? str : val;
