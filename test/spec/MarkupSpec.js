@@ -103,16 +103,28 @@ describe("Markup core spec", function () {
         template = "La la la";
         result = Mark.up(template);
         expect(result).toEqual("La la la");
+
+        template = "La {{la}} la";
+        result = Mark.up(template);
+        expect(result).toEqual("La ??? la");
     });
 
     it("resolves nested objects with same name", function () {
+        template = "friend's friend: {{friend}}{{friend}}{{name}}{{/friend}}{{/friend}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("friend's friend: Jeremy");
+
+        template = "friend's friend: {{friend}}{{friend.name}}{{/friend}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("friend's friend: Jeremy");
+
         template = "friend's friend: {{friend}}{{friend.name/}}{{/friend}}";
         result = Mark.up(template, context);
         expect(result).toEqual("friend's friend: Jeremy");
 
-        template = "friend's friend: {{friend}}{{friend}}{{name}}{{/friend}}{{/friend}}";
+        template = "brothers: {{brothers|join> + /}} {{brothers}}x{{/brothers}}";
         result = Mark.up(template, context);
-        expect(result).toEqual("friend's friend: Jeremy");
+        expect(result).toEqual("brothers: Jack + Joe + Jim xxx");
     });
 
     it("resolves nested if statements", function () {
@@ -179,10 +191,6 @@ describe("Markup core spec", function () {
         template = "{{weight}}{{weight}}{{if truthy}}{{if truthy}}abc{{/if}}{{/if}}";
         result = Mark.up(template, context);
         expect(result).toEqual("145145abc");
-
-        template = "{{brother}}{{brother}}{{name}}{{/brother}}{{/brother}}";
-        result = Mark.up(template, {brother: {brother:{name:"David"}}});
-        expect(result).toEqual("David");
     });
 
     it("resolves undefined/empty values", function () {
@@ -275,10 +283,6 @@ describe("Markup core spec", function () {
         template = "brothers: {{brothers}} {{brothers}}";
         result = Mark.up(template, context);
         expect(result).toEqual("brothers: JackJoeJim JackJoeJim");
-
-        template = "brothers: {{brothers/}} {{brothers}}x{{/brothers}}";
-        result = Mark.up(template, context);
-        expect(result).toEqual("brothers: JackJoeJim xxx");
     });
 
     it("resolves self reference in iteration", function () {
@@ -368,6 +372,10 @@ describe("Markup core spec", function () {
         template = "{{if gender|equals>male}}{{age}}!{{/if}}";
         result = Mark.up(template, context);
         expect(result).toEqual("33.3!");
+
+        template = "{{if name.first|equals>John}}***{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("***");
 
         template = "{{name}}{{first}}{{if .|equals>John}}***{{/if}}{{/first}}{{/name}}";
         result = Mark.up(template, context);
