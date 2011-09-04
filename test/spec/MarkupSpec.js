@@ -218,10 +218,6 @@ describe("Markup core spec", function () {
         result = Mark.up(template, {foo: undefined});
         expect(result).toEqual("foo: ???");
 
-        template = "whatever: {{whatever|upcase}}";
-        result = Mark.up(template, context);
-        expect(result).toEqual("whatever: ???");
-
         template = "La la {{la}}";
         result = Mark.up(template);
         expect(result).toEqual("La la ???");
@@ -229,6 +225,18 @@ describe("Markup core spec", function () {
         template = "{{cousin}}{{name.last}}{{/cousin}}";
         result = Mark.up(template, context);
         expect(result).toEqual("???");
+
+        template = "whatever: {{whatever|upcase}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("whatever: ???");
+
+        template = "whatever: {{whatever}}xxx{{/whatever}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("whatever: ???");
+
+        template = "whatever: {{whatever|reverse}}xxx{{/whatever}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("whatever: ???");
     });
 
     it("resolves single pipe on scalar value", function () {

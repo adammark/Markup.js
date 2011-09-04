@@ -201,12 +201,12 @@ Mark.up = function (template, context, options, undefined) {
             }
         }
 
-        // if a block tag, process child contents, e.g. {{foo}}child{{/foo}}
+        // if an object block, process child contents, e.g. {{foo}}child{{/foo}}
         else if (child) {
-            result = Mark.up(child, context[prop]);
+            result = context[prop] ? Mark.up(child, context[prop]) : undefined;
         }
 
-        // property exists
+        // else all others
         else if (context.hasOwnProperty(prop)) {
             result = pipe(context[prop], filters);
         }
