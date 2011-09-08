@@ -25,3 +25,7 @@ Mark.pipes.breaklines = function (str) {
 Mark.pipes.linkify = function (str) {
     return str.replace(/\b(https?:[^\b\s]+)\b/g, "<a href=\"$1\">$1</a>");
 };
+
+Mark.pipes.address = function (addr) {
+    return "<a href=\"http://maps.google.com/maps?q=" + encodeURI(addr) + ">" + addr + "</a>";
+};
