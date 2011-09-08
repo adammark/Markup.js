@@ -13,3 +13,7 @@ Mark.pipes.repeat = function (str, count, separator) {
     }
     return a.join(separator || "");
 };
+
+Mark.pipes.bust = function (url) {
+    return url + (url.indexOf("?") > -1 ? "&" : "?") + "cache=" + Math.random();
+};
