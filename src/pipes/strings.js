@@ -17,3 +17,7 @@ Mark.pipes.repeat = function (str, count, separator) {
 Mark.pipes.bust = function (url) {
     return url + (url.indexOf("?") > -1 ? "&" : "?") + "cache=" + Math.random();
 };
+
+Mark.pipes.breaklines = function (str) {
+    return str.replace(/\n/g, "<br>");
+};
