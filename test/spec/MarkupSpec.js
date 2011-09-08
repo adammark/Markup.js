@@ -446,7 +446,7 @@ describe("Markup core spec", function () {
         expect(result).toEqual("brothers: 1");
     });
 
-    it("resolves includes", function () {
+    it("resolves included strings", function () {
         // passed arg
         var greeting = "My name is {{name.first|upcase}}!";
 
@@ -465,6 +465,16 @@ describe("Markup core spec", function () {
         template = "Hello! {{greeting|upcase}}";
         result = Mark.up(template, context);
         expect(result).toEqual("Hello! MY NAME IS JOHN!");
+    });
+
+    it("resolves included functions", function () {
+        Mark.includes.lala = function () {
+            return "12345";
+        };
+
+        template = "ABCDE {{lala}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("ABCDE 12345");
     });
 
     it("resolves iteration counter", function () {

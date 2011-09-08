@@ -152,7 +152,11 @@ Mark.up = function (template, context, options, undefined) {
 
         // tag refers to included template
         if (Mark.includes[prop]) {
-            result = pipe(Mark.up(Mark.includes[prop], context), filters);
+            prop = Mark.includes[prop];
+            if (prop instanceof Function) {
+                prop = prop();
+            }
+            result = pipe(Mark.up(prop, context), filters);
         }
 
         // tag refers to current context
