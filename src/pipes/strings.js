@@ -21,3 +21,7 @@ Mark.pipes.bust = function (url) {
 Mark.pipes.breaklines = function (str) {
     return str.replace(/\n/g, "<br>");
 };
+
+Mark.pipes.linkify = function (str) {
+    return str.replace(/\b(https?:[^\b\s]+)\b/g, "<a href=\"$1\">$1</a>");
+};
