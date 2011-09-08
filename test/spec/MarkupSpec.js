@@ -469,12 +469,16 @@ describe("Markup core spec", function () {
 
     it("resolves included functions", function () {
         Mark.includes.lala = function () {
-            return "12345";
+            return "xyz";
         };
 
-        template = "ABCDE {{lala}}";
+        template = "ABC {{lala}}";
         result = Mark.up(template, context);
-        expect(result).toEqual("ABCDE 12345");
+        expect(result).toEqual("ABC xyz");
+
+        template = "ABC {{lala|upcase}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("ABC XYZ");
     });
 
     it("resolves iteration counter", function () {
