@@ -600,6 +600,25 @@ var result = Mark.up(template, context, options);
 
 *Be careful to avoid naming conflicts with `context` variables.*
 
+### Functions as includes
+
+Sometimes you need to perform operations or access data outside the
+scope of the `context` object. In such cases, you can include a
+*function* that returns a string:
+
+``` javascript
+Mark.includes.status = function () {
+    return "You are here: " + location.href;
+};
+
+var template = "Welcome! {{status}}";
+
+var result = Mark.up(template, context);
+// "Welcome! You are here: http://www.example.com/"
+```
+
+The function will be executed whenever the template is evaluated.
+
 ## Implementation
 
 You can implement Markup.js in a few different ways. The right strategy
