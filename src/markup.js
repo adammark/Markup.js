@@ -1,5 +1,5 @@
 /*
-  Markup.js: http://github.com/adammark/Markup.js
+  Markup.js v1.0: http://github.com/adammark/Markup.js
   (c) 2011 Adam Mark
 */
 var Mark = {
