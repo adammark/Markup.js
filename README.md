@@ -803,7 +803,7 @@ myapp.templates = {
 ```
 
 You can load the appropriate bundle with a <a
-href="http://yepnopejs.com/">conditional script loader</a> or other
+href="http://microjs.com/#loader">conditional script loader</a> or other
 mechanism.
 
 For simple apps, it might be easier to include all the strings in a
