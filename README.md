@@ -408,8 +408,9 @@ var result = Mark.up(template, context);
 
 ### Writing custom pipes
 
-You can add your own pipes to Markup.js. The first argument is the piped
-value and any subsequent arguments are strings. For example:
+You can add your own pipes to Markup.js. A pipe is simply a function
+with one or more arguments. The first argument (required) is the piped
+value itself. Any additional arguments are strings. For example:
 
 ``` javascript
 Mark.pipes.repeat = function (str, count, separator) {
@@ -510,7 +511,7 @@ var template = "{{if age|more>100}} {{if gender|equals>male}} Old man! {{/if}} {
 ```
 
 ``` javascript
-var template = "{{if ...}} ... {{else}} {if ...}} ... {{else}} ... {{/if}} {{/if}}";
+var template = "{{if ...}} ... {{else}} {{if ...}} ... {{else}} ... {{/if}} {{/if}}";
 ```
 
 ### Testing loop counters
@@ -533,7 +534,7 @@ var template = "{{users}} {{if ##|more>10|divisible>3}} <thead>...</thead> {{/if
 ```
 
 ``` javascript
-// do something on the first pass
+// do something on the first iteration
 var template = "{{users}} {{if #|first}} ... {{/if}} ... {{/users}}";
 ```
 
@@ -604,7 +605,7 @@ var result = Mark.up(template, context, options);
 
 Sometimes you need to perform operations or access data outside the
 scope of the `context` object. In such cases, you can include a
-*function* that returns a string:
+*function* that returns a string when the template is processed:
 
 ``` javascript
 Mark.includes.status = function () {
@@ -616,8 +617,6 @@ var template = "Welcome! {{status}}";
 var result = Mark.up(template, context);
 // "Welcome! You are here: http://www.example.com/"
 ```
-
-The function will be executed whenever the template is evaluated.
 
 ## Implementation
 
