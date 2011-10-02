@@ -308,7 +308,7 @@ Mark.pipes = {
         return arr.slice(0, count);
     },
     slice: function (arr, start, length) {
-        return arr.slice(start, parseInt(start, 0) + parseInt(length, 0));
+        return arr.slice(+start, (+start) + (+length));
     },
     split: function (str, separator) {
         return str.split(separator || ",");
