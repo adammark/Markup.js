@@ -281,7 +281,7 @@ Mark.pipes = {
         return str.trim().replace(/\s{2,}/g, " ");
     },
     round: function (num) {
-        return Math.round(+(num));
+        return Math.round(+num);
     },
     style: function (str, classes) {
         return '<span class="' + classes + '">' + str + '</span>';
