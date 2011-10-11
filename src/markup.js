@@ -189,7 +189,7 @@ Mark.up = function (template, context, options, undefined) {
             result = true;
             // allow test for empty/undefined without filter (e.g "{{if foo}}...{{/if}}")
             if (!filters.length) {
-                if (context[prop] === undefined || context[prop].length === 0) {
+                if (!context[prop] || context[prop].length === 0) {
                     result = false;
                 }
             }
