@@ -732,6 +732,24 @@ elem.innerHTML = Mark.up(elem.innerHTML, context1, { cache: "menu_tpl" });
 elem.innerHTML = Mark.up(Mark.cache.menu_tpl, context2);
 ```
 
+To avoid a flicker of unformatted text, template elements should be hidden
+(via CSS) until formatting is applied.
+
+#### Using <script> tags
+
+A related technique is to embed templates in `<script>` tags like so:
+
+``` html
+<script type="text/template" id="main-menu">
+    <ul>
+        ...
+    </ul>
+</script>
+```
+
+Be sure to specify `type="text/template"` or else browsers will interpret
+the contents as JavaScript.
+
 ### 3. Loading templates with AJAX
 
 The above method makes it easier to write templates but harder to reuse
@@ -745,16 +763,16 @@ $.get("templates/sidebar.txt", function (txt) {
 });
 ```
 
-To reduce the number of network requests, you could concatenate multiple
+To reduce the number of network requests, you can include multiple
 templates into a single file:
 
 ```
->>> user_detail
+===== user_detail
 <div class="user-details">
     ...
 </div>
 
->>> user_profile
+===== user_profile
 <div class="user-profile">
     ...
 </div>
@@ -764,7 +782,7 @@ templates into a single file:
 var templates = {};
 
 $.get("user-templates.txt", function (txt) {
-    txt = txt.split(">>>").splice(1);
+    txt = txt.split("=====").splice(1);
  
     for (var t in txt) {
         var i = txt[t].indexOf("\n");
