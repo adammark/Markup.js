@@ -735,7 +735,7 @@ elem.innerHTML = Mark.up(Mark.cache.menu_tpl, context2);
 To avoid a flicker of unformatted text, template elements should be hidden
 (via CSS) until formatting is applied.
 
-#### Using <script> tags
+#### Using script tags
 
 A related technique is to embed templates in `<script>` tags like so:
 
