@@ -33,3 +33,14 @@ Mark.pipes.tweet = function (str) {
 Mark.pipes.address = function (addr) {
     return "<a href=\"http://maps.google.com/maps?q=" + encodeURI(addr) + ">" + addr + "</a>";
 };
+
+// inject args into formatted string, e.g. "a=[0]&b=[1]"
+Mark.pipes.inject = function (str) {
+    var matches = str.match(/\[\d+\]/g) || [], m;
+
+    while ((m = matches.shift())) {
+        str = str.replace(m, arguments[1 + parseInt(m.substr(1))] || "");
+    }
+
+    return str;
+};
