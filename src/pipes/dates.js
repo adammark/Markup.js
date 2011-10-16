@@ -67,7 +67,8 @@ Mark.pipes.timeago = function (date) {
     var diff = new Date().getTime() - date.getTime();
     var h = Math.floor(diff / 3600000);
     var to_s = function (n, label) {
-        return Math.floor(n) + " " + label + (n > 1 ? "s" : "") + " ago";
+        n = Math.floor(n);
+        return n + " " + label + (n > 1 ? "s" : "") + " ago";
     };
 
     if (h === 0) {
