@@ -4,7 +4,7 @@
  * Supported time codes: g G i a A
  */
 Mark.pipes.datetime = function (date, format) {
-    if (typeof date === "string") {
+    if (typeof date === "string" || typeof date === "number") {
         date = new Date(date);
     }
 
@@ -59,7 +59,7 @@ Mark.pipes.datetime = function (date, format) {
 };
 
 Mark.pipes.timeago = function (date) {
-    if (typeof date === "string") {
+    if (typeof date === "string" || typeof date === "number") {
         date = new Date(date);
     }
 
