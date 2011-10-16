@@ -22,8 +22,12 @@ Mark.pipes.breaklines = function (str) {
     return str.replace(/\n/g, "<br>");
 };
 
-Mark.pipes.linkify = function (str) {
+Mark.pipes.links = function (str) {
     return str.replace(/\b(https?:[^\b\s]+)\b/g, "<a href=\"$1\">$1</a>");
+};
+
+Mark.pipes.tweet = function (str) {
+    return str.replace(/(@\w+)/g, "<a href=\"http://twitter.com/#!/$1\">$1</a>");
 };
 
 Mark.pipes.address = function (addr) {
