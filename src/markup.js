@@ -90,7 +90,7 @@ Mark.up = function (template, context, options, undefined) {
     options = options || {};
 
     var re = /\{\{\w*[^}]+\w*\}\}/g,
-        tags = template.match(re) || [],
+        tags = template.toString().match(re) || [],
         pipe = Mark._pipe,
         tag,
         prop,
