@@ -43,7 +43,12 @@ var Mark = {
         if (filter) {
             fn = filter.split(">").shift().trim();
             args = filter.split(">").splice(1);
-            val = Mark._pipe(Mark.pipes[fn].apply(null, [val].concat(args)), filters);
+            try {
+                val = Mark._pipe(Mark.pipes[fn].apply(null, [val].concat(args)), filters);
+            }
+            catch (e) {
+            }
+            //val = Mark._pipe(Mark.pipes[fn].apply(null, [val].concat(args)), filters);
         }
 
         return val;

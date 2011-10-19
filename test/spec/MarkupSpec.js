@@ -426,6 +426,22 @@ describe("Markup core spec", function () {
         expect(result).toEqual("");
     });
 
+    it("handles undeclared pipe", function () {
+        template = "{{gender|foo}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("male");
+
+        template = "{{gender|upcase|foo}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("MALE");
+    });
+
+    it("handles null pointer", function () {
+        template = "{{race|chop>50}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("null");
+    });
+
     it("resolves custom pipes", function () {
         // passed arg
         var times = function (num, n) {
