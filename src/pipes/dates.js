@@ -4,7 +4,10 @@
  * Supported time codes: g G i a A
  */
 Mark.pipes.datetime = function (date, format) {
-    if (typeof date === "string" || typeof date === "number") {
+    if (String(date).match(/^\d*$/)) {
+        date = parseInt(date);
+    }
+    if (typeof date === "number" || typeof date === "string") {
         date = new Date(date);
     }
 
