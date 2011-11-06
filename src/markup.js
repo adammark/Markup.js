@@ -48,7 +48,6 @@ var Mark = {
             }
             catch (e) {
             }
-            //val = Mark._pipe(Mark.pipes[fn].apply(null, [val].concat(args)), filters);
         }
 
         return val;
