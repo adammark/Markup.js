@@ -790,7 +790,7 @@ $.get("user-templates.txt", function (txt) {
         var val = txt[t].substr(i).trim();
         templates[key] = val;
     }
-});
+}, "html");
 ```
 
 You can also cache templates in 
