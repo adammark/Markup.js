@@ -794,7 +794,7 @@ $.get("user-templates.txt", function (txt) {
 ```
 
 You can also cache templates in 
-<a href="http://diveintohtml5.org/storage.html">Local Storage</a> or the
+<a href="http://diveintohtml5.info/storage.html">Local Storage</a> or the
 <a href="http://www.html5rocks.com/en/tutorials/appcache/beginner/">Application 
 Cache</a> for instantaneous retrieval.
 
