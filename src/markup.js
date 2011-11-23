@@ -29,6 +29,7 @@ var Mark = {
     _iter: function (idx, size) {
         this.idx = idx;
         this.size = size;
+        this.length = size;
         this.sign = "#";
         this.prototype = Number;
         this.toString = this.valueOf = function () {

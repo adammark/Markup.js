@@ -730,6 +730,10 @@ describe("Markup core spec", function () {
         template = "{{name.last|length}}";
         result = Mark.up(template, context);
         expect(result).toEqual("3");
+
+        template = "{{sisters}}{{#|size}}{{/sisters}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("22");
     });
 
     it("resolves pipe: style", function () {
