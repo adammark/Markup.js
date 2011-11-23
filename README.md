@@ -326,7 +326,7 @@ argument is always the piped value itself:
 
 `sub` (str, pattern, replacement): returns str with all instances of pattern replaced
 
-`length` (obj): returns length of string, array or iterator
+`length` (obj): returns length of string, array or iterator (# or ##)
 
 `size` (obj): alias to `length`
 
