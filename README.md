@@ -539,10 +539,14 @@ context or the size of the array itself:
 ``` javascript
 // do something on the first iteration
 var template = "{{users}} {{if #|first}} ... {{/if}} ... {{/users}}";
+```
 
+``` javascript
 // do something on the last iteration
 var template = "{{users}} {{if #|last}} ... {{/if}} ... {{/users}}";
+```
 
+``` javascript
 // test the size of the array during the loop
 var template = "{{users}} {{if #|size|more>100}} ... {{/if}} ... {{/users}}";
 ```
