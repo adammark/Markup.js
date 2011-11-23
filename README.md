@@ -326,7 +326,7 @@ argument is always the piped value itself:
 
 `sub` (str, pattern, replacement): returns str with all instances of pattern replaced
 
-`length` (obj): returns length of string or array
+`length` (obj): returns length of string, array or iterator
 
 `size` (obj): alias to `length`
 
@@ -362,9 +362,9 @@ argument is always the piped value itself:
 
 `falsy` (obj): returns true if false, else returns false
 
-`first` (iter): returns true if iterator (# or ##) is the first item, else returns false
+`first` (iterator): returns true if iterator (# or ##) is the first item, else returns false
 
-`last` (iter): returns true if iterator (# or ##) is the last item, else returns false
+`last` (iterator): returns true if iterator (# or ##) is the last item, else returns false
 
 `call` (obj, fn, arg1, arg2...): power pipe! calls fn on obj with zero or more args
 
