@@ -516,7 +516,7 @@ var template = "{{if ...}} ... {{else}} {{if ...}} ... {{else}} ... {{/if}} {{/i
 
 ### Testing loop counters
 
-You can use loop counters to apply conditional formatting:
+You can use loop counters (# and ##) to apply conditional formatting:
 
 ``` javascript
 // show different content in even and odd rows
@@ -533,10 +533,21 @@ var template = "{{users}} {{if #|divisible>5}} <thead>...</thead> {{/if}} ... {{
 var template = "{{users}} {{if ##|more>10|divisible>3}} <thead>...</thead> {{/if}} ... {{/users}}";
 ```
 
+Certain pipes can be used to evaluate the position of the current iteration
+context or the size of the array itself:
+
 ``` javascript
 // do something on the first iteration
 var template = "{{users}} {{if #|first}} ... {{/if}} ... {{/users}}";
+
+// do something on the last iteration
+var template = "{{users}} {{if #|last}} ... {{/if}} ... {{/users}}";
+
+// test the size of the array during the loop
+var template = "{{users}} {{if #|size|more>100}} ... {{/if}} ... {{/users}}";
 ```
+
+In these cases, # and ## are interchangeable.
 
 ### Pipes in conditional expressions
 

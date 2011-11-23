@@ -734,6 +734,10 @@ describe("Markup core spec", function () {
         template = "{{sisters}}{{#|size}}{{/sisters}}";
         result = Mark.up(template, context);
         expect(result).toEqual("22");
+
+        template = "{{sisters}}{{##|size}}{{/sisters}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("22");
     });
 
     it("resolves pipe: style", function () {
@@ -902,6 +906,10 @@ describe("Markup core spec", function () {
 
     it("resolves pipe: first", function () {
         template = "{{brothers}}{{if #|first}}{{.}}{{/if}}{{/brothers}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("Jack");
+
+        template = "{{brothers}}{{if ##|first}}{{.}}{{/if}}{{/brothers}}";
         result = Mark.up(template, context);
         expect(result).toEqual("Jack");
 
