@@ -6,7 +6,7 @@
  * {{title|capcase}}
  */
 Mark.pipes.capcase = function (str) {
-    return str.replace(/\b(\w+)\b/g, function($1) { return $1.capitalize(); } );
+    return str.replace(/\b(\w+)\b/g, function ($1) { return $1.capitalize(); } );
 };
 
 /*
@@ -25,7 +25,7 @@ Mark.pipes.repeat = function (str, count, separator) {
 };
 
 /*
- * Add a cache buster to a URL.
+ * Add a cache buster (unique value) to a URL.
  *
  * Example:
  *
@@ -82,7 +82,7 @@ Mark.pipes.address = function (addr) {
 
 /*
  * Inject values into string with numeric tokens, e.g. "a=[0]&b=[1]". This is
- * is a templating function in itself.
+ * a templating function in itself.
  */
 Mark.pipes.inject = function (str) {
     var matches = str.match(/\[\d+\]/g) || [], m;
