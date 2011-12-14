@@ -1,7 +1,13 @@
 /*
- * See http://php.net/manual/en/function.date.php
+ * Format a date (Date object, UTC string or UTC milliseconds).
+ *
  * Supported date codes: D l n m M F j d Y y
  * Supported time codes: g G i a A
+ * (See http://php.net/manual/en/function.date.php)
+ *
+ * Example:
+ *
+ * {{published|datetime>n/j/Y g:i a}}
  */
 Mark.pipes.datetime = function (date, format) {
     if (String(date).match(/^\d*$/)) {
@@ -61,8 +67,18 @@ Mark.pipes.datetime = function (date, format) {
         .replace(/%y%/, Y.toString().substr(-2));
 };
 
+/*
+ * Format a date in "... minutes ago" notation.
+ *
+ * Example:
+ *
+ * {{created_at|timeago}}
+ */
 Mark.pipes.timeago = function (date) {
-    if (typeof date === "string" || typeof date === "number") {
+    if (String(date).match(/^\d*$/)) {
+        date = parseInt(date);
+    }
+    if (typeof date === "number" || typeof date === "string") {
         date = new Date(date);
     }
 
