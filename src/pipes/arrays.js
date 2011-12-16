@@ -1,8 +1,20 @@
 /*
- * Get a random entry from an array.
+ * Shuffle and reduce an array to n random entries. (n defaults to 1)
+ *
+ * Example:
+ *
+ * <ul>
+ *     {{users|rand>5}}
+ *         <li>{{lastname}}, {{firstname}}</li>
+ *     {{/users}}
+ * </ul>
  */
-Mark.pipes.rand = function (arr) {
-    return arr[Math.floor(Math.random() * arr.length)];
+Mark.pipes.rand = function (arr, n) {
+    var copy = Mark._copy(arr).sort(function (a, b) {
+        return Math.random() > 0.5 ? 1 : -1;
+    });
+
+    return copy.slice(0, n || 1);
 };
 
 /*
