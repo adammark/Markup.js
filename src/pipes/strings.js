@@ -25,6 +25,17 @@ Mark.pipes.repeat = function (str, count, separator) {
 };
 
 /*
+ * Get the first n words of a string. (words defaults to 25)
+ *
+ * Example:
+ *
+ * {{article|tease>30}}
+ */
+Mark.pipes.tease = function (str, words) {
+    return str.split(/\s+/).slice(0, words || 25).join(" ") + "...";
+};
+
+/*
  * Add a cache buster (unique value) to a URL.
  *
  * Example:
