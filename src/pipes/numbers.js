@@ -65,3 +65,18 @@ Mark.pipes.ordinal = function (num) {
 Mark.pipes.percent = function (num, precision) {
     return (num < 1 ? num * 100 : num).toFixed(precision || 0) + "%";
 };
+
+/*
+ * Convert a number to stopwatch notation ("mm:ss"), given a factor of 1
+ * (seconds) or 1000 (milliseconds). (factor defaults to 1)
+ *
+ * Example:
+ *
+ * {{duration||runtime>1000}}
+ *
+ */
+Mark.pipes.runtime = function (time, factor) {
+    var m = Math.floor(time / (60 * (factor || 1)));
+    var s = Math.floor((time / (factor || 1)) % 60);
+    return m + ":" + ("00" + s).substr(-2);
+};
