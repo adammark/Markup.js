@@ -533,8 +533,9 @@ var template = "{{users}} {{if #|divisible>5}} <thead>...</thead> {{/if}} ... {{
 var template = "{{users}} {{if ##|more>10|divisible>3}} <thead>...</thead> {{/if}} ... {{/users}}";
 ```
 
-Certain pipes can be used to evaluate the position of the current iteration
-context or the size of the array itself:
+Certain pipes can be used to evaluate the position of the current iteration 
+context or the size of the array itself. In these cases, # and ## are 
+interchangeable:
 
 ``` javascript
 // do something on the first iteration
@@ -550,8 +551,6 @@ var template = "{{users}} {{if #|last}} ... {{/if}} ... {{/users}}";
 // test the size of the array during the loop
 var template = "{{users}} {{if #|size|more>100}} ... {{/if}} ... {{/users}}";
 ```
-
-In these cases, # and ## are interchangeable.
 
 ### Pipes in conditional expressions
 
