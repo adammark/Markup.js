@@ -56,7 +56,7 @@ var Mark = {
 
     // get the full extent of a block tag given a template and token (e.g. "if")
     _bridge: function (tpl, tkn) {
-        var exp = "{{" + tkn + "([^/}]+\\w*)?}}|{{/" + tkn + "}}",
+        var exp = "{{\\s*" + tkn + "([^/}]+\\w*)?}}|{{/" + tkn + "\\s*}}",
             re = new RegExp(exp, "g"),
             tags = tpl.match(re),
             t,
@@ -126,7 +126,7 @@ Mark.up = function (template, context, options, undefined) {
 
     // get "if" or "else" string from piped result
     function test(result, child, context, options) {
-        child = Mark.up(child, context, options).split("{{else}}");
+        child = Mark.up(child, context, options).split(/{{\s*else\s*}}/);
 
         if (testy) {
             result = child[result === false ? 1 : 0];
@@ -142,13 +142,13 @@ Mark.up = function (template, context, options, undefined) {
         child = "";
         selfy = tag.indexOf("/}}") > -1;
         prop = tag.substr(2, tag.length - (selfy ? 5 : 4));
-        testy = prop.indexOf("if ") === 0;
+        testy = prop.trim().indexOf("if ") === 0;
         filters = prop.replace(/&gt;/g, ">").split("|").splice(1);
-        prop = prop.replace(/^if/, "").split("|").shift().trim();
+        prop = prop.replace(/^\s*if/, "").split("|").shift().trim();
         token = testy ? "if" : prop.split("|")[0];
 
         // determine the full extent of a block tag and its child
-        if (!selfy && tags.indexOf("{{/" + token + "}}") > -1) {
+        if (!selfy && tags.join().indexOf("{{/" + token) > -1) {
             result = Mark._bridge(template, token);
             tag = result[0];
             child = result[1];
@@ -176,7 +176,7 @@ Mark.up = function (template, context, options, undefined) {
         }
 
         // skip "else" tags. these will be pulled out in test()
-        else if (tag === "{{else}}") {
+        else if (/^{{\s*else\s*}}$/.test(tag)) {
             continue;
         }
 

@@ -357,9 +357,24 @@ describe("Markup core spec", function () {
         result = Mark.up(template, context);
         expect(result).toEqual("***");
 
-        template = "{{if children}}***{{/if}}";
+        // space if tag
+        template = "{{if brothers }}***{{/if}}";
         result = Mark.up(template, context);
-        expect(result).toEqual("");
+        expect(result).toEqual("***");
+
+        template = "{{ if brothers}}&&&{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("&&&");
+
+        // space else tag
+        template = "{{if children}}***{{ else }}###{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("###");
+
+        // space /if tag
+        template = "{{if children}}***{{else}}@@@{{/if }}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("@@@");
 
         template = "{{if brothers|empty}}***{{/if}}";
         result = Mark.up(template, context);
