@@ -6,7 +6,7 @@
  * {{title|capcase}}
  */
 Mark.pipes.capcase = function (str) {
-    return str.replace(/\b(\w)/g, function ($1) { return $1.toUpperCase(); });
+    return str.replace(/\b\w/g, function ($1) { return $1.toUpperCase(); });
 };
 
 /*
@@ -92,11 +92,9 @@ Mark.pipes.address = function (addr) {
  * a templating function in itself.
  */
 Mark.pipes.inject = function (str) {
-    var matches = str.match(/\[\d+\]/g) || [], m;
+    var args = arguments;
 
-    while ((m = matches.shift())) {
-        str = str.replace(m, arguments[1 + parseInt(m.substr(1))] || "");
-    }
-
-    return str;
+    return str.replace(/\[\d+\]/g, function ($1) {
+        return args[parseInt($1.slice(1)) + 1] || "";
+    });
 };
