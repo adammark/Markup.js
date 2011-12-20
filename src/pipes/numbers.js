@@ -1,10 +1,12 @@
 /*
- * Display a number in "123,456.78" format to the given precision (defaults
- * to 0) and optionally signed "+" if positive (defaults to false).
+ * Display a number in "#,###.##" notation according to the given precision 
+ * (number of decimal places) and with an optional "+" sign (if positive). 
+ * precision defaults to 0; signed defaults to false.
  *
- * Example:
+ * Examples:
  *
- * {{pct_change|numberformat>2>true}}
+ * {{total_views|numberformat}}
+ * {{percent_change|numberformat>2>true}}
  */
 Mark.pipes.numberformat = function (num, precision, signed) {
     var m = (+num).toFixed(precision).match(/\d+/g),
@@ -28,7 +30,7 @@ Mark.pipes.dollars = function (num) {
 };
 
 /*
- * Format a U.S. phone number string as "(123) 456-7890".
+ * Format a U.S. phone number string as "(###) ###-####".
  *
  * Example:
  *
@@ -54,7 +56,7 @@ Mark.pipes.ordinal = function (num) {
 };
 
 /*
- * Express a number as a percent, e.g. "123.45%". Precision defaults to 0.
+ * Express a number as a percent, e.g. "123.45%". precision defaults to 0.
  *
  * Examples:
  *
@@ -67,7 +69,7 @@ Mark.pipes.percent = function (num, precision) {
 
 /*
  * Convert a number to stopwatch notation ("mm:ss"), given a factor of 1
- * (seconds) or 1000 (milliseconds). (factor defaults to 1)
+ * (seconds) or 1000 (milliseconds). factor defaults to 1.
  *
  * Example:
  *
