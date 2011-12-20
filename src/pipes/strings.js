@@ -17,11 +17,7 @@ Mark.pipes.capcase = function (str) {
  * {{chorus|repeat>5}}
  */
 Mark.pipes.repeat = function (str, count, separator) {
-    var a = [];
-    for (var i = 0, j = count || 2; i < j; i++) {
-        a.push(str);
-    }
-    return a.join(separator || "");
+    return new Array(count || 2).join(str + (separator || "")) + str;
 };
 
 /*
