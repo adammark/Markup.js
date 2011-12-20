@@ -1,31 +1,30 @@
 /*
- * Format a number in dollar notation.
+ * Display a number in "123,456.78" format to the given precision (defaults
+ * to 0) and optionally signed "+" if positive (defaults to false).
+ *
+ * Example:
+ *
+ * {{pct_change|numberformat>2>true}}
+ */
+Mark.pipes.numberformat = function (num, precision, signed) {
+    var m = (+num).toFixed(precision).match(/\d+/g),
+        i = m[0].length % 3,
+        d = m[1] ? "." + m[1] : "",
+        a = i ? [m[0].slice(0, i)] : [],
+        s = signed && num > 0 ? "+" : (num < 0) ? "-" : "";
+
+    return s + a.concat(m[0].slice(i).match(/\d{3}/g) || []).join() + d;
+};
+
+/*
+ * Format a number in dollars. Depends on numberformat, above.
  *
  * Example:
  *
  * {{price|dollars}}
  */
 Mark.pipes.dollars = function (num) {
-    var n = (+num).toFixed(2).toString(), i = n.indexOf(".");
-    while ((i -= 3) > 0) {
-        n = n.substr(0, i) + "," + n.substr(i);
-    }
-    return "$" + n;
-};
-
-/*
- * Format a number in euros.
- *
- * Example:
- *
- * {{price|euros}}
- */
-Mark.pipes.euros = function (num) {
-    var n = (+num).toFixed(2).toString(), i = n.indexOf(".");
-    while ((i -= 3) > 0) {
-        n = n.substr(0, i) + "." + n.substr(i);
-    }
-    return n.replace(/\.(\d{2})$/, ",$1") + " \u20AC";
+    return "$" + Mark.pipes.numberformat(num, 2);
 };
 
 /*
@@ -73,7 +72,6 @@ Mark.pipes.percent = function (num, precision) {
  * Example:
  *
  * {{duration||runtime>1000}}
- *
  */
 Mark.pipes.runtime = function (time, factor) {
     var m = Math.floor(time / (60 * (factor || 1)));
