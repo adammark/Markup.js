@@ -6,9 +6,7 @@
  * {{title|capcase}}
  */
 Mark.pipes.capcase = function (str) {
-    return str.replace(/\b(\w+)\b/g, function ($1) {
-        return $1.charAt(0).toUpperCase() + $1.slice(1);
-    });
+    return str.replace(/\b(\w)/g, function ($1) { return $1.toUpperCase(); });
 };
 
 /*
