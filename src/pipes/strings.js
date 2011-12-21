@@ -10,6 +10,25 @@ Mark.pipes.capcase = function (str) {
 };
 
 /*
+ * Capitalize the first character in each word, excluding some articles and
+ * prepositions.
+ *
+ * Example:
+ *
+ * {{title|headline}}
+ */
+Mark.pipes.headline = function (str) {
+    var exclude = "a,an,the,for,to,of,on,as,in,and,from".split(",");
+
+    return str.replace(/\b\w+/g, function (s, i) {
+        if (exclude.indexOf(s) > -1 && i > 0) {
+            return s;
+        }
+        return s.charAt(0).toUpperCase() + s.slice(1);
+    });
+};
+
+/*
  * Repeat a string. Count defaults to 2; separator defaults to "".
  *
  * Example:
