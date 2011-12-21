@@ -30,6 +30,20 @@ Mark.pipes.dollars = function (num) {
 };
 
 /*
+ * Format a number in euros. Depends on numberformat, above.
+ *
+ * Example:
+ *
+ * {{price|euros}}
+ */
+Mark.pipes.euros = function (num) {
+    var str = Mark.pipes.numberformat(num, 2);
+    return str.replace(/[\.,]/g, function (s) {
+        return s === "." ? "," : ".";
+    }) + " \u20AC";
+};
+
+/*
  * Format a U.S. phone number string as "(###) ###-####".
  *
  * Example:
