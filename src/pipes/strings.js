@@ -109,6 +109,10 @@ Mark.pipes.address = function (addr) {
 /*
  * Inject values into string with numeric tokens, e.g. "a=[0]&b=[1]". This is
  * a templating function in itself.
+ *
+ * Example:
+ *
+ * {{display_url|inject>100>date>desc}}
  */
 Mark.pipes.inject = function (str) {
     var args = arguments;
