@@ -6,7 +6,7 @@
  * {{title|capcase}}
  */
 Mark.pipes.capcase = function (str) {
-    return str.replace(/\b\w/g, function ($1) { return $1.toUpperCase(); });
+    return str.replace(/\b\w/g, function (s) { return s.toUpperCase(); });
 };
 
 /*
@@ -94,7 +94,7 @@ Mark.pipes.address = function (addr) {
 Mark.pipes.inject = function (str) {
     var args = arguments;
 
-    return str.replace(/\[\d+\]/g, function ($1) {
-        return args[parseInt($1.slice(1)) + 1] || "";
+    return str.replace(/\[(\d+)\]/g, function (s, i) {
+        return args[+i + 1] || "";
     });
 };
