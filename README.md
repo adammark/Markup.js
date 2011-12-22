@@ -628,6 +628,48 @@ var result = Mark.up(template, context);
 // "Welcome! You are here: http://www.example.com/"
 ```
 
+## Gotchas
+
+Here are some common traps to avoid:
+
+### Ambiguous templates
+
+The following template is ambiguous because the first tag is unclosed:
+
+``` javascript
+template = "Adam has {{bros|length}} brothers: {{bros}}...{{/bros}}";
+```
+
+In such cases, you should use a self-closing tag:
+
+``` javascript
+template = "Adam has {{bros|length /}} brothers: {{bros}}...{{/bros}}";
+```
+
+### Incorrect notation
+
+Markup.js uses dot notation, not bracket notation, for both objects and 
+arrays:
+
+``` javascript
+var context = {
+    name: { first: "John", last: "Doe" },
+    colors: ["Red", "Blue", "Green"]
+};
+
+// WRONG
+var template = "First name: {{name[first]}}";
+
+// RIGHT
+var template = "First name: {{name.first}}";
+
+// WRONG
+var template = "Favorite color: {{colors[0]}}";
+
+// RIGHT
+var template = "Favorite color: {{colors.0}}";
+```
+
 ## Implementation
 
 You can implement Markup.js in a few different ways. The right strategy
