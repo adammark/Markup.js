@@ -854,20 +854,21 @@ myapp.templates = {
 var template = myapp.templates.hello[LANG];
 ```
 
-If you use Markup.js for both HTML composition *and* translation, you
-might benefit from using includes. Here's one way to go about it:
+If you use Markup.js for markup *and* translation, you might benefit from 
+using includes. Here's one way to go about it:
 
 ``` javascript
-// english resource bundle
-var bundle = {
+// english messages
+Mark.includes = {
     hello_msg: "Welcome, {{user.name}}.",
-    goodbye_msg: "See ya!"
+    goodbye_msg: "See ya, {{user.name}}!"
 };
 
 // html templates
 var templates = {
     hello_tpl: "<div class='hello'>{{hello_msg}}</div>",
-    goodbye_tpl: "<div class='goodbye'>{{goodbye_msg}}</div>"
+    goodbye_tpl: "<div class='goodbye'>{{goodbye_msg}}</div>",
+    error_tpl: "<div class='error'>{{error_msg}}</div>"
 };
 
 // context object
@@ -875,17 +876,13 @@ var context = {
     user: { name: "Adam" }
 };
 
-var hello_html = Mark.up(templates.hello_tpl, context, {includes: bundle});
+var hello_html = Mark.up(templates.hello_tpl, context);
 // "<div class='hello'>Welcome, Adam.</div>"
 
-var goodbye_html = Mark.up(templates.goodbye_tpl);
-// "<div class='goodbye'>See ya!</div>"
+var goodbye_html = Mark.up(templates.goodbye_tpl, context);
+// "<div class='goodbye'>See ya, Adam!</div>"
 
 ```
-
-Notice the last example requires neither a context object (since
-`goodbye_msg` contains no variables) nor options (since they were set in
-the previous function call).
 
 *Internationalization requires careful design, especially when dealing
 with context-sensitive strings. In the above example, `hello_msg`
