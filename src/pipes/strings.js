@@ -36,7 +36,7 @@ Mark.pipes.headline = function (str) {
  * {{chorus|repeat>5}}
  */
 Mark.pipes.repeat = function (str, count, separator) {
-    return new Array(count || 2).join(str + (separator || "")) + str;
+    return new Array(+count || 2).join(str + (separator || "")) + str;
 };
 
 /*
