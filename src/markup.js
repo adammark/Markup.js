@@ -1,5 +1,5 @@
 /*
-  Markup.js v1.0: http://github.com/adammark/Markup.js
+  Markup.js v1.1: http://github.com/adammark/Markup.js
   (c) 2011 Adam Mark
 */
 var Mark = {
@@ -142,6 +142,9 @@ Mark.up = function (template, context, options, undefined) {
         child = "";
         selfy = tag.indexOf("/}}") > -1;
         prop = tag.substr(2, tag.length - (selfy ? 5 : 4));
+        prop = prop.replace(/`(\w+)`/g, function (s, m) {
+            return Mark.includes[m];
+        });
         testy = prop.trim().indexOf("if ") === 0;
         filters = prop.replace(/&gt;/g, ">").split("|").splice(1);
         prop = prop.replace(/^\s*if/, "").split("|").shift().trim();
@@ -362,5 +365,8 @@ Mark.pipes = {
     },
     call: function (obj, fn) {
         return obj[fn].apply(obj, [].slice.call(arguments, 2));
+    },
+    set: function (obj, key) {
+        Mark.includes[key] = obj; return "";
     }
 };

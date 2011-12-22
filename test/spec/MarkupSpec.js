@@ -987,24 +987,46 @@ describe("Markup core spec", function () {
         expect(result).toEqual("mutt");
 
         template = "{{a|call>toPrecision>5}}";
-        context = {a:1, b:2, c:3};
-        result = Mark.up(template, context);
+        result = Mark.up(template, {a:1, b:2, c:3});
         expect(result).toEqual("1.0000");
 
         template = "{{a|call>join>*}}";
-        context = {a:["ad","am","ma","rk"]};
-        result = Mark.up(template, context);
+        result = Mark.up(template, {a:["ad","am","ma","rk"]});
         expect(result).toEqual("ad*am*ma*rk");
 
         template = "{{a|call>getFullYear|equals>2011|choose>Yes>No}}";
-        context = {a:new Date(2011,1,1)};
-        result = Mark.up(template, context);
+        result = Mark.up(template, {a:new Date(2011,1,1)});
         expect(result).toEqual("Yes");
 
         template = "{{a|call>getFullYear|more>2020|choose>Yes>No}}";
-        context = {a:new Date(2011,1,1)};
-        result = Mark.up(template, context);
+        result = Mark.up(template, {a:new Date(2011,1,1)});
         expect(result).toEqual("No");
+    });
+
+    it("resolves pipe: set", function () {
+        template = "{{gender|upcase|set>gen}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("");
+
+        template = "{{gen}} {{gen|downcase}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("MALE male");
+
+        template = "{{if gender|upcase|equals>`gen`}}+++{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("+++");
+
+        template = "{{if gender|upcase|equals>`gen`|equals>`gen`}}---{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("---");
+
+        template = "{{weight|set>gen}}{{gen}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("145");
+
+        template = "{{fruits}}{{if .|notequals>`fruit`}}*{{/if}}{{.}}{{.|set>fruit}}{{/fruits}}";
+        result = Mark.up(template, { fruits: ["apple", "apple", "orange"] });
+        expect(result).toEqual("*appleapple*orange");
     });
 
 });
