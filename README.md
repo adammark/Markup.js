@@ -715,35 +715,12 @@ var elem = document.getElementById("menu");
 elem.innerHTML = Mark.up(elem.innerHTML, context);
 ```
 
-If you intend to evaluate embedded templates more than once during the
-lifetime of the HTML page, you'll need to store the original template
-text for later lookup. Markup.js provides a `cache` variable for this 
-reason:
-
-``` javascript
-var elem = document.getElementById("menu");
-
-Mark.cache.menu_tpl = elem.innerHTML;
-
-// now
-elem.innerHTML = Mark.up(Mark.cache.menu_tpl, context1);
-
-// later
-elem.innerHTML = Mark.up(Mark.cache.menu_tpl, context2);
-```
-
-Or you can cache templates via the `options` arguments:
-
-``` javascript
-// now
-elem.innerHTML = Mark.up(elem.innerHTML, context1, { cache: "menu_tpl" });
-
-// later
-elem.innerHTML = Mark.up(Mark.cache.menu_tpl, context2);
-```
-
 To avoid a flicker of unformatted text, template elements should be hidden
 (via CSS) until formatting is applied.
+
+If you intend to evaluate embedded templates more than once during the
+lifetime of the HTML page, you'll need to store the original template
+text for later lookup.
 
 #### Using script tags
 

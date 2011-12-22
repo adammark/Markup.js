@@ -558,19 +558,6 @@ describe("Markup core spec", function () {
         expect(result).toEqual("0.00 1.00 ");
     });
 
-    it("caches templates", function () {
-        template = "abcdefg-{{name}}";
-        result = Mark.up(template, { name: "Adam" }, { cache: "t1" });
-        expect(result).toEqual("abcdefg-Adam");
-
-        result = Mark.up(Mark.cache.t1, { name: "Mark" });
-        expect(result).toEqual("abcdefg-Mark");
-
-        Mark.cache.t2 = "hijklmnop-{{name}}";
-        result = Mark.up(Mark.cache.t2, { name: "Adam" });
-        expect(result).toEqual("hijklmnop-Adam");
-    });
-
     it("resolves pipe: blank", function () {
         template = "{{name.middle|blank>N/A}}";
         result = Mark.up(template, context);

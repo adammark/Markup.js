@@ -6,9 +6,6 @@ var Mark = {
     // templates to include, by name
     includes: {},
     
-    // templates to cache, by name
-    cache: {},
-
     // helper fn: copy array a, or copy array a into b. return b
     _copy: function (a, b) {
         b = b || [];
@@ -117,11 +114,6 @@ Mark.up = function (template, context, options, undefined) {
     // set templates to include, if any
     if (options.includes) {
         Mark._copy(options.includes, Mark.includes);
-    }
-
-    // cache this template by name, if provided
-    if (options.cache) {
-        Mark.cache[options.cache] = template;
     }
 
     // get "if" or "else" string from piped result
