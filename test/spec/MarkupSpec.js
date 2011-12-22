@@ -118,15 +118,11 @@ describe("Markup core spec", function () {
         result = Mark.up(template, context);
         expect(result).toEqual("friend's friend: Jeremy");
 
-        template = "friend's friend: {{friend}}{{friend.name}}{{/friend}}";
+        template = "friend's friend: {{friend}}{{friend.name/}}{{/friend}}";
         result = Mark.up(template, context);
         expect(result).toEqual("friend's friend: Jeremy");
 
-        template = "{{brothers|join> + }} {{brothers|join> + }}";
-        result = Mark.up(template, context);
-        expect(result).toEqual("Jack + Joe + Jim Jack + Joe + Jim");
-
-        template = "brothers: {{brothers|join> + }}{{/brothers}} {{brothers}}x{{/brothers}}";
+        template = "brothers: {{brothers|join> + /}} {{brothers}}x{{/brothers}}";
         result = Mark.up(template, context);
         expect(result).toEqual("brothers: Jack + Joe + Jim xxx");
     });
@@ -288,7 +284,7 @@ describe("Markup core spec", function () {
         result = Mark.up(template, context);
         expect(result).toEqual("brothers: Jack * Joe * Jim");
 
-        template = "brothers: {{brothers|join> * }}";
+        template = "brothers: {{brothers|join> * /}}";
         result = Mark.up(template, context);
         expect(result).toEqual("brothers: Jack * Joe * Jim");
 

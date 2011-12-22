@@ -98,6 +98,7 @@ Mark.up = function (template, context, options, undefined) {
         prop,
         token,
         filters = [],
+        selfy,
         testy,
         child,
         ctx,
@@ -131,7 +132,8 @@ Mark.up = function (template, context, options, undefined) {
     while ((tag = tags[i++])) {
         result = undefined;
         child = "";
-        prop = tag.substr(2, tag.length - 4);
+        selfy = tag.indexOf("/}}") > -1;
+        prop = tag.substr(2, tag.length - (selfy ? 5 : 4));
         prop = prop.replace(/`(\w+)`/g, function (s, m) {
             return Mark.includes[m];
         });
@@ -141,7 +143,7 @@ Mark.up = function (template, context, options, undefined) {
         token = testy ? "if" : prop.split("|")[0];
 
         // determine the full extent of a block tag and its child
-        if (tags.join().indexOf("{{/" + token) > -1) {
+        if (!selfy && tags.join().indexOf("{{/" + token) > -1) {
             result = Mark._bridge(template, token);
             tag = result[0];
             child = result[1];
