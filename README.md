@@ -413,18 +413,14 @@ with one or more arguments. The first argument (required) is the piped
 value itself. Any additional arguments are strings. For example:
 
 ``` javascript
-Mark.pipes.repeat = function (str, count, separator) {
-    var a = [];
-    for (var i = 0, j = count || 2; i < j; i++) {
-        a.push(str);
-    }
-    return a.join(separator || "");
+Mark.pipes.shout = function (str, n) {
+    return str + new Array(parseInt(n || 1) + 1).join("!");
 };
 
-var template = "{{name|repeat>3>, }}!";
+var template = "{{exclamation|shout>5}}";
 
-var result = Mark.up(template, {name:"Beetlejuice"});
-// "Beetlejuice, Beetlejuice, Beetlejuice!"
+var result = Mark.up(template, {exclamation:"Bonsai"});
+// "Bonsai!!!!!"
 
 ```
 
