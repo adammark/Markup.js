@@ -51,6 +51,36 @@ var Mark = {
         return val;
     },
 
+    // evaluate an array or object and process its child contents (if any)
+    _eval: function (context, filters, child) {
+        var result = context = Mark._pipe(context, filters),
+            i = -1,
+            j;
+
+        // if result is array, iterate
+        if (result instanceof Array) {
+            result = "";
+            j = context.length;
+
+            while (++i < j) {
+                opts = {
+                    iter: new Mark._iter(i, j)
+                };
+                result += child ? Mark.up(child, context[i], opts) : context[i];
+            }
+        }
+
+        return result;
+    },
+
+    // get "if" or "else" string from piped result
+    _test: function (result, child, context, options) {
+        var str = Mark.up(child, context, options).split(/{{\s*else\s*}}/),
+            res = (result === false ? str[1] : str[0]);
+
+        return Mark.up(res || "", context, options);
+    },
+
     // get the full extent of a block tag given a template and token (e.g. "if")
     _bridge: function (tpl, tkn) {
         var exp = "{{\\s*" + tkn + "([^/}]+\\w*)?}}|{{/" + tkn + "\\s*}}",
@@ -116,42 +146,40 @@ Mark.up = function (template, context, options, undefined) {
         Mark._copy(options.includes, Mark.includes);
     }
 
-    // get "if" or "else" string from piped result
-    function test(result, child, context, options) {
-        child = Mark.up(child, context, options).split(/{{\s*else\s*}}/);
-
-        if (testy) {
-            result = child[result === false ? 1 : 0];
-            result = Mark.up(result || "", context, options);
-        }
-
-        return result;
-    }
-
     // loop through tags, e.g. {{a}}, {{b}}, {{c}}, {{/c}}
     while ((tag = tags[i++])) {
-        result = undefined;
         child = "";
         selfy = tag.indexOf("/}}") > -1;
-        prop = tag.substr(2, tag.length - (selfy ? 5 : 4));
-        prop = prop.replace(/`(\w+)`/g, function (s, m) {
+        x = tag.length - (selfy ? 5 : 4);
+        prop = tag.substr(2, x).replace(/`(\w+)`/g, function (s, m) {
             return Mark.includes[m];
         });
         testy = prop.trim().indexOf("if ") === 0;
         filters = prop.replace(/&gt;/g, ">").split("|").splice(1);
         prop = prop.replace(/^\s*if/, "").split("|").shift().trim();
         token = testy ? "if" : prop.split("|")[0];
+        ctx = context[prop];
+
+        // assume testing for empty
+        if (testy && !filters.length) {
+            filters = ["notempty"];
+        }
 
         // determine the full extent of a block tag and its child
-        if (!selfy && tags.join().indexOf("{{/" + token) > -1) {
+        if (!selfy && template.indexOf("{{/" + token) > -1) {
             result = Mark._bridge(template, token);
             tag = result[0];
             child = result[1];
             i += tag.match(re).length - 1; // fast forward
         }
 
+        // skip "else" tags. these will be pulled out in _test()
+        if (/^{{\s*else\s*}}$/.test(tag)) {
+            continue;
+        }
+
         // tag refers to included template
-        if (Mark.includes[prop]) {
+        else if (Mark.includes[prop]) {
             prop = Mark.includes[prop];
             if (prop instanceof Function) {
                 prop = prop();
@@ -159,64 +187,53 @@ Mark.up = function (template, context, options, undefined) {
             result = pipe(Mark.up(prop, context), filters);
         }
 
-        // tag refers to current context
-        else if (prop === ".") {
-            result = test(pipe(context, filters), child, context);
-        }
-
         // tag refers to loop counter
         else if (prop.match(/#{1,2}/)) {
             options.iter.sign = prop;
-            result = test(pipe(options.iter, filters), child, context, options);
+            result = pipe(options.iter, filters);
         }
 
-        // skip "else" tags. these will be pulled out in test()
-        else if (/^{{\s*else\s*}}$/.test(tag)) {
-            continue;
+        // tag refers to current context
+        else if (prop === ".") {
+            result = pipe(context, filters);
         }
 
-        // tag has dot notation, e.g. "a.b.c". traverse it to get the actual context
+        // tag has dot notation, e.g. "a.b.c"
         else if (prop.match(/\./)) {
             prop = prop.split(".");
-            for (x = 0, ctx = context; x < prop.length; x++) {
+            ctx = context;
+
+            // get the actual context
+            for (x = 0; x < prop.length; x++) {
                 ctx = ctx[prop[x]];
             }
-            result = test(pipe(ctx, filters), child, context);
+
+            result = Mark._eval(ctx, filters, child);
         }
 
         // tag is otherwise testable
         else if (testy) {
-            result = true;
-            // allow test for empty/undefined without filter (e.g "{{if foo}}...{{/if}}")
-            if (!filters.length) {
-                if (!context[prop] || context[prop].length === 0) {
-                    result = false;
-                }
-            }
-            result = test(result && pipe(context[prop], filters), child, context);
+            result = pipe(ctx, filters);
         }
 
-        // context is an array. loop through piped array
-        else if (context[prop] instanceof Array) {
-            result = ctx = pipe(context[prop], filters);
-            if (ctx instanceof Array) {
-                result = "";
-                for (x in ctx) {
-                    // for each, new iterator
-                    options = { iter: new Mark._iter(+x, ctx.length) };
-                    result += child ? Mark.up(child, ctx[x], options) : ctx[x];
-                }
-            }
+        // context is an array. loop through it
+        else if (ctx instanceof Array) {
+            result = Mark._eval(ctx, filters, child);
         }
 
-        // if an object block, process child contents, e.g. {{foo}}child{{/foo}}
+        // tag is a block, e.g. {{foo}}child{{/foo}}
         else if (child) {
-            result = context[prop] ? Mark.up(child, context[prop]) : undefined;
+            result = ctx ? Mark.up(child, ctx) : undefined;
         }
 
         // else all others
         else if (context.hasOwnProperty(prop)) {
-            result = pipe(context[prop], filters);
+            result = pipe(ctx, filters);
+        }
+
+        // resolve "if" statements
+        if (testy) {
+            result = Mark._test(result, child, context, options);
         }
 
         // replace the tag, e.g. "{{name}}", with the result, e.g. "Adam"

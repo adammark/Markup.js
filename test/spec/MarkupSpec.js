@@ -15,6 +15,7 @@ describe("Markup core spec", function () {
         brothers: ["Jack", "Joe", "Jim"],
         sisters: [{name: "Jill"}, {name: "Jen"}],
         cousin: { name: { first: "Jake" } },
+        alpha: { beta: ["a","b","c","d","e"] },
         children: [],
         path: "example.com?a=b c=d",
         link: "<a href=\"http://www.example.com\">example.com</a>",
@@ -23,6 +24,7 @@ describe("Markup core spec", function () {
         truthy: true,
         falsy: false,
         friend: { name: "Justin", friend: { name: "Jeremy" } },
+        foods: { fruits: [ {"name":"apple"}, {"name":"orange"} ] },
         obj: { truthy: true, falsy: false }
     };
 
@@ -332,6 +334,24 @@ describe("Markup core spec", function () {
         expect(result).toEqual("sisters: <li>Jill</li><li>Jen</li>");
     });
 
+    it("resolves iteration using dot notation", function () {
+        template = "{{alpha.beta}}{{.}}{{/alpha.beta}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("abcde");
+
+        template = "{{alpha.beta|reverse}}{{.}}{{/alpha.beta}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("edcba");
+
+        template = "{{alpha.beta|reverse}}{{.|upcase}}{{/alpha.beta}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("EDCBA");
+
+        template = "{{foods.fruits}}{{name}}+{{/foods.fruits}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("apple+orange+");
+    });
+
     it("resolves pipe on complex array", function () {
         template = "sisters: {{sisters|reverse}}<li>{{name}}</li>{{/sisters}}";
         result = Mark.up(template, context);
@@ -403,6 +423,14 @@ describe("Markup core spec", function () {
         template = "{{name}}{{first}}{{if .|equals>John}}***{{/if}}{{/first}}{{/name}}";
         result = Mark.up(template, context);
         expect(result).toEqual("***");
+
+        template = "{{if alpha.beta|size|more>1}}@@@{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("@@@");
+
+        template = "{{if alpha.beta}}zzz{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("zzz");
     });
 
     it("resolves if/else", function () {

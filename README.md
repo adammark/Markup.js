@@ -132,6 +132,20 @@ var template = "<ul>{{brothers}}<li>{{.}}</li>{{/brothers}}</ul>";
 var result = Mark.up(template, context);
 // "<ul><li>Jack</li><li>Joe</li><li>Jim</li></ul>"
 ```
+
+``` javascript
+var context = {
+    user: {
+        contacts: ["John", "Jane"]
+    }
+};
+
+var template = "<ul>{{user.contacts}}<li>{{.}}</li>{{/user.contacts}}</ul>";
+
+var result = Mark.up(template, context);
+// "<ul><li>John</li><li>Jane</li></ul>"
+```
+
 When looping through an array of objects, object properties can be
 referenced by name:
 
