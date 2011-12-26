@@ -352,7 +352,7 @@ argument is always the piped value itself:
 
 `slice` (arr, start, length): returns a slice of arr (start to start+length)
 
-`split` (str, separator): returns a string split by separator
+`split` (str, separator): split str into an array. separator defaults to ","
 
 `choose` (bool, iffy, elsy): returns iffy if bool is true, else returns elsy
 
