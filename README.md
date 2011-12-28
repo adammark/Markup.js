@@ -584,7 +584,7 @@ In the above example, `salary|big|even` returns *5000000*, which
 resolves to *true* inside the IF statement. *You should follow this
 convention if you write boolean pipes.*
 
-## Includes
+## Includes and setters
 
 You can include templates inside other templates. For example:
 
@@ -623,8 +623,6 @@ var options = {
 var result = Mark.up(template, context, options);
 ```
 
-*Be careful to avoid naming conflicts with `context` variables.*
-
 ### Functions as includes
 
 Sometimes you need to perform operations or access data outside the
@@ -641,6 +639,22 @@ var template = "Welcome! {{status}}";
 var result = Mark.up(template, context);
 // "Welcome! You are here: http://www.example.com/"
 ```
+
+### Setters
+
+The special `set` pipe lets you set a variable *inside the template itself*:
+
+```
+{{users|size|set>num_users}}
+
+{{if num_users|more>10}}
+    ...
+{{/if}}
+```
+
+*Includes and setters are accessible in the global scope of template execution
+and from one template to another. They take precedence over `context`
+variables with the same name, so be careful to avoid naming conflicts.*
 
 ## Gotchas
 
