@@ -380,11 +380,13 @@ argument is always the piped value itself:
 
 `last` (iterator): returns true if iterator (# or ##) is the last item, else returns false
 
-`call` (obj, fn, arg1, arg2...): power pipe! calls fn on obj with zero or more args
+`call` (obj, func, arg1, arg2...): calls func on obj with zero or more args. see below
+
+`set` (obj, key): sets a variable for later use (and outputs nothing). see "Setters" below
 
 *Note: Arrays are copied before sorting or slicing.*
 
-### Power pipe
+### The 'call' pipe
 
 With great power comes great responsibility.  Thus the `call` pipe,
 which allows you to call a function on any object and pass it zero or
