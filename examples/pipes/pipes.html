@@ -49,11 +49,7 @@ function init() {
     // ......................... D .........................
     function Doggy() {
         this.bark = function (count) {
-            var str = "";
-            for (var i = 0; i < count; i++) {
-                str += "Woof! ";
-            }
-            return str;
+            return new Array((+count || 1) + 1).join("Woof! ");
         }
     }
 
@@ -133,7 +129,7 @@ function init() {
     <h2>D. Piped functions</h2>
 
     <div id="D">
-        Bark: <em>{{dog|call>bark>3}}</em>
+        Bark: <em>{{dog|call>bark>10}}</em>
     </div>
 
     <h2>E. Testing for empty</h2>
