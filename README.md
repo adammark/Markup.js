@@ -480,7 +480,7 @@ IF statements are formatted as `{{if expression}} ... {{/if}}`, where
 *expression* is a boolean test with optional pipes:
 
 ``` javascript
-var template = "{{if brothers|notempty}} John has {{brothers|size}} brothers! {{/if}}"
+var template = "{{if brothers}} John has {{brothers|size}} brothers! {{/if}}"
 ```
 
 ``` javascript
