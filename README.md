@@ -7,7 +7,7 @@ JavaScript.
 
 Markup.js takes the pain out of converting structured data into HTML
 markup or other text formats. Its intuitive syntax and small footprint
-(only 1.7KB minified and gzipped) make it the perfect choice for your
+(only 1.8KB minified and gzipped) make it the perfect choice for your
 Javascript app. Plus there are *no dependencies.*
 
 ## Usage
@@ -326,7 +326,11 @@ argument is always the piped value itself:
 
 `downcase` (str): returns str down-cased
 
-`chop` (str, n): chops str to n chars followed by "..." if n > str.length
+`capcase` (str): returns str with the first letter in each word capitalized
+
+`chop` (str, n): chops str to n chars followed by "..." if n < string length
+
+`tease` (str, n): chops str to n words followed by "..." if n < word count
 
 `trim` (str): returns str with leading and trailing white space removed
 
@@ -337,8 +341,6 @@ argument is always the piped value itself:
 `style` (str, classes): returns `<span class="classes">str</span>`
 
 `clean` (str): returns str with HTML tags removed
-
-`sub` (str, pattern, replacement): returns str with all instances of pattern replaced
 
 `length` (obj): returns length of string, array or iterator (# or ##)
 

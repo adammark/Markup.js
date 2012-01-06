@@ -25,6 +25,7 @@ describe("Markup core spec", function () {
         falsy: false,
         friend: { name: "Justin", friend: { name: "Jeremy" } },
         foods: { fruits: [ {"name":"apple"}, {"name":"orange"} ] },
+        motto: "life is like a box of chocolates",
         obj: { truthy: true, falsy: false }
     };
 
@@ -722,6 +723,12 @@ describe("Markup core spec", function () {
         expect(result).toEqual("JOHN");
     });
 
+    it("resolves pipe: capcase", function () {
+        template = "{{motto|capcase}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("Life Is Like A Box Of Chocolates");
+    });
+
     it("resolves pipe: downcase", function () {
         template = "{{name.first|downcase}}";
         result = Mark.up(template, context);
@@ -736,6 +743,16 @@ describe("Markup core spec", function () {
         template = "{{name.first|chop>100}}";
         result = Mark.up(template, context);
         expect(result).toEqual("John");
+    });
+
+    it("resolves pipe: tease", function () {
+        template = "{{motto|tease>3}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("life is like...");
+
+        template = "{{motto|tease>50}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("life is like a box of chocolates");
     });
 
     it("resolves pipe: round", function () {
@@ -780,16 +797,6 @@ describe("Markup core spec", function () {
         template = "{{link|clean}}";
         result = Mark.up(template, context);
         expect(result).toEqual("example.com");
-    });
-
-    it("resolves pipe: sub", function () {
-        template = "{{address|sub>Maple>Elm}}";
-        result = Mark.up(template, context);
-        expect(result).toEqual("1 Elm Street");
-
-        template = "{{address|sub>1>2|sub>Maple>Elm}}";
-        result = Mark.up(template, context);
-        expect(result).toEqual("2 Elm Street");
     });
 
     it("resolves pipe: reverse", function () {

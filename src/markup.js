@@ -1,5 +1,5 @@
 /*
-  Markup.js v1.1: http://github.com/adammark/Markup.js
+  Markup.js v1.2: http://github.com/adammark/Markup.js
   (c) 2011 Adam Mark
 */
 var Mark = {
@@ -288,8 +288,15 @@ Mark.pipes = {
     downcase: function (str) {
         return String(str).toLowerCase();
     },
+    capcase: function (str) {
+        return str.replace(/\b\w/g, function (s) { return s.toUpperCase(); });
+    },
     chop: function (str, n) {
         return str.length > n ? str.substr(0, n) + "..." : str;
+    },
+    tease: function (str, n) {
+        var a = str.split(/\s+/);
+        return a.slice(0, n).join(" ") + (a.length > n ? "..." : "");
     },
     trim: function (str) {
         return str.trim();
@@ -305,9 +312,6 @@ Mark.pipes = {
     },
     clean: function (str) {
         return String(str).replace(/<\/?[^>]+>/gi, "");
-    },
-    sub: function (str, pattern, replacement) {
-        return String(str).replace(new RegExp(pattern, "g"), replacement);
     },
     size: function (obj) {
         return obj.length;

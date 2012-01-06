@@ -1,15 +1,4 @@
 /*
- * Capitalize the first character in each word.
- *
- * Example:
- *
- * {{title|capcase}}
- */
-Mark.pipes.capcase = function (str) {
-    return str.replace(/\b\w/g, function (s) { return s.toUpperCase(); });
-};
-
-/*
  * Capitalize the first character in each word, excluding some articles and
  * prepositions.
  *
@@ -37,17 +26,6 @@ Mark.pipes.headline = function (str) {
  */
 Mark.pipes.repeat = function (str, count, separator) {
     return new Array(+count || 2).join(str + (separator || "")) + str;
-};
-
-/*
- * Get the first n words of a string. (words defaults to 25)
- *
- * Example:
- *
- * {{article|tease>30}}
- */
-Mark.pipes.tease = function (str, words) {
-    return str.split(/\s+/).slice(0, words || 25).join(" ") + "...";
 };
 
 /*
