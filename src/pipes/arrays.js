@@ -1,4 +1,46 @@
 /*
+ * Determine if an array contains an object with the given property value.
+ *
+ * Example:
+ *
+ * {{if fruits|has>color>red}}
+ *    ...
+ * {{/if}}
+ */
+Mark.pipes.has = function (arr, prop, val) {
+    for (var i = 0, j = arr.length; i < j; i++) {
+        if (arr[i][prop] == val) {
+            return true;
+        }
+    }
+
+    return false;
+};
+
+/*
+ * Reduce an array to objects with the given property value.
+ *
+ * Example:
+ *
+ * <ul>
+ *     {{fruits|sift>color>red}}
+ *         <li>{{fruit.name}}</li>
+ *     {{/fruits}}
+ * </ul>
+ */
+Mark.pipes.sift = function (arr, prop, val) {
+    var result = [];
+
+    for (var i = 0, j = arr.length; i < j; i++) {
+        if (arr[i][prop] == val) {
+            result.push(arr[i]);
+        }
+    }
+
+    return result;
+};
+
+/*
  * Shuffle and reduce an array to n random entries. (n defaults to 1)
  *
  * Example:
