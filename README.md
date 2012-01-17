@@ -585,8 +585,8 @@ var template = "{{if salary|big|even}} A nice round number! {{/if}}";
 ```
 
 In the above example, `salary|big|even` returns *5000000*, which
-resolves to *true* inside the IF statement. *You should follow this
-convention if you write boolean pipes.*
+resolves to *true*. *You should follow this convention if you write 
+boolean pipes.*
 
 ## Includes and setters
 
@@ -794,7 +794,7 @@ itself:
 ...
 ```
 
-Then, simply replace the HTML contents:
+Then simply replace the HTML contents:
 
 ``` javascript
 var elem = document.getElementById("menu");
@@ -851,6 +851,8 @@ templates into a single file:
     ...
 </div>
 ```
+
+Then load and parse the file:
 
 ``` javascript
 var templates = {};
@@ -918,8 +920,8 @@ myapp.templates = {
 var template = myapp.templates.hello[LANG];
 ```
 
-If you use Markup.js for markup *and* translation, you might benefit from 
-using includes. Here's one way to go about it:
+If you use Markup.js for both markup and translation tasks, you might benefit
+from using includes. Here's one way to go about it:
 
 ``` javascript
 // english messages
