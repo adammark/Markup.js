@@ -954,7 +954,9 @@ expects to receive a `user` object.*
 
 ## Compatibility
 
-TODO Chrome 13+, Safari 5+, etc.
+Tested in recent versions of Chrome, Safari, Firefox and various mobile WebKit
+implementations. Not compatible with older versions of Internet Explorer.  See
+<code>test/specs.html</code>
 
 ## License
 
