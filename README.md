@@ -669,13 +669,13 @@ Here are some common traps to avoid:
 The following template is ambiguous because the first tag is unclosed:
 
 ``` javascript
-template = "Adam has {{bros|length}} brothers: {{bros}}...{{/bros}}";
+var template = "Adam has {{bros|length}} brothers: {{bros}}...{{/bros}}";
 ```
 
 In such cases, you should use a self-closing tag:
 
 ``` javascript
-template = "Adam has {{bros|length /}} brothers: {{bros}}...{{/bros}}";
+var template = "Adam has {{bros|length /}} brothers: {{bros}}...{{/bros}}";
 ```
 
 ### Incorrect notation
@@ -700,6 +700,19 @@ var template = "Favorite color: {{colors[0]}}";
 
 // RIGHT
 var template = "Favorite color: {{colors.0}}";
+```
+
+### Use of quote marks in pipes
+
+Markup.js treats all piped variables as strings, so quote marks are treated 
+like any other characters:
+
+``` javascript
+// WRONG
+var template = "{{if name|like>'Adam'}} ...";
+
+// RIGHT
+var template = "{{if name|like>Adam}} ...";
 ```
 
 ## Implementation
