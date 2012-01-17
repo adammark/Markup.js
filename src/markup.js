@@ -1,5 +1,5 @@
 /*
-  Markup.js v1.2.1: http://github.com/adammark/Markup.js
+  Markup.js v1.2.2: http://github.com/adammark/Markup.js
   (c) 2011 Adam Mark
 */
 var Mark = {
@@ -31,7 +31,6 @@ var Mark = {
         this.size = size;
         this.length = size;
         this.sign = "#";
-        this.prototype = Number;
         this.toString = this.valueOf = function () {
             return this.idx + this.sign.length - 1;
         };
