@@ -26,7 +26,8 @@ describe("Markup core spec", function () {
         friend: { name: "Justin", friend: { name: "Jeremy" } },
         foods: { fruits: [ {"name":"apple"}, {"name":"orange"} ] },
         motto: "life is like a box of chocolates",
-        obj: { truthy: true, falsy: false }
+        obj: { truthy: true, falsy: false },
+        chars: [ ["a","b","c"], ["d","e","f"] ]
     };
 
     beforeEach(function () {
@@ -1034,21 +1035,9 @@ describe("Markup core spec", function () {
         result = Mark.up(template, context);
         expect(result).toEqual("MALE male");
 
-        template = "{{if gender|upcase|equals>`gen`}}+++{{/if}}";
+        template = "{{chars}}{{.|set>char}}{{char}}{{.}},{{/char}}-{{/chars}}";
         result = Mark.up(template, context);
-        expect(result).toEqual("+++");
-
-        template = "{{if gender|upcase|equals>`gen`|equals>`gen`}}---{{/if}}";
-        result = Mark.up(template, context);
-        expect(result).toEqual("---");
-
-        template = "{{weight|set>gen}}{{gen}}";
-        result = Mark.up(template, context);
-        expect(result).toEqual("145");
-
-        template = "{{fruits}}{{if .|notequals>`fruit`}}*{{/if}}{{.}}{{.|set>fruit}}{{/fruits}}";
-        result = Mark.up(template, { fruits: ["apple", "apple", "orange"] });
-        expect(result).toEqual("*appleapple*orange");
+        expect(result).toEqual("a,b,c,-d,e,f,-");
     });
 
 });

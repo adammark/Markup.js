@@ -1,11 +1,14 @@
 /*
-  Markup.js v1.2: http://github.com/adammark/Markup.js
+  Markup.js v1.2.1: http://github.com/adammark/Markup.js
   (c) 2011 Adam Mark
 */
 var Mark = {
     // templates to include, by name
     includes: {},
-    
+
+    // setters, by name
+    setters: {},
+
     // helper fn: copy array a, or copy array a into b. return b
     _copy: function (a, b) {
         b = b || [];
@@ -117,7 +120,7 @@ var Mark = {
 };
 
 // fill a template string with context data. return transformed template
-Mark.up = function (template, context, options, undefined) {
+Mark.up = function (template, context, options) {
     context = context || {};
     options = options || {};
 
@@ -133,6 +136,8 @@ Mark.up = function (template, context, options, undefined) {
         child,
         ctx,
         result,
+        setter,
+        include,
         i = 0,
         x;
 
@@ -150,10 +155,7 @@ Mark.up = function (template, context, options, undefined) {
     while ((tag = tags[i++])) {
         child = "";
         selfy = tag.indexOf("/}}") > -1;
-        x = tag.length - (selfy ? 5 : 4);
-        prop = tag.substr(2, x).replace(/`(\w+)`/g, function (s, m) {
-            return Mark.includes[m];
-        });
+        prop = tag.substr(2, tag.length - (selfy ? 5 : 4));
         testy = prop.trim().indexOf("if ") === 0;
         filters = prop.replace(/&gt;/g, ">").split("|").splice(1);
         prop = prop.replace(/^\s*if/, "").split("|").shift().trim();
@@ -178,13 +180,17 @@ Mark.up = function (template, context, options, undefined) {
             continue;
         }
 
+        // tag refers to setter
+        else if ((setter = Mark.setters[prop])) {
+            result = Mark._eval(setter, filters, child);
+        }
+
         // tag refers to included template
-        else if (Mark.includes[prop]) {
-            prop = Mark.includes[prop];
-            if (prop instanceof Function) {
-                prop = prop();
+        else if ((include = Mark.includes[prop])) {
+            if (include instanceof Function) {
+                include = include();
             }
-            result = pipe(Mark.up(prop, context), filters);
+            result = pipe(Mark.up(include, context), filters);
         }
 
         // tag refers to loop counter
@@ -380,6 +386,6 @@ Mark.pipes = {
         return obj[fn].apply(obj, [].slice.call(arguments, 2));
     },
     set: function (obj, key) {
-        Mark.includes[key] = obj; return "";
+        Mark.setters[key] = obj; return "";
     }
 };
