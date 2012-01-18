@@ -31,6 +31,7 @@ describe("Markup core spec", function () {
     };
 
     beforeEach(function () {
+        Mark.delimiter = ">";
         template = "";
         result = "";
     });
@@ -586,6 +587,17 @@ describe("Markup core spec", function () {
         template = "{{sisters}}{{#|fix>2}} {{/sisters}}";
         result = Mark.up(template, context);
         expect(result).toEqual("0.00 1.00 ");
+    });
+
+    it("resolves custom delimiter", function () {
+        Mark.delimiter = ":"
+        template = "{{name.middle|blank:N/A}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("N/A");
+
+        template = "{{name.middle|blank::N/A}}";
+        result = Mark.up(template, context, { delimiter: "::" });
+        expect(result).toEqual("N/A");
     });
 
     it("resolves pipe: blank", function () {

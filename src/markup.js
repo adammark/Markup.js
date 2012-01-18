@@ -1,5 +1,5 @@
 /*
-  Markup.js v1.2.2: http://github.com/adammark/Markup.js
+  Markup.js v1.3: http://github.com/adammark/Markup.js
   (c) 2011 Adam Mark
 */
 var Mark = {
@@ -8,6 +8,9 @@ var Mark = {
 
     // setters, by name
     setters: {},
+
+    // argument delimiter
+    delimiter: ">",
 
     // helper fn: copy array a, or copy array a into b. return b
     _copy: function (a, b) {
@@ -41,8 +44,8 @@ var Mark = {
         var filter = filters.shift(), fn, args;
 
         if (filter) {
-            fn = filter.split(">").shift().trim();
-            args = filter.split(">").splice(1);
+            fn = filter.split(Mark.delimiter).shift().trim();
+            args = filter.split(Mark.delimiter).splice(1);
             try {
                 val = Mark._pipe(Mark.pipes[fn].apply(null, [val].concat(args)), filters);
             }
@@ -150,13 +153,18 @@ Mark.up = function (template, context, options) {
         Mark._copy(options.includes, Mark.includes);
     }
 
+    // override delimiter
+    if (options.delimiter) {
+        Mark.delimiter = options.delimiter;
+    }
+
     // loop through tags, e.g. {{a}}, {{b}}, {{c}}, {{/c}}
     while ((tag = tags[i++])) {
         child = "";
         selfy = tag.indexOf("/}}") > -1;
         prop = tag.substr(2, tag.length - (selfy ? 5 : 4));
         testy = prop.trim().indexOf("if ") === 0;
-        filters = prop.replace(/&gt;/g, ">").split("|").splice(1);
+        filters = prop.split("|").splice(1);
         prop = prop.replace(/^\s*if/, "").split("|").shift().trim();
         token = testy ? "if" : prop.split("|")[0];
         ctx = context[prop];

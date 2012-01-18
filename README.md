@@ -471,6 +471,25 @@ Mark.pipes.add = function (a, b, c) {
 };
 ```
 
+### Changing the argument delimiter
+
+You can change the argument delimiter from ">" to a character (or characters)
+of your choosing:
+
+``` javascript
+Mark.delimiter = ":";
+```
+
+The delimiter can also be set in the optional `options` argument of `Mark.up`:
+
+``` javascript
+var options = {
+    delimiter: ":"
+};
+
+Mark.up(template, context, options);
+```
+
 ### More pipes!
 
 Additional pipes are available in `src/pipes` for your piping pleasure. 
