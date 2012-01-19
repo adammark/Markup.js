@@ -918,13 +918,15 @@ You can load the appropriate bundle with a <a
 href="http://microjs.com/#loader">conditional script loader</a> or other
 mechanism.
 
-Alternatively, you can load resources from a properties file:
+Alternatively, you can declare resources in a properties file:
 
 ```
 # en.txt
 hello_msg=Hi, {{user.name}}.
 goodbye_msg=Bye, {{user.name}}.
 ```
+
+Then load and parse the file:
 
 ``` javascript
 var resources = {};
