@@ -876,13 +876,13 @@ Then load and parse the file:
 ``` javascript
 var templates = {};
 
-$.get("user-templates.txt", function (txt) {
-    txt = txt.split("=====").splice(1);
+$.get("user-templates.txt", function (text) {
+    text = text.split("=====").splice(1);
  
-    for (var t in txt) {
-        var i = txt[t].indexOf("\n");
-        var key = txt[t].substr(0, i).trim();
-        var val = txt[t].substr(i).trim();
+    for (var t in text) {
+        var i = text[t].indexOf("\n");
+        var key = text[t].substr(0, i).trim();
+        var val = text[t].substr(i).trim();
         templates[key] = val;
     }
 }, "html");
@@ -899,18 +899,18 @@ Markup.js can help support internationalization of your UI. Here's a
 basic approach to creating a resource "bundle" for each target language:
 
 ``` javascript
-// templates.en.js
-myapp.templates = {
-    hello: "Welcome, {{user.name}}.",
-    goodbye: "Bye, {{user.name}}."
+// english
+var resources = {
+    hello_msg: "Hi, {{user.name}}.",
+    goodbye_msg: "Bye, {{user.name}}."
 };
 ```
 
 ``` javascript
-// templates.es.js
-myapp.templates = {
-    hello: "Hola, {{user.name}}.",
-    goodbye: "Adios, {{user.name}}."
+// spanish
+var resources = {
+    hello_msg: "Hola, {{user.name}}.",
+    goodbye_msg: "Adios, {{user.name}}."
 };
 ```
 
@@ -918,56 +918,51 @@ You can load the appropriate bundle with a <a
 href="http://microjs.com/#loader">conditional script loader</a> or other
 mechanism.
 
-For simple apps, it might be easier to include all the strings in a
-single data structure:
+Alternatively, you can load resources from a properties file:
+
+```
+# en.txt
+hello_msg=Hi, {{user.name}}.
+goodbye_msg=Bye, {{user.name}}.
+```
 
 ``` javascript
-// templates.js
-myapp.templates = {
-    hello: {
-        en: "Welcome, {{user.name}}!",
-        es: "Hola, {{user.name}}!"
-    },
-    goodbye: {
-        en: "Bye, {{user.name}}!",
-        es: "Adios, {{user.name}}!"
+var resources = {};
+
+$.get("en.txt", function (text) {
+    text = text.split("\n");
+
+    for (var t in text) {
+        var s = text[t].trim();
+        if (!s.length || s.charAt(0) === "#") {
+            continue;
+        }
+        s = s.split("=");
+        resources[s[0].trim()] = s[1].trim();
     }
-};
+
+}, "html");
 ```
 
-``` javascript
-var template = myapp.templates.hello[LANG];
-```
-
-If you use Markup.js for both markup and translation tasks, you might benefit
-from using includes. Here's one way to go about it:
+If you use Markup.js for both markup and translation, you can assign your
+resource strings to the `includes` variable, then refer to these strings from
+within your HTML templates:
 
 ``` javascript
-// english messages
-Mark.includes = {
-    hello_msg: "Welcome, {{user.name}}.",
-    goodbye_msg: "See ya, {{user.name}}!"
-};
+Mark.includes = resources;
 
-// html templates
-var templates = {
-    hello_tpl: "<div class='hello'>{{hello_msg}}</div>",
-    goodbye_tpl: "<div class='goodbye'>{{goodbye_msg}}</div>",
-    error_tpl: "<div class='error'>{{error_msg}}</div>"
-};
+var template = "<div class='hi-bye'>{{hello_msg}} {{goodbye_msg}}</div>";
 
-// context object
 var context = {
     user: { name: "Adam" }
 };
 
-var hello_html = Mark.up(templates.hello_tpl, context);
-// "<div class='hello'>Welcome, Adam.</div>"
-
-var goodbye_html = Mark.up(templates.goodbye_tpl, context);
-// "<div class='goodbye'>See ya, Adam!</div>"
-
+var result = Mark.up(template, context);
+// "<div class='hi-bye'>Hi, Adam. Bye, Adam.</div>"
 ```
+
+Includes are accessible in the global scope of template execution and from one
+template to another.
 
 *Internationalization requires careful design, especially when dealing
 with context-sensitive strings. In the above example, `hello_msg`
