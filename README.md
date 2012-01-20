@@ -813,12 +813,12 @@ itself:
 ...
 ```
 
-Then simply replace the HTML contents:
+Then simply replace the element contents:
 
 ``` javascript
 var elem = document.getElementById("menu");
 
-elem.innerHTML = Mark.up(elem.innerHTML, context);
+elem.innerHTML = Mark.up(elem.innerText, context);
 ```
 
 To avoid a flicker of unformatted text, template elements should be hidden
