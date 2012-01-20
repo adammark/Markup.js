@@ -41,7 +41,7 @@ function init() {
     var elems = document.getElementsByClassName("example");
 
     for (var i = 0; i < elems.length; i++) {
-        elems[i].innerHTML = Mark.up(elems[i].innerHTML, context);
+        elems[i].innerHTML = Mark.up(elems[i].innerText, context);
     }
 }
 </script>

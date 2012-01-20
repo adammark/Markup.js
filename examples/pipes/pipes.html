@@ -18,7 +18,7 @@
     }
 </style>
 
-<script src="../../src/markup.min.js"></script>
+<script src="../../src/markup.js"></script>
 
 <script>
 function init() {
@@ -39,12 +39,12 @@ function init() {
     // ......................... A .........................
     elem = document.getElementById("A");
 
-    elem.innerHTML = Mark.up(elem.innerHTML, context);
+    elem.innerHTML = Mark.up(elem.innerText, context);
 
     // ......................... B .........................
     elem = document.getElementById("B");
 
-    elem.innerHTML = Mark.up(elem.innerHTML, context);
+    elem.innerHTML = Mark.up(elem.innerText, context);
 
     // ......................... D .........................
     function Doggy() {
@@ -55,12 +55,12 @@ function init() {
 
     elem = document.getElementById("D");
 
-    elem.innerHTML = Mark.up(elem.innerHTML, { dog: new Doggy() });;
+    elem.innerHTML = Mark.up(elem.innerText, { dog: new Doggy() });;
 
     // ......................... E .........................
     elem = document.getElementById("E");
 
-    elem.innerHTML = Mark.up(elem.innerHTML, context);
+    elem.innerHTML = Mark.up(elem.innerText, context);
 
     // ......................... F .........................
     var my_pipes = {
@@ -93,7 +93,7 @@ function init() {
     
     elem = document.getElementById("F");
 
-    elem.innerHTML = Mark.up(elem.innerHTML, menu, { pipes: my_pipes });
+    elem.innerHTML = Mark.up(elem.innerText, menu, { pipes: my_pipes });
 }
 </script>
 </head>
