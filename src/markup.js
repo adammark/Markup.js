@@ -44,8 +44,9 @@ var Mark = {
         var filter = filters.shift(), fn, args;
 
         if (filter) {
-            fn = filter.split(Mark.delimiter).shift().trim();
-            args = filter.split(Mark.delimiter).splice(1);
+            var parts = filter.split(Mark.delimiter);
+            fn = parts[0].trim();
+            args = parts.splice(1);
             try {
                 val = Mark._pipe(Mark.pipes[fn].apply(null, [val].concat(args)), filters);
             }
