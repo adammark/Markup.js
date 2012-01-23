@@ -1,5 +1,5 @@
 /*
-  Markup.js v1.3: http://github.com/adammark/Markup.js
+  Markup.js v1.3.1: http://github.com/adammark/Markup.js
   (c) 2011 Adam Mark
 */
 var Mark = {
@@ -41,10 +41,10 @@ var Mark = {
 
     // pipe an obj through filters. e.g. _pipe(123, "add>10|times>5")
     _pipe: function (val, filters) {
-        var filter = filters.shift(), fn, args;
+        var filter = filters.shift(), parts, fn, args;
 
         if (filter) {
-            var parts = filter.split(Mark.delimiter);
+            parts = filter.split(Mark.delimiter);
             fn = parts[0].trim();
             args = parts.splice(1);
             try {
@@ -59,20 +59,22 @@ var Mark = {
 
     // evaluate an array or object and process its child contents (if any)
     _eval: function (context, filters, child) {
-        var result = context = Mark._pipe(context, filters),
+        var result = Mark._pipe(context, filters),
+            ctx = result,
             i = -1,
-            j;
+            j,
+            opts;
 
         // if result is array, iterate
         if (result instanceof Array) {
             result = "";
-            j = context.length;
+            j = ctx.length;
 
             while (++i < j) {
                 opts = {
                     iter: new Mark._iter(i, j)
                 };
-                result += child ? Mark.up(child, context[i], opts) : context[i];
+                result += child ? Mark.up(child, ctx[i], opts) : ctx[i];
             }
         }
 
@@ -81,7 +83,7 @@ var Mark = {
 
     // get "if" or "else" string from piped result
     _test: function (result, child, context, options) {
-        var str = Mark.up(child, context, options).split(/{{\s*else\s*}}/),
+        var str = Mark.up(child, context, options).split(/\{\{\s*else\s*\}\}/),
             res = (result === false ? str[1] : str[0]);
 
         return Mark.up(res || "", context, options);
@@ -184,7 +186,7 @@ Mark.up = function (template, context, options) {
         }
 
         // skip "else" tags. these will be pulled out in _test()
-        if (/^{{\s*else\s*}}$/.test(tag)) {
+        if (/^\{\{\s*else\s*\}\}$/.test(tag)) {
             continue;
         }
 
