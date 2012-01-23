@@ -1,5 +1,6 @@
 /*
   Markup.js v1.3.1: http://github.com/adammark/Markup.js
+  MIT License
   (c) 2011 Adam Mark
 */
 var Mark = {
@@ -136,7 +137,7 @@ Mark.up = function (template, context, options) {
     // pattern matching any tag, e.g. "{{apples}}" and "{{/apples}}"
     var re = /\{\{\w*[^}]+\w*\}\}/g,
         // an array of tags
-        tags = template.toString().match(re) || [],
+        tags = template.match(re) || [],
         // the tag being evaluated
         tag,
         // the string to evaluate, e.g. "hamster|dance"
