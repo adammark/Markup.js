@@ -1,21 +1,53 @@
 /*
- * Format a date (Date object, UTC string or UTC milliseconds).
+ * Express a date in the user's local format.
+ *
+ * Example:
+ *
+ * {{created_at|date}}
+ */
+Mark.pipes.date = function (date) {
+    return new Date(+date || date).toLocaleDateString();
+};
+
+/*
+ * Express a time in the user's local format.
+ *
+ * Example:
+ *
+ * {{created_at|time}}
+ */
+Mark.pipes.time = function (date) {
+    return new Date(+date || date).toLocaleTimeString();
+};
+
+/*
+ * Express a date and time in the user's local format.
+ *
+ * Example:
+ *
+ * {{created_at|datetime}}
+ */
+Mark.pipes.datetime = function (date) {
+    return new Date(+date || date).toLocaleString();
+};
+
+/*
+ * Apply custom formatting to a date. (English)
+ * See http://php.net/manual/en/function.date.php
  *
  * Supported date codes: D l n m M F j d Y y
  * Supported time codes: g G i a A
- * (See http://php.net/manual/en/function.date.php)
+ *
+ * Default format: "l, F j, Y g:i a"
  *
  * Example:
  *
  * {{published|datetime>n/j/Y g:i a}}
  */
-Mark.pipes.datetime = function (date, format) {
-    if (String(date).match(/^\d*$/)) {
-        date = parseInt(date);
-    }
-    if (typeof date === "number" || typeof date === "string") {
-        date = new Date(date);
-    }
+Mark.pipes.formatdate = function (date, format) {
+    date = new Date(+date || date);
+
+    format = format || "l, F j, Y g:i a";
 
     var days = [
         "Sunday",
@@ -26,6 +58,7 @@ Mark.pipes.datetime = function (date, format) {
         "Friday",
         "Saturday"
     ];
+
     var months = [
         "January",
         "February",
@@ -48,39 +81,36 @@ Mark.pipes.datetime = function (date, format) {
     var j = date.getDate();
     var Y = date.getFullYear();
 
-    return (format || "l, F j, Y g:i a")
-        .replace(/(\w)/g, "%$1%")
-        .replace(/%g%/, (G % 12) || 12)
-        .replace(/%G%/, G)
-        .replace(/%i%/, i)
-        .replace(/%a%/, G < 12 ? "a.m." : "p.m.")
-        .replace(/%A%/, G < 12 ? "A.M." : "P.M.")
-        .replace(/%D%/, l.substr(0, 3))
-        .replace(/%l%/, l)
-        .replace(/%n%/, date.getMonth() + 1)
-        .replace(/%m%/, ("0" + (date.getMonth() + 1)).substr(-2))
-        .replace(/%M%/, F.substr(0, 3))
-        .replace(/%F%/, F)
-        .replace(/%j%/, j)
-        .replace(/%d%/, ("0" + j).substr(-2))
-        .replace(/%Y%/, Y)
-        .replace(/%y%/, Y.toString().substr(-2));
+    return format.replace(/[a-z]/gi, function (str) {
+        return {
+            "g": (G % 12) || 12,
+            "G": G,
+            "i": i,
+            "a": G < 12 ? "a.m." : "p.m.",
+            "A": G < 12 ? "A.M." : "P.M.",
+            "D": l.substr(0, 3),
+            "l": l,
+            "n": date.getMonth() + 1,
+            "m": ("0" + (date.getMonth() + 1)).substr(-2),
+            "M": F.substr(0, 3),
+            "F": F,
+            "j": j,
+            "d": ("0" + j).substr(-2),
+            "Y": Y,
+            "y": Y.toString().substr(-2)
+        }[str];
+    });
 };
 
 /*
- * Format a date in "... minutes ago" notation.
+ * Express a date in "... minutes ago" notation. (English)
  *
  * Example:
  *
  * {{created_at|timeago}}
  */
 Mark.pipes.timeago = function (date) {
-    if (String(date).match(/^\d*$/)) {
-        date = parseInt(date);
-    }
-    if (typeof date === "number" || typeof date === "string") {
-        date = new Date(date);
-    }
+    date = new Date(+date || date);
 
     var result = "";
     var diff = new Date().getTime() - date.getTime();
