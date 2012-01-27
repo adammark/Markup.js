@@ -853,7 +853,7 @@ it with jQuery:
 ``` javascript
 $.get("templates/sidebar.txt", function (txt) {
     // do stuff
-});
+}, "html");
 ```
 
 To reduce the number of network requests, you can include multiple
