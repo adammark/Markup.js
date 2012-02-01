@@ -94,3 +94,36 @@ Mark.pipes.runtime = function (time, factor) {
     var s = Math.floor((time / (factor || 1)) % 60);
     return m + ":" + ("00" + s).substr(-2);
 };
+
+/*
+ * Add n to number.
+ *
+ * Example:
+ *
+ * {{age|plus>10}}
+ */
+Mark.pipes.plus = function (num, n) {
+    return num + (+n);
+}
+
+/*
+ * Subtract n from number
+ *
+ * Example:
+ *
+ * {{age|minus>10}}
+ */
+Mark.pipes.minus = function (num, n) {
+    return num - (+n);
+}
+
+/*
+ * Multiply number by n.
+ *
+ * Example:
+ *
+ * {{age|times>10}}
+ */
+Mark.pipes.times = function (num, n) {
+    return num * (+n);
+}
