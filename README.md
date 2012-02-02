@@ -679,6 +679,44 @@ The special `set` pipe lets you set a variable *inside the template itself*:
 and from one template to another. They take precedence over `context`
 variables with the same name, so be careful to avoid naming conflicts.*
 
+## Backtick expressions
+
+Although it's rarely necessary, you might want to pass a context variable as
+an argument to a pipe. You can do this by enclosing the variable in backticks:
+
+``` javascript
+var context = {
+    "name": "John",
+    "age": 50,
+    "retirement_age": 55
+};
+
+var template = "{{if age|more>`retirement_age`}} Life of leisure {{/if}}";
+```
+
+The statement within backticks can be a fully qualified expression, as in:
+
+```
+{{if age|more>`spouse.age|times>2`}} Ewwwwww {{/if}}
+```
+
+This technique also applies to variables created with the `set` pipe:
+
+```
+{{user.prefs.colors.0|set>favorite_color}}
+
+{{if other_color|equals>`favorite_color`}} Match! {{/if}}
+```
+
+As a best practice, business logic should stay in the business layer of your
+application. Compare the readability of the following expressions:
+
+```
+{{if user.age|more>`retirement_age`}}
+
+{{if user.retired}}
+```
+
 ## Gotchas
 
 Here are some common traps to avoid:
@@ -851,7 +889,7 @@ templates in plain text files and load them via AJAX. Here's how to do
 it with jQuery:
 
 ``` javascript
-$.get("templates/sidebar.txt", function (txt) {
+$.get("templates.txt", function (txt) {
     // do stuff
 }, "html");
 ```
@@ -876,7 +914,7 @@ Then load and parse the file:
 ``` javascript
 var templates = {};
 
-$.get("user-templates.txt", function (text) {
+$.get("user.txt", function (text) {
     text = text.split("=====").splice(1);
  
     for (var t in text) {

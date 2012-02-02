@@ -26,7 +26,7 @@ var Mark = {
 
     // get the length of array A, or simply return A. see pipes, below
     _size: function (a) {
-        return a instanceof Array ? a.length : a;
+        return a instanceof Array ? a.length : (a || 0);
     },
 
     // an object with an index (0...n-1) ("#") and size (n) ("##")
@@ -40,7 +40,7 @@ var Mark = {
         };
     },
 
-    // pipe an obj through filters. e.g. _pipe(123, "add>10|times>5")
+    // pipe an obj through filters. e.g. _pipe(123, ["add>10","times>5"])
     _pipe: function (val, filters) {
         // get the first filter, e.g. "add>10"
         var filter = filters.shift(), parts, fn, args;
@@ -185,6 +185,9 @@ Mark.up = function (template, context, options) {
         child = "";
         selfy = tag.indexOf("/}}") > -1;
         prop = tag.substr(2, tag.length - (selfy ? 5 : 4));
+        prop = prop.replace(/`(.+)`/g, function (s, p1) {
+            return Mark.up("{{" + p1 + "}}", context);
+        });
         testy = prop.trim().indexOf("if ") === 0;
         filters = prop.split("|").splice(1);
         prop = prop.replace(/^\s*if/, "").split("|").shift().trim();

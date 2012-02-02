@@ -1052,4 +1052,35 @@ describe("Markup core spec", function () {
         expect(result).toEqual("a,b,c,-d,e,f,-");
     });
 
+    it("resolves backtick expressions", function () {
+        Mark.pipes.plus = function (num, n) {
+            return num + (+n);
+        };
+
+        Mark.pipes.times = function (num, n) {
+            return num * (+n);
+        };
+
+        template = "{{name}} ... {{age|plus>`base`}}";
+        result = Mark.up(template, { name: "Adam", base: 10, age: 35 });
+        expect(result).toEqual("Adam ... 45");        
+        
+        template = "{{name}} ... {{age|plus>`base.n`}}";
+        result = Mark.up(template, { name: "Adam", base: { n: 5 }, age: 35 });
+        expect(result).toEqual("Adam ... 40");
+        
+        template = "{{base|set>BASE}}{{name}} ... {{age|plus>`BASE`}}";
+        result = Mark.up(template, { name: "Adam", base: 100, age: 35 });
+        expect(result).toEqual("Adam ... 135");
+        
+        template = "{{name}} ... {{age|plus>`base.n|times>100`}}";
+        result = Mark.up(template, { name: "Adam", base: { n: 10 }, age: 35 });
+        expect(result).toEqual("Adam ... 1035");
+
+        Mark.includes.base = "10000";
+
+        template = "{{name}} ... {{age|plus>`base`}}";
+        result = Mark.up(template, { name: "Adam", base: 999, age: 35 });
+        expect(result).toEqual("Adam ... 10035");
+    });
 });
