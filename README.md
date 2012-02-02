@@ -31,7 +31,7 @@ var template = "Hi, {{name.first}}!";
 var result = Mark.up(template, context); // "Hi, John!"
 ```
 
-You can format any kind of objects, including Functions with exposed
+You can format any kind of objects, including functions with exposed
 properties:
 
 ``` javascript
@@ -607,7 +607,7 @@ In the above example, `salary|big|even` returns *5000000*, which
 resolves to *true*. *You should follow this convention if you write 
 boolean pipes.*
 
-## Includes and setters
+## Includes
 
 You can include templates inside other templates. For example:
 
@@ -663,7 +663,7 @@ var result = Mark.up(template, context);
 // "Welcome! You are here: http://www.example.com/"
 ```
 
-### Setters
+## Setters
 
 The special `set` pipe lets you set a variable *inside the template itself*:
 
@@ -712,7 +712,7 @@ As a best practice, business logic should stay in the business layer of your
 application. Compare the readability of the following expressions:
 
 ```
-{{if user.age|more>`retirement_age`}}
+{{if user.age|more>`user.retirement_age`}}
 
 {{if user.retired}}
 ```
