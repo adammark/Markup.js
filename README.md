@@ -492,7 +492,7 @@ Mark.up(template, context, options);
 
 ### More pipes!
 
-Additional pipes are available in `src/pipes` for your piping pleasure. 
+Additional pipes are available in `src/extras` for your piping pleasure. 
 (These are not included in markup.js.)
 
 ## IF and IF/ELSE statements
