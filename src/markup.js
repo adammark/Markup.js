@@ -290,7 +290,7 @@ Mark.pipes = {
         return obj && (obj + "").trim().length ? obj : false;
     },
     blank: function (str, val) {
-        return Mark.pipes.empty(str) ? str : val;
+        return !!str || str === 0 ? str : val;
     },
     more: function (a, b) {
         return Mark._size(a) > b ? a : false;

@@ -601,6 +601,10 @@ describe("Markup core spec", function () {
     });
 
     it("resolves pipe: blank", function () {
+        template = "{{name.first|blank>N/A}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("John");
+
         template = "{{name.middle|blank>N/A}}";
         result = Mark.up(template, context);
         expect(result).toEqual("N/A");
