@@ -85,9 +85,10 @@ Mark.pipes.percent = function (num, precision) {
  * Convert a number to stopwatch notation ("mm:ss"), given a factor of 1
  * (seconds) or 1000 (milliseconds). factor defaults to 1.
  *
- * Example:
+ * Examples:
  *
- * {{duration||runtime>1000}}
+ * {{duration|runtime}}
+ * {{duration|runtime>1000}}
  */
 Mark.pipes.runtime = function (time, factor) {
     var m = Math.floor(time / (60 * (factor || 1)));
