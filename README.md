@@ -300,15 +300,15 @@ Markup.js comes with more than 40 built-in pipes:
 
 `notempty` (obj): Test for the presence of a value. `{{if apples|notempty}}` or simply `{{if apples}}`
 
-`more` (obj, n): Test if a number or array (length) is greater than n. `{{if apples|more>35}}`
+`more` (obj, n): Test if a number, iterator, or array is greater than n. `{{if articles|more>100}}` `{{if #|more>10}}`
 
-`less` (obj, n): Test if a number or array (length) is less than n. `{{if age|less>21}}`
+`less` (obj, n): Test if a number, iterator, or array is less than n. `{{if age|less>21}}`
 
-`ormore` (obj, n): Test if a number or array (length) is greater than or equal to n. `{{if age|ormore>18}}`
+`ormore` (obj, n): Test if a number, iterator, or array is greater than or equal to n. `{{if age|ormore>18}}`
 
-`orless` (obj, n): Test if a number or array is (length) less than or equal to n. `{{if weight|orless>165}}`
+`orless` (obj, n): Test if a number, iterator, or array is less than or equal to n. `{{if age|orless>55}}`
 
-`between` (obj, n1, n2): Test if a number or array (length) is between n1 and n2, inclusive. `{{if height|between>60>72}}`
+`between` (obj, n1, n2): Test if a number, iterator or array is between n1 and n2, inclusive. `{{if age|between>18>35}}`
 
 `equals` (obj, str): Test for equality (==). `{{if name|equals>Adam}}` `{{if age|equals>35}}`
 
@@ -386,9 +386,8 @@ Markup.js comes with more than 40 built-in pipes:
 
 ### The 'call' pipe
 
-With great power comes great responsibility.  Thus the `call` pipe,
-which allows you to call a function on any object and pass it zero or
-more arguments:
+The `call` pipe allows you to call a function on any object and pass it zero
+or more arguments:
 
 ``` javascript
 var context = {
@@ -433,9 +432,8 @@ Mark.pipes.shout = function (str, n) {
 
 var template = "{{exclamation|shout>5}}";
 
-var result = Mark.up(template, {exclamation:"Bonsai"});
+var result = Mark.up(template, { exclamation: "Bonsai" });
 // "Bonsai!!!!!"
-
 ```
 
 If you prefer, you can pass pipes into the optional `options` argument of
