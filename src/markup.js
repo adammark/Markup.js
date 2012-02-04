@@ -1,5 +1,5 @@
 /*
-  Markup.js v1.4.0: http://github.com/adammark/Markup.js
+  Markup.js v1.4.1: http://github.com/adammark/Markup.js
   MIT License
   (c) 2011 Adam Mark
 */
@@ -283,14 +283,14 @@ Mark.up = function (template, context, options) {
 
 // "out of the box" pipes. see README
 Mark.pipes = {
-    blank: function (str, val) {
-        return !!str || str === 0 ? str : val;
-    },
     empty: function (obj) {
         return !obj || (obj + "").trim().length === 0 ? obj : false;
     },
     notempty: function (obj) {
         return obj && (obj + "").trim().length ? obj : false;
+    },
+    blank: function (str, val) {
+        return Mark.pipes.empty(str) ? str : val;
     },
     more: function (a, b) {
         return Mark._size(a) > b ? a : false;
