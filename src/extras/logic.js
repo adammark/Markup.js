@@ -10,6 +10,6 @@
  * Providing a fallback value:
  * {{gender|cases>M,F>Male,Female>Unknown}}
  */
-Mark.pipes.cases = function (num, a, b, c) {
-    return b.split(",")[a.match(/\w+/g).indexOf(num.toString())] || c;
+Mark.pipes.cases = function (obj, a, b, c) {
+    return b.split(",")[a.match(/\w+/g).indexOf(obj.toString())] || c;
 };
