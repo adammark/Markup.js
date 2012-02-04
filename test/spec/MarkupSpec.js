@@ -710,6 +710,10 @@ describe("Markup core spec", function () {
         template = "{{if name.first|like>Adam}}{{name.first}}{{/if}}";
         result = Mark.up(template, context);
         expect(result).toEqual("");
+
+        template = "{{if name.first|like>john}}{{name.first}}{{/if}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("John");
     });
 
     it("resolves pipe: notlike", function () {

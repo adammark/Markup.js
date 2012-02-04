@@ -315,7 +315,7 @@ Mark.pipes = {
         return a != b ? a : false;
     },
     like: function (str, pattern) {
-        return new RegExp(pattern).test(str) ? str : false;
+        return new RegExp(pattern, "i").test(str) ? str : false;
     },
     notlike: function (str, pattern) {
         return !Mark.pipes.like(str, pattern) ? str : false;
