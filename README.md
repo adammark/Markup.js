@@ -5,18 +5,18 @@ JavaScript.
 
 ## Why Markup.js?
 
-Markup.js takes the pain out of converting structured data into HTML
-markup or other text formats. Its intuitive syntax and small footprint
-(only 1.8KB minified and gzipped) make it the perfect choice for your
-Javascript app. Plus there are *no dependencies.*
+Markup.js takes the pain out of converting structured data into HTML markup or
+other text formats. Its intuitive syntax and small footprint (only 1.8KB
+minified and gzipped) make it the perfect choice for your Javascript app. Plus
+there are *no dependencies.*
 
 ## Usage
 
 Include `<script src="markup.min.js"></script>`.
 
-Markup.js has a single function: `Mark.up(template, context)`. Here's a
-basic example that shows how `template`, a string, is injected with
-properties of `context`, an object:
+Markup.js has a single function: `Mark.up(template, context)`. Here's a basic
+example that shows how `template`, a string, is injected with properties of
+`context`, an object:
 
 ``` javascript
 var context = {
@@ -101,8 +101,8 @@ var result = Mark.up(template, context);
 // "Favorite color: Red"
 ```
 
-You can mix array index notation and object property notation in the
-same expression:
+You can mix array index notation and object property notation in the same
+expression:
 
 ``` javascript
 var context = {
@@ -118,8 +118,8 @@ var result = Mark.up(template, context);
 
 ## Loops
 
-If a tag resolves to an array, the array is iterated. A single dot
-refers to the current iteration context:
+If a tag resolves to an array, the array is iterated. A single dot refers to
+the current iteration context:
 
 ``` javascript
 var context = {
@@ -193,8 +193,8 @@ var template = "{{sisters}} {{##}}-{{name.first}} {{/sisters}}";
 // " 1-Jill  2-Jen "
 ```
 
-This is useful for applying conditional formatting, as described below,
-and for creating numbered lists.
+This is useful for applying conditional formatting, as described below, and
+for creating numbered lists.
 
 ## Pipes
 
@@ -219,8 +219,8 @@ var result = Mark.up(template, context);
 // "Name: JOHN DOE"
 ```
 
-A pipe can accept arguments. For example, the `blank` pipe accepts a
-value to display if the piped input is *null*, *false* or *undefined*:
+A pipe can accept arguments. For example, the `blank` pipe accepts a value to
+display if the piped input is *null*, *false* or *undefined*:
 
 ``` javascript
 var template = "Phone: {{phone|blank>N/A}}";
@@ -229,8 +229,8 @@ var result = Mark.up(template, context);
 // "Phone: N/A"
 ```
 
-The `choose` pipe accepts two strings and returns one of them depending
-on whether the piped input is true or false:
+The `choose` pipe accepts two strings and returns one of them depending on
+whether the piped input is true or false:
 
 ``` javascript
 var template = "John is jiggy: {{jiggy|choose>Yes>No}}";
@@ -267,8 +267,7 @@ var result = Mark.up(template, context);
 
 ### Chaining pipes
 
-Variables can be passed through multiple pipes. Here are two simple
-examples:
+Variables can be passed through multiple pipes. Here are two simple examples:
 
 ``` javascript
 var template = "Alias: {{alias|trim|downcase}}";
@@ -295,98 +294,95 @@ var result = Mark.up(template, context);
 
 ### Built-in pipes
 
-Markup.js comes with more than 40 built-in pipes. Below, the first
-argument is always the piped value itself:
+Markup.js comes with more than 40 built-in pipes:
 
-`empty` (obj): returns obj if empty, else returns false
+`empty` (obj): Test for an empty array, empty string, null, undefined, or 0. `{{if apples|empty}}`
 
-`notempty` (obj): returns obj if notempty, else returns false
+`notempty` (obj): Test for the presence of a value. `{{if apples|notempty}}` or simply `{{if apples}}`
 
-`more` (a, b): returns a if a > b, else returns false
+`more` (obj, n): Test if a number or array (length) is greater than n. `{{if apples|more>35}}`
 
-`less` (a, b): returns a if a < b, else returns false
+`less` (obj, n): Test if a number or array (length) is less than n. `{{if age|less>21}}`
 
-`ormore` (a, b): returns a if a >= b, else returns false
+`ormore` (obj, n): Test if a number or array (length) is greater than or equal to n. `{{if age|ormore>18}}`
 
-`orless` (a, b): returns a if a <= b, else returns false
+`orless` (obj, n): Test if a number or array is (length) less than or equal to n. `{{if weight|orless>165}}`
 
-`between` (a, b, c): returns a if a is between b and c, inclusive, else returns false
+`between` (obj, n1, n2): Test if a number or array (length) is between n1 and n2, inclusive. `{{if height|between>60>72}}`
 
-`equals` (a, b): returns a if a == b, else returns false
+`equals` (obj, str): Test for equality (==). `{{if name|equals>Adam}}` `{{if age|equals>35}}`
 
-`notequals` (a, b): returns a if a != b, else returns false
+`notequals` (obj, str): Test for inequality (!=). `{{if name|notequals>Adam}}`
 
-`blank` (str, val): returns val if str is false/null/undefined, else returns str
+`like` (str, str): Test for a pattern match (case-insensitive). `{{if name|like>Adam}}` `{{if name|like>a.*}}`
 
-`like` (str, pattern): returns str if regex pattern matches str, else returns false
+`notlike` (str, str): Test for a non-match (case-insensitive). `{{if name|notlike>Adam}}`
 
-`notlike` (str, pattern): returns str if regex pattern does not match str, else returns false
+`blank` (str, str): Display a default value for a null or empty string. `{{title|blank>Untitled}}`
 
-`upcase` (str): returns str upper-cased
+`upcase` (str): Upper-case a string. `{{name|upcase}}`
 
-`downcase` (str): returns str down-cased
+`downcase` (str): Lower-case a string. `{{name|downcase}}`
 
-`capcase` (str): returns str with the first letter in each word capitalized
+`capcase` (str): Capitalize the first letter in each word. `{{title|capcase}}`
 
-`chop` (str, n): chops str to n chars followed by "..." if n < string length
+`chop` (str, n): Chop a string to n chars followed by "..." if n < string length. `{{description|chop>100}}`
 
-`tease` (str, n): chops str to n words followed by "..." if n < word count
+`tease` (str, n): Chop a string to n words followed by "..." if n < word count. `{{summary|chop>15}}`
 
-`trim` (str): returns str with leading and trailing white space removed
+`trim` (str): Trim leading and trailing white space from a string. `{{article|trim}}`
 
-`pack` (str): returns str with white space trimmed and normalized
+`pack` (str): Trim and normalize white space in a string. `{{article|pack}}`
 
-`round` (num): returns num rounded
+`round` (num): Round a number. `{{age|round}}`
 
-`style` (str, classes): returns `<span class="classes">str</span>`
+`clean` (str): Strip HTML/XML tags from a string. `{{article|clean}}`
 
-`clean` (str): returns str with HTML tags removed
+`length` (obj): Get the length of an array, string, or iterator. `{{apples|length}}` `{{#|length}}`
 
-`length` (obj): returns length of string, array or iterator (# or ##)
+`size` (obj): Alias of `length`. `{{apples|size}}`
 
-`size` (obj): alias to `length`
+`reverse` (arr): Reverse an array.\* `{{articles|reverse}} ... {{/articles}}`
 
-`reverse` (arr): returns arr reversed
+`join` (arr [, str]): Join an array with "," or given token. `{{names|join> + }}`
 
-`join` (arr, separator): returns arr joined by separator
+`limit` (arr, n): Limit an array to n entries. `{{articles|limit>10}}`
 
-`limit` (arr, count): returns the first count elements of arr
+`slice` (arr, n1, n2): Slice an array from n1 to n1 + n2. `{{articles|slice>100>10}}`
 
-`slice` (arr, start, length): returns a slice of arr (start to start+length)
+`split` (str [, str]): Split a string on "," or given token. `{{names|split>;}} {{.}} {{/names}}`
 
-`split` (str, separator): split str into an array. separator defaults to ","
+`choose` (bool, str, str): Return one value if true, another if false. `{{user.passed|choose>Passed!>Failed!}}`
 
-`choose` (bool, iffy, elsy): returns iffy if bool is true, else returns elsy
+`sort` (arr [, str]): Sort a simple array, or sort an array of objects by property.\* `{{colors|sort}}` `{{users|sort>firstname}}`
 
-`sort` (arr, prop): returns arr sorted. optionally sort by property prop 
+`fix` (num, n): Format a number to n decimal places. `{{weight|fix>1}}`
 
-`fix` (num, n): returns num formatted to n decimal places
+`mod` (num, n): Get the remainder of a number or iterator divided by n. `{{rows|mod>10}}`
 
-`mod` (num, n): returns num % n
+`divisible` (num, n): Test if a number or iterator is perfectly divisible by n. `{{if #|divisible>3}}`
 
-`divisible` (num, n): returns num if num % n === 0, else returns false
+`even` (num): Test if a number or iterator is even. `{{if #|even}}`
 
-`even` (num): returns num if num is even, else returns false
+`odd` (num): Test if a number or iterator is odd. `{{if #|odd}}`
 
-`odd` (num): returns num if num is odd, else returns false
+`number` (str): Extract a number from a string (e.g. "$1,234.56" or "30px"). `{{price|number}}`
 
-`number` (str): returns number from str, e.g. "$1,234.56" > 1234.56 or "30px" > 30
+`url` (str): URL-encode a string. `{{article.link|url}}`
 
-`url` (str): returns URL-encoded str
+`bool` (obj): Cast an object to a boolean value. `{{user.geo_pref_flag|bool}}`
 
-`bool` (obj): casts obj to boolean, returning true or false
+`falsy` (obj): Test for falseness. `{{if expired|falsy}}`
 
-`falsy` (obj): returns true if false, else returns false
+`first` (iterator): Test if an iterator is first. `{{if #|first}}`
 
-`first` (iterator): returns true if iterator (# or ##) is the first item, else returns false
+`last` (iterator): Test if an iterator is last. `{{if #|last}}`
 
-`last` (iterator): returns true if iterator (# or ##) is the last item, else returns false
+`call` (obj, func [, arg1, arg2, ...]): Call an object function (see doc below). `{{doggy|call>bark>5}}`
 
-`call` (obj, func, arg1, arg2...): calls func on obj with zero or more args. see below
+`set` (obj, key): Set a variable for later use, outputting nothing (see doc below). `{{user.birthday|set>bday}}`
 
-`set` (obj, key): sets a variable for later use (and outputs nothing). see "Setters" below
-
-*Note: Arrays are copied before sorting or slicing.*
+*\* Arrays are copied first*
 
 ### The 'call' pipe
 
@@ -426,9 +422,9 @@ var result = Mark.up(template, context);
 
 ### Writing custom pipes
 
-You can add your own pipes to Markup.js. A pipe is simply a function
-with one or more arguments. The first argument (required) is the piped
-value itself. Any additional arguments are strings. For example:
+You can add your own pipes to Markup.js. A pipe is simply a function with one
+or more arguments. The first argument (required) is the piped value itself.
+Any additional arguments are strings. For example:
 
 ``` javascript
 Mark.pipes.shout = function (str, n) {
@@ -442,8 +438,8 @@ var result = Mark.up(template, {exclamation:"Bonsai"});
 
 ```
 
-If you prefer, you can pass pipes into the optional `options` argument
-of `Mark.up`:
+If you prefer, you can pass pipes into the optional `options` argument of
+`Mark.up`:
 
 ``` javascript
 var options = {
@@ -455,9 +451,9 @@ var options = {
 var result = Mark.up(template, context, options);
 ```
 
-Note! All pipe arguments are passed as strings. For example, in the
-expression `{{num|add>23>45}}`, "23" and "45" are strings. Therefore,
-you should cast data types as necessary in your custom pipes:
+Note! All pipe arguments are passed as strings. For example, in the expression
+`{{num|add>23>45}}`, "23" and "45" are strings. Therefore, you should cast
+data types as necessary in your custom pipes:
 
 ``` javascript
 // WRONG! 1 + "23" + "45" returns "12345"
@@ -566,8 +562,8 @@ var template = "{{users}} {{if #|divisible>5}} <thead>...</thead> {{/if}} ... {{
 var template = "{{users}} {{if ##|more>10|divisible>3}} <thead>...</thead> {{/if}} ... {{/users}}";
 ```
 
-Certain pipes can be used to evaluate the position of the current iteration 
-context or the size of the array itself. In these cases, # and ## are 
+Certain pipes can be used to evaluate the position of the current iteration
+context or the size of the array itself. In these cases, # and ## are
 interchangeable:
 
 ``` javascript
@@ -587,10 +583,9 @@ var template = "{{users}} {{if #|size|more>100}} ... {{/if}} ... {{/users}}";
 
 ### Pipes in conditional expressions
 
-Boolean pipes, such as `between` or `more`, return the *inputted value*
-if the expression is true. Otherwise they return *false*. This way,
-pipes can be chained together to form complex AND statements. For
-example:
+Boolean pipes, such as `between` or `more`, return the *inputted value* if the
+expression is true. Otherwise they return *false*. This way, pipes can be
+chained together to form complex AND statements. For example:
 
 ``` javascript
 // a custom pipe
@@ -603,9 +598,8 @@ var context = { salary: 5000000 };
 var template = "{{if salary|big|even}} A nice round number! {{/if}}";
 ```
 
-In the above example, `salary|big|even` returns *5000000*, which
-resolves to *true*. *You should follow this convention if you write 
-boolean pipes.*
+In the above example, `salary|big|even` returns *5000000*, which resolves to
+*true*. *You should follow this convention if you write boolean pipes.*
 
 ## Includes
 
@@ -648,9 +642,9 @@ var result = Mark.up(template, context, options);
 
 ### Functions as includes
 
-Sometimes you need to perform operations or access data outside the
-scope of the `context` object. In such cases, you can include a
-*function* that returns a string when the template is processed:
+Sometimes you need to perform operations or access data outside the scope of
+the `context` object. In such cases, you can include a *function* that returns
+a string when the template is processed:
 
 ``` javascript
 Mark.includes.status = function () {
@@ -737,7 +731,7 @@ var template = "Adam has {{bros|length /}} brothers: {{bros}}...{{/bros}}";
 
 ### Incorrect notation
 
-Markup.js uses dot notation, not bracket notation, for both objects and 
+Markup.js uses dot notation, not bracket notation, for both objects and
 arrays:
 
 ``` javascript
@@ -775,9 +769,9 @@ var template = "{{if name|like>Adam}} ...";
 ## Implementation
 
 You can implement Markup.js in a few different ways. The right strategy
-depends on many factors, including the speed and size of your app, the
-number of templates you're handling, and whether you want the templates
-to be reusable throughout your codebase.
+depends on many factors, including the speed and size of your app, the number
+of templates you're handling, and whether you want the templates to be
+reusable throughout your codebase.
 
 ### 1. Writing templates as JavaScript strings
 
@@ -809,8 +803,7 @@ myapp.templates.cart = {
 };
 ```
 
-You can use jQuery to inject an evaluated template into a document
-element:
+You can use jQuery to inject an evaluated template into a document element:
 
 ``` javascript
 var template = myapp.templates.user_sidebar;
@@ -828,9 +821,8 @@ document.getElementById("sidebar").innerHTML = Mark.up(template, context);
 
 ### 2. Embedding templates in HTML
 
-The above method can be unwieldy if you're dealing with large chunks of
-HTML. Instead, you might want to embed templates in the HTML code
-itself:
+The above method can be unwieldy if you're dealing with large chunks of HTML.
+Instead, you might want to embed templates in the HTML code itself:
 
 ``` html
 <!-- menu.html -->
@@ -863,8 +855,8 @@ To avoid a flicker of unformatted text, template elements should be hidden
 (via CSS) until formatting is applied.
 
 If you intend to evaluate embedded templates more than once during the
-lifetime of the HTML page, you'll need to store the original template
-text for later lookup.
+lifetime of the HTML page, you'll need to store the original template text for
+later lookup.
 
 #### Using script tags
 
@@ -878,15 +870,14 @@ A related technique is to embed templates in `<script>` tags like so:
 </script>
 ```
 
-Be sure to specify `type="text/template"` or else browsers will interpret
-the contents as JavaScript.
+Be sure to specify `type="text/template"` or else browsers will interpret the
+contents as JavaScript.
 
 ### 3. Loading templates with AJAX
 
-The above method makes it easier to write templates but harder to reuse
-them throughout your app. A compromise solution is to write your
-templates in plain text files and load them via AJAX. Here's how to do
-it with jQuery:
+The above method makes it easier to write templates but harder to reuse them
+throughout your app. A compromise solution is to write your templates in plain
+text files and load them via AJAX. Here's how to do it with jQuery:
 
 ``` javascript
 $.get("templates.txt", function (txt) {
@@ -894,8 +885,8 @@ $.get("templates.txt", function (txt) {
 }, "html");
 ```
 
-To reduce the number of network requests, you can include multiple
-templates into a single file:
+To reduce the number of network requests, you can include multiple templates
+into a single file:
 
 ```
 ===== user_detail
@@ -933,8 +924,8 @@ Cache</a> for instantaneous retrieval.
 
 ## Internationalization (i18n)
 
-Markup.js can help support internationalization of your UI. Here's a
-basic approach to creating a resource "bundle" for each target language:
+Markup.js can help support internationalization of your UI. Here's a basic
+approach to creating a resource "bundle" for each target language:
 
 ``` javascript
 // english
@@ -1004,9 +995,9 @@ var result = Mark.up(template, context);
 Includes are accessible in the global scope of template execution and from one
 template to another.
 
-*Internationalization requires careful design, especially when dealing
-with context-sensitive strings. In the above example, `hello_msg`
-expects to receive a `user` object.*
+*Internationalization requires careful design, especially when dealing with
+context-sensitive strings. In the above example, `hello_msg` expects to
+receive a `user` object.*
 
 ## Compatibility
 
