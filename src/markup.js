@@ -345,9 +345,6 @@ Mark.pipes = {
     round: function (num) {
         return Math.round(+num);
     },
-    style: function (str, classes) {
-        return '<span class="' + classes + '">' + str + '</span>';
-    },
     clean: function (str) {
         return String(str).replace(/<\/?[^>]+>/gi, "");
     },

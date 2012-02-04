@@ -804,12 +804,6 @@ describe("Markup core spec", function () {
         expect(result).toEqual("22");
     });
 
-    it("resolves pipe: style", function () {
-        template = "{{name.first|style>a b}}";
-        result = Mark.up(template, context);
-        expect(result).toEqual('<span class="a b">John</span>');
-    });
-
     it("resolves pipe: clean", function () {
         template = "{{link|clean}}";
         result = Mark.up(template, context);
