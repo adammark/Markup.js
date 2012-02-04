@@ -2,14 +2,14 @@
  * Perform a switch statement on a number or string.
  *
  * Number example:
- * {{apples|cases>0,1,2>No apples,One apple,Two apples}}
+ * {{apples|select>0,1,2>No apples,One apple,Two apples}}
  *
  * String example:
- * {{error|cases>NOT_FOUND,GENERAL>File not found,Unknown Error}}
+ * {{error|select>NOT_FOUND,GENERAL>File not found,Unknown Error}}
  *
  * Providing a fallback value:
- * {{gender|cases>M,F>Male,Female>Unknown}}
+ * {{gender|select>M,F>Male,Female>Unknown}}
  */
-Mark.pipes.cases = function (obj, a, b, c) {
+Mark.pipes.select = function (obj, a, b, c) {
     return b.split(",")[a.match(/\w+/g).indexOf(obj.toString())] || c;
 };
