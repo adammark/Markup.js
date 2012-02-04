@@ -104,7 +104,7 @@ Mark.pipes.runtime = function (time, factor) {
  */
 Mark.pipes.plus = function (num, n) {
     return num + (+n);
-}
+};
 
 /*
  * Subtract n from number
@@ -115,7 +115,7 @@ Mark.pipes.plus = function (num, n) {
  */
 Mark.pipes.minus = function (num, n) {
     return num - (+n);
-}
+};
 
 /*
  * Multiply number by n.
@@ -126,4 +126,4 @@ Mark.pipes.minus = function (num, n) {
  */
 Mark.pipes.times = function (num, n) {
     return num * (+n);
-}
+};
