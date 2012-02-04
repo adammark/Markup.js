@@ -1,5 +1,5 @@
 /*
-  Markup.js v1.4.1: http://github.com/adammark/Markup.js
+  Markup.js v1.4.2: http://github.com/adammark/Markup.js
   MIT License
   (c) 2011 Adam Mark
 */
@@ -360,11 +360,8 @@ Mark.pipes = {
     join: function (arr, separator) {
         return arr.join(separator);
     },
-    limit: function (arr, count) {
-        return arr.slice(0, count);
-    },
-    slice: function (arr, start, length) {
-        return arr.slice(+start, (+start) + (+length));
+    limit: function (arr, count, idx) {
+        return arr.slice(+idx || 0, +count + (+idx || 0));
     },
     split: function (str, separator) {
         return str.split(separator || ",");

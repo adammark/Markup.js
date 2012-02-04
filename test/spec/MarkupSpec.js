@@ -638,6 +638,10 @@ describe("Markup core spec", function () {
         template = "{{brothers|limit>1}}{{.}}{{/brothers}}";
         result = Mark.up(template, context);
         expect(result).toEqual("Jack");
+
+        template = "{{brothers|limit>1>1}}{{.}}{{/brothers}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("Joe");
     });
 
     it("resolves pipe: more", function () {
@@ -824,16 +828,6 @@ describe("Markup core spec", function () {
         template = "{{brothers|join>-}}";
         result = Mark.up(template, context);
         expect(result).toEqual("Jack-Joe-Jim");
-    });
-
-    it("resolves pipe: slice", function () {
-        template = "{{brothers|slice>1>1}}";
-        result = Mark.up(template, context);
-        expect(result).toEqual("Joe");
-
-        template = "{{brothers|slice>1>2|join>-}}";
-        result = Mark.up(template, context);
-        expect(result).toEqual("Joe-Jim");
     });
 
     it("resolves pipe: sort", function () {

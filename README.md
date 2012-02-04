@@ -346,9 +346,7 @@ Markup.js comes with more than 40 built-in pipes:
 
 `join` (arr [, str]): Join an array with "," or with the given token. `{{names|join> + }}`
 
-`limit` (arr, n): Limit an array to n entries. `{{articles|limit>10}} ... {{/articles}}`
-
-`slice` (arr, n1, n2): Slice an array from n1 to n1 + n2. `{{articles|slice>100>10}} ... {{/articles}}`
+`limit` (arr, n1 [, n2]): Limit an array to n1 items beginning at index n2 (or 0). `{{contacts|limit>10}} ... {{/contacts}}`
 
 `split` (str [, str]): Split a string on "," or by the given token. `{{names|split>;}} {{.}} {{/names}}`
 
