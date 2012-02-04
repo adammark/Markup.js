@@ -862,6 +862,20 @@ describe("Markup core spec", function () {
         expect(result).toEqual("zippy");
     });
 
+    it("resolves pipe: toggle", function () {
+        template = "{{gender|toggle>male,female>M,F}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("M");
+
+        template = "{{weight|toggle>135,145,155>Small,Medium,Large}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("Medium");
+
+        template = "{{weight|toggle>100,300>Skinny,Fat>N/A}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("N/A");
+    });
+
     it("resolves pipe: fix", function () {
         template = "{{age|fix>3}}";
         result = Mark.up(template, context);

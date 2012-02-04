@@ -1,5 +1,5 @@
 /*
-  Markup.js v1.4.2: http://github.com/adammark/Markup.js
+  Markup.js v1.4.3: http://github.com/adammark/Markup.js
   MIT License
   (c) 2011 Adam Mark
 */
@@ -368,6 +368,9 @@ Mark.pipes = {
     },
     choose: function (bool, iffy, elsy) {
         return !!bool ? iffy : elsy;
+    },
+    toggle: function (obj, csv1, csv2, str) {
+        return csv2.split(",")[csv1.match(/\w+/g).indexOf(obj + "")] || str;
     },
     sort: function (arr, prop) {
         var fn = function (a, b) {

@@ -340,7 +340,7 @@ Markup.js comes with more than 40 built-in pipes:
 
 `length` (obj): Get the length of an array, string, or iterator. `{{apples|length}}` `{{#|length}}`
 
-`size` (obj): Alias of `length`. `{{apples|size}}`
+`size` (obj): Alias of length. `{{apples|size}}` `{{#|size}}`
 
 `reverse` (arr): Reverse an array.\* `{{articles|reverse}} ... {{/articles}}`
 
@@ -351,6 +351,8 @@ Markup.js comes with more than 40 built-in pipes:
 `split` (str [, str]): Split a string on "," or by the given token. `{{names|split>;}} {{.}} {{/names}}`
 
 `choose` (bool, str, str): Output one value if true, another if false. `{{user.passed|choose>Passed!>Failed!}}`
+
+`toggle` (obj, str, str, [,str]): Switch one string value for another. `{{gender|toggle>M,F>Male,Female>Unknown}}`
 
 `sort` (arr [, str]): Sort an array, optionally by object property.\* `{{users|sort>firstname}} ... {{/users}}`
 
@@ -993,7 +995,7 @@ var result = Mark.up(template, context);
 Includes are accessible in the global scope of template execution and from one
 template to another.
 
-*Internationalization requires careful design, especially when dealing with
+*Internationalization requires careful planning, especially when dealing with
 context-sensitive strings. In the above example, `hello_msg` expects to
 receive a `user` object.*
 
