@@ -344,17 +344,17 @@ Markup.js comes with more than 40 built-in pipes:
 
 `reverse` (arr): Reverse an array.\* `{{articles|reverse}} ... {{/articles}}`
 
-`join` (arr [, str]): Join an array with "," or given token. `{{names|join> + }}`
+`join` (arr [, str]): Join an array with "," or with the given token. `{{names|join> + }}`
 
-`limit` (arr, n): Limit an array to n entries. `{{articles|limit>10}}`
+`limit` (arr, n): Limit an array to n entries. `{{articles|limit>10}} ... {{/articles}}`
 
-`slice` (arr, n1, n2): Slice an array from n1 to n1 + n2. `{{articles|slice>100>10}}`
+`slice` (arr, n1, n2): Slice an array from n1 to n1 + n2. `{{articles|slice>100>10}} ... {{/articles}}`
 
-`split` (str [, str]): Split a string on "," or given token. `{{names|split>;}} {{.}} {{/names}}`
+`split` (str [, str]): Split a string on "," or by the given token. `{{names|split>;}} {{.}} {{/names}}`
 
-`choose` (bool, str, str): Return one value if true, another if false. `{{user.passed|choose>Passed!>Failed!}}`
+`choose` (bool, str, str): Output one value if true, another if false. `{{user.passed|choose>Passed!>Failed!}}`
 
-`sort` (arr [, str]): Sort a simple array, or sort an array of objects by property.\* `{{colors|sort}}` `{{users|sort>firstname}}`
+`sort` (arr [, str]): Sort an array, optionally by object property.\* `{{users|sort>firstname}} ... {{/users}}`
 
 `fix` (num, n): Format a number to n decimal places. `{{weight|fix>1}}`
 
@@ -380,9 +380,9 @@ Markup.js comes with more than 40 built-in pipes:
 
 `call` (obj, func [, arg1, arg2, ...]): Call an object function (see doc below). `{{doggy|call>bark>5}}`
 
-`set` (obj, key): Set a variable for later use, outputting nothing (see doc below). `{{user.birthday|set>bday}}`
+`set` (obj, str): Set a variable for later use, outputting nothing (see doc below). `{{user.birthday|set>bday}}`
 
-*\* Arrays are copied first*
+\* Arrays are copied first
 
 ### The 'call' pipe
 
