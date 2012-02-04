@@ -35,7 +35,7 @@ var Mark = {
         this.size = size;
         this.length = size;
         this.sign = "#";
-        this.toString = this.valueOf = function () {
+        this.toString = function () {
             return this.idx + this.sign.length - 1;
         };
     },
