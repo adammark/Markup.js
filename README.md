@@ -885,8 +885,8 @@ $.get("user-template.txt", function (txt) {
 }, "html");
 ```
 
-To reduce the number of network requests, you can include multiple templates
-into a single file:
+To reduce the number of network requests, you can put multiple templates in a
+single text file:
 
 ``` text
 ===== user_detail
@@ -1026,8 +1026,8 @@ var lang = navigator.language.split("-")[0];
 Mark.lang = lang in Mark.plurals ? lang : "en";
 ```
 
-Next, create resource strings for the target language as described above. For
-expressions that require pluralization, use ";;" to delimit each plural form:
+Next, create resource strings for the target language. For expressions that
+require pluralization, use ";;" to delimit each plural form:
 
 ``` javascript
 // English messages
