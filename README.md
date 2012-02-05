@@ -917,10 +917,9 @@ $.get("user-templates.txt", function (text) {
 }, "html");
 ```
 
-You can also cache templates in 
-<a href="http://diveintohtml5.info/storage.html">Local Storage</a> or the
-<a href="http://www.html5rocks.com/en/tutorials/appcache/beginner/">Application 
-Cache</a> for instantaneous retrieval.
+You can also cache templates in [Local Storage](http://diveintohtml5.info/storage.html) 
+or the [Application Cache](http://www.html5rocks.com/en/tutorials/appcache/beginner/) 
+for instantaneous retrieval.
 
 ## Internationalization (i18n)
 
@@ -943,9 +942,8 @@ var resources = {
 };
 ```
 
-You can load the appropriate bundle with a <a
-href="http://microjs.com/#loader">conditional script loader</a> or other
-mechanism.
+You can load the appropriate bundle with a 
+[conditional script loader](http://microjs.com/#loader) or other mechanism.
 
 Alternatively, you can declare resources as properties in a plain text file:
 
@@ -1005,7 +1003,7 @@ for the languages you intend to support (English is included by default). A
 pluralization function accepts an array of strings and a number, and returns
 one of the strings:
 
-```
+``` javascript
 // Spanish has two plural forms
 Mark.plurals.es = function (msgs, n) {
     return msgs[n === 1 ? 0 : 1];
@@ -1040,7 +1038,7 @@ Mark.includes = {
 };
 ```
 
-Notice one *include* can include another, as `welcome_msg` includes
+Notice one include can include another, as `welcome_msg` includes
 `credit_msg`. Also notice how `pluralize` accepts a dynamic variable (in
 backticks) to determine which part of `credit_msg` to extract.
 
