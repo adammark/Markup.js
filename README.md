@@ -378,18 +378,18 @@ Markup.js comes with more than 40 built-in pipes:
 
 `last` (iterator): Test if an iterator is last. `{{if #|last}}`
 
-`pluralize` (str, n): Select a plural form. (See doc below) `{{credit_msg|pluralize>100}}`
+`pluralize` (str, n): Select a plural form. (See doc below.) `{{credit_msg|pluralize>100}}`
 
-`call` (obj, func [, arg1, arg2, ...]): Call an object function. (See doc below) `{{doggy|call>bark>5}}`
+`call` (obj, func [, arg1, arg2, ...]): Call an object function. (See doc below.) `{{doggy|call>bark>5}}`
 
-`set` (obj, str): Set a variable for later use, outputting nothing. (See doc below) `{{user.birthday|set>bday}}`
+`set` (obj, str): Set a variable for later use, outputting nothing. (See doc below.) `{{user.birthday|set>bday}}`
 
 \* Arrays are copied first
 
 ### The 'call' pipe
 
-The `call` pipe allows you to call a function on any object and pass it zero
-or more arguments:
+The `call` pipe lets you call a function on any object and pass it zero or
+more arguments:
 
 ``` javascript
 var context = {
@@ -880,7 +880,7 @@ throughout your app. A compromise solution is to write your templates in plain
 text files and load them via AJAX. Here's how to do it with jQuery:
 
 ``` javascript
-$.get("user-profile.txt", function (txt) {
+$.get("user-template.txt", function (txt) {
     // do stuff
 }, "html");
 ```
@@ -1000,7 +1000,7 @@ require. To prepare your app for pluralization:
 
 First, add [pluralization functions](http://translate.sourceforge.net/wiki/l10n/pluralforms) 
 for the languages you intend to support (English is included by default). A
-pluralization function accepts an array of strings and a number, and returns
+pluralization function accepts an array of strings and a number, then returns
 one of the strings:
 
 ``` javascript
@@ -1059,9 +1059,9 @@ var result = Mark.up(template, context);
 ### Dates, numbers and currencies
 
 Web browsers provide no convenient way to format dates. You can either write
-your own pipes for this purpose (see an example in `src/extras/dates.js`) or
+your own pipes for this purpose (see an example in [src/extras/dates.js]) or
 do the formatting on the server side. Or simply use the localized date and
-time strings provided by the JavaScript `Date` object:
+time strings provided by the JavaScript Date object:
 
 ``` javascript
 Mark.pipes.date = function (date) {
