@@ -1011,7 +1011,7 @@ Mark.plurals.es = function (msgs, n) {
 
 // Czech has three plural forms
 Mark.plurals.cs = function (msgs, n) {
-    return msgs[n === 1 ? 0 : (n >=2 && n <= 4) ? 1 : 2]
+    return msgs[n === 1 ? 0 : (n >= 2 && n <= 4) ? 1 : 2];
 };
 ```
 
