@@ -661,7 +661,7 @@ var result = Mark.up(template, context);
 
 The special `set` pipe lets you set a variable *inside the template itself*:
 
-```
+``` text
 {{users|size|set>num_users}}
 
 {{if num_users|more>10}}
@@ -690,13 +690,13 @@ var template = "{{if age|more>`retirement_age`}} Life of leisure {{/if}}";
 
 The statement within backticks can be a fully qualified expression, as in:
 
-```
+``` text
 {{if age|more>`spouse.age|times>2`}} Ewwwwww {{/if}}
 ```
 
 This technique also applies to variables created with the `set` pipe:
 
-```
+``` text
 {{user.prefs.colors.0|set>favorite_color}}
 
 {{if other_color|equals>`favorite_color`}} Match! {{/if}}
@@ -705,7 +705,7 @@ This technique also applies to variables created with the `set` pipe:
 As a best practice, business logic should stay in the business layer of your
 application. Compare the readability of the following expressions:
 
-```
+``` text
 {{if user.age|more>`user.retirement_age`}}
 
 {{if user.retired}}
@@ -888,7 +888,7 @@ $.get("user-profile.txt", function (txt) {
 To reduce the number of network requests, you can include multiple templates
 into a single file:
 
-```
+``` text
 ===== user_detail
 <div class="user-details">
     ...
@@ -947,7 +947,7 @@ You can load the appropriate bundle with a
 
 Alternatively, you can declare resources as properties in a plain text file:
 
-```
+``` text
 # en.txt
 hello_msg=Hi, {{user.name}}.
 goodbye_msg=Bye, {{user.name}}.
