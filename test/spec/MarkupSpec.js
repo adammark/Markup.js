@@ -1092,5 +1092,33 @@ describe("Markup core spec", function () {
         template = "{{name}} ... {{age|plus>`base`}}";
         result = Mark.up(template, { name: "Adam", base: 999, age: 35 });
         expect(result).toEqual("Adam ... 10035");
+
+        // whoa
+        template = "{{age|`method`>1}}";
+        result = Mark.up(template, { name: "Adam", method: "plus", age: 35 });
+        expect(result).toEqual("36");
+
+        template = "{{age|`method`>1}}";
+        result = Mark.up(template, { name: "Adam", method: "minus", age: 34 });
+        expect(result).toEqual("34");
+    });
+
+    it("resolves pipe: pluralize", function () {
+        Mark.includes = {
+            hello_msg: "Hi {{name}}! {{apples_msg|pluralize>`apples`}}",
+            apples_msg: "You have one apple. ;; You have {{apples}} apples."
+        };
+
+        template = "<p>{{hello_msg}}</p>";
+
+        context = { name: "Adam", apples: 5 };
+        result = Mark.up(template, context);
+
+        expect(result).toEqual("<p>Hi Adam! You have 5 apples.</p>");
+
+        context = { name: "Adam", apples: 1 };
+        result = Mark.up(template, context);
+
+        expect(result).toEqual("<p>Hi Adam! You have one apple.</p>");
     });
 });

@@ -6,7 +6,7 @@ JavaScript.
 ## Why Markup.js?
 
 Markup.js takes the pain out of converting structured data into HTML markup or
-other text formats. Its intuitive syntax and small footprint (only 1.8KB
+other text formats. Its intuitive syntax and small footprint (only 1.9KB
 minified and gzipped) make it the perfect choice for your Javascript app. Plus
 there are *no dependencies.*
 
@@ -354,7 +354,7 @@ Markup.js comes with more than 40 built-in pipes:
 
 `toggle` (obj, str, str, [,str]): Switch one string value for another. `{{gender|toggle>M,F>Male,Female>Unknown}}`
 
-`sort` (arr [, str]): Sort an array, optionally by object property.\* `{{users|sort>firstname}} ... {{/users}}`
+`sort` (arr [, str]): Sort an array, optionally by object property name.\* `{{users|sort>firstname}} ... {{/users}}`
 
 `fix` (num, n): Format a number to n decimal places. `{{weight|fix>1}}`
 
@@ -378,9 +378,11 @@ Markup.js comes with more than 40 built-in pipes:
 
 `last` (iterator): Test if an iterator is last. `{{if #|last}}`
 
-`call` (obj, func [, arg1, arg2, ...]): Call an object function (see doc below). `{{doggy|call>bark>5}}`
+`pluralize` (str, n): Select a plural form. (See doc below) `{{credit_msg|pluralize>100}}`
 
-`set` (obj, str): Set a variable for later use, outputting nothing (see doc below). `{{user.birthday|set>bday}}`
+`call` (obj, func [, arg1, arg2, ...]): Call an object function. (See doc below) `{{doggy|call>bark>5}}`
+
+`set` (obj, str): Set a variable for later use, outputting nothing. (See doc below) `{{user.birthday|set>bday}}`
 
 \* Arrays are copied first
 
@@ -878,7 +880,7 @@ throughout your app. A compromise solution is to write your templates in plain
 text files and load them via AJAX. Here's how to do it with jQuery:
 
 ``` javascript
-$.get("templates.txt", function (txt) {
+$.get("user-profile.txt", function (txt) {
     // do stuff
 }, "html");
 ```
@@ -903,7 +905,7 @@ Then load and parse the file:
 ``` javascript
 var templates = {};
 
-$.get("user.txt", function (text) {
+$.get("user-templates.txt", function (text) {
     text = text.split("=====").splice(1);
  
     for (var t in text) {
@@ -922,8 +924,8 @@ Cache</a> for instantaneous retrieval.
 
 ## Internationalization (i18n)
 
-Markup.js can help support internationalization of your UI. Here's a basic
-approach to creating a resource "bundle" for each target language:
+Markup.js can support internationalization of your UI. Here's a basic approach
+to creating a resource "bundle" for each target language:
 
 ``` javascript
 // english
@@ -945,7 +947,7 @@ You can load the appropriate bundle with a <a
 href="http://microjs.com/#loader">conditional script loader</a> or other
 mechanism.
 
-Alternatively, you can declare resources in a properties file:
+Alternatively, you can declare resources as properties in a plain text file:
 
 ```
 # en.txt
@@ -973,12 +975,15 @@ $.get("en.txt", function (text) {
 }, "html");
 ```
 
-If you use Markup.js for both markup and translation, you can assign your
-resource strings to the `includes` variable, then refer to these strings from
-within your HTML templates:
+If you use Markup.js for markup and translation at the same time, you can
+assign your resource strings to the `includes` variable, then refer to these
+strings from within your HTML templates:
 
 ``` javascript
-Mark.includes = resources;
+Mark.includes = {
+    hello_msg: "Hi, {{user.name}}.",
+    goodbye_msg: "Bye, {{user.name}}."
+};
 
 var template = "<div class='hi-bye'>{{hello_msg}} {{goodbye_msg}}</div>";
 
@@ -990,18 +995,114 @@ var result = Mark.up(template, context);
 // "<div class='hi-bye'>Hi, Adam. Bye, Adam.</div>"
 ```
 
-Includes are accessible in the global scope of template execution and from one
-template to another.
+### Pluralization
 
-*Internationalization requires careful planning, especially when dealing with
-context-sensitive strings. In the above example, `hello_msg` expects to
-receive a `user` object.*
+The built-in `pluralize` pipe handles pluralized forms in any language you
+require. To prepare your app for pluralization:
+
+First, add [pluralization functions](http://translate.sourceforge.net/wiki/l10n/pluralforms) 
+for the languages you intend to support (English is included by default). A
+pluralization function accepts an array of strings and a number, and returns
+one of the strings:
+
+```
+// Spanish has two plural forms
+Mark.plurals.es = function (msgs, n) {
+    return msgs[n === 1 ? 0 : 1];
+};
+
+// Czech has three plural forms
+Mark.plurals.cs = function (msgs, n) {
+    return msgs[n === 1 ? 0 : (n >=2 && n <= 4) ? 1 : 2]
+};
+```
+
+Next, set `Mark.lang` to the user's language (the default value is "en"). In a
+browser, you can set the language like this:
+
+``` javascript
+// get the user's language
+var lang = navigator.language.split("-")[0];
+
+// now apply it, or fall back to a supported language
+Mark.lang = lang in Mark.plurals ? lang : "en";
+```
+
+Next, create resource strings for the target language as described above. For
+expressions that require pluralization, use ";;" to delimit each plural form:
+
+``` javascript
+// English messages
+Mark.includes = {
+    welcome_msg: "Welcome, {{name}}. {{credit_msg|pluralize>`credits`}}",
+    credit_msg: "You have one credit.;;You have {{credits}} credits.",
+    error_msg: "Oops! There was an error."
+};
+```
+
+Notice one *include* can include another, as `welcome_msg` includes
+`credit_msg`. Also notice how `pluralize` accepts a dynamic variable (in
+backticks) to determine which part of `credit_msg` to extract.
+
+Finally, put it all together:
+
+``` javascript
+var context = {
+    name: "Adam",
+    credits: 50
+};
+
+var template = "<p class='welcome'>{{welcome_msg}}</p>";
+
+var result = Mark.up(template, context);
+// "<p>Welcome, Adam. You have 50 credits.</p>"
+```
+
+### Dates, numbers and currencies
+
+Web browsers provide no convenient way to format dates. You can either write
+your own pipes for this purpose (see an example in `src/extras/dates.js`) or
+do the formatting on the server side. Or simply use the localized date and
+time strings provided by the JavaScript `Date` object:
+
+``` javascript
+Mark.pipes.date = function (date) {
+    return new Date(+date || date).toLocaleDateString();
+};
+
+Mark.pipes.time = function (date) {
+    return new Date(+date || date).toLocaleTimeString();
+};
+
+Mark.pipes.datetime = function (date) {
+    return new Date(+date || date).toLocaleString();
+};
+```
+
+The same goes for numbers and currencies. You can handle this functionality on
+the server side or else write your own pipes:
+
+``` javascript
+Mark.pipes.price = function (num, currency) {
+    var str;
+
+    if (currency === "dollar") {
+        str = "$" + num.toFixed(2);
+    }
+    else if (currency === "euro") {
+        str = num.toFixed(2) + " \u20AC";
+    }
+
+    return str;
+};
+```
+
+See `src/extras/numbers.js` for additional examples.
 
 ## Compatibility
 
 Tested in recent versions of Chrome, Safari, Firefox and various mobile WebKit
-implementations. Not compatible with older versions of Internet Explorer.  See
-<code>test/specs.html</code>
+implementations. Not compatible with older versions of Internet Explorer.
 
 ## License
 
