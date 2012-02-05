@@ -328,7 +328,7 @@ Markup.js comes with more than 40 built-in pipes:
 
 `chop` (str, n): Chop a string to n chars followed by "..." if n < string length. `{{description|chop>100}}`
 
-`tease` (str, n): Chop a string to n words followed by "..." if n < word count. `{{summary|chop>15}}`
+`tease` (str, n): Chop a string to n words followed by "..." if n < word count. `{{summary|tease>15}}`
 
 `trim` (str): Trim leading and trailing white space from a string. `{{article|trim}}`
 
