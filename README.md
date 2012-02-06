@@ -1038,7 +1038,7 @@ Mark.includes = {
 };
 ```
 
-Notice one include can include another, as `welcome_msg` includes
+Notice how one include can include another, as `welcome_msg` includes
 `credit_msg`. Also notice how `pluralize` accepts a dynamic variable (in
 backticks) to determine which part of `credit_msg` to extract.
 
@@ -1053,7 +1053,7 @@ var context = {
 var template = "<p class='welcome'>{{welcome_msg}}</p>";
 
 var result = Mark.up(template, context);
-// "<p>Welcome, Adam. You have 50 credits.</p>"
+// "<p class='welcome'>Welcome, Adam. You have 50 credits.</p>"
 ```
 
 ### Dates, numbers and currencies
