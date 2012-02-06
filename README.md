@@ -1059,7 +1059,7 @@ var result = Mark.up(template, context);
 ### Dates, numbers and currencies
 
 Web browsers provide no convenient way to format dates. You can either write
-your own pipes for this purpose (see an example in [src/extras/dates.js]) or
+your own pipes for this purpose (see an example in `src/extras/dates.js`) or
 do the formatting on the server side. Or simply use the localized date and
 time strings provided by the JavaScript Date object:
 
