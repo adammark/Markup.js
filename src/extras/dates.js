@@ -34,7 +34,7 @@ Mark.pipes.datetime = function (date) {
 /*
  * Format a date using Moment.js.
  *
- * Requires Moment.js: https://github.com/timrwood/moment
+ * Requires Moment.js: http://momentjs.com/
  *
  * Example:
  *
@@ -47,7 +47,7 @@ Mark.pipes.moment = function (date, format) {
 /*
  * Express a time difference using Moment.js, e.g. "10 minutes ago"
  *
- * Requires Moment.js: https://github.com/timrwood/moment
+ * Requires Moment.js: http://momentjs.com/
  *
  * Example:
  *
