@@ -32,7 +32,33 @@ Mark.pipes.datetime = function (date) {
 };
 
 /*
- * Apply custom formatting to a date. (English)
+ * Format a date using Moment.js.
+ *
+ * Requires Moment.js: https://github.com/timrwood/moment
+ *
+ * Example:
+ *
+ * {{created_at|moment>M/D/YYYY}}
+ */
+Mark.pipes.moment = function (date, format) {
+    return moment(+date || date).format(format);
+};
+
+/*
+ * Express a time difference using Moment.js, e.g. "10 minutes ago"
+ *
+ * Requires Moment.js: https://github.com/timrwood/moment
+ *
+ * Example:
+ *
+ * {{created_at|fromnow}}
+ */
+Mark.pipes.fromnow = function (date) {
+    return moment(+date || date).fromNow();
+};
+
+/*
+ * Format a date in English.
  * See http://php.net/manual/en/function.date.php
  *
  * Supported date codes: D l n m M F j d Y y
@@ -44,7 +70,7 @@ Mark.pipes.datetime = function (date) {
  *
  * {{published|datetime>n/j/Y g:i a}}
  */
-Mark.pipes.formatdate = function (date, format) {
+Mark.pipes.datetime = function (date, format) {
     date = new Date(+date || date);
 
     format = format || "l, F j, Y g:i a";
@@ -100,38 +126,4 @@ Mark.pipes.formatdate = function (date, format) {
             "y": Y.toString().substr(-2)
         }[str];
     });
-};
-
-/*
- * Express a date in "... minutes ago" notation. (English)
- *
- * Example:
- *
- * {{created_at|timeago}}
- */
-Mark.pipes.timeago = function (date) {
-    date = new Date(+date || date);
-
-    var result = "";
-    var diff = new Date().getTime() - date.getTime();
-    var h = Math.floor(diff / 3600000);
-    var to_s = function (n, label) {
-        n = Math.floor(n);
-        return n + " " + label + (n > 1 ? "s" : "") + " ago";
-    };
-
-    if (h === 0) {
-        h = Math.floor(diff / 60000);
-        result = h < 2 ? "Just now" : to_s(h, "minute");
-    } else if (h < 24) {
-        result = to_s(h, "hour");
-    } else if (h < 168) {
-        result = to_s(h / 24, "day");
-    } else if (h < 744) {
-        result = to_s(h / 168, "week");
-    } else {
-        result = to_s(h / 744, "month");
-    }
-
-    return result;
 };
