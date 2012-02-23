@@ -23,6 +23,7 @@ describe("Markup core spec", function () {
         parents: undefined,
         truthy: true,
         falsy: false,
+        birthday: "Thu Feb 23 2012 10:21:41 GMT-0500 (EST)",
         friend: { name: "Justin", friend: { name: "Jeremy" } },
         foods: { fruits: [ {"name":"apple"}, {"name":"orange"} ] },
         motto: "life is like a box of chocolates",
@@ -1111,14 +1112,13 @@ describe("Markup core spec", function () {
 
         template = "<p>{{hello_msg}}</p>";
 
-        context = { name: "Adam", apples: 5 };
-        result = Mark.up(template, context);
+        result = Mark.up(template, { name: "Adam", apples: 5 });
 
         expect(result).toEqual("<p>Hi Adam! You have 5 apples.</p>");
 
-        context = { name: "Adam", apples: 1 };
-        result = Mark.up(template, context);
+        result = Mark.up(template, { name: "Adam", apples: 1 });
 
         expect(result).toEqual("<p>Hi Adam! You have one apple.</p>");
     });
+
 });
