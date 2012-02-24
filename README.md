@@ -1084,9 +1084,8 @@ Mark.pipes.datetime = function (date) {
 };
 ```
 
-Numbers and currencies are also painful to format in JavaScript, but 
-[Accounting.js](http://josscrowcroft.github.com/accounting.js/) makes it
-simple:
+For numbers and currencies, try 
+[Accounting.js](http://josscrowcroft.github.com/accounting.js/):
 
 ``` javascript
 Mark.pipes.dollars = function (num) {
