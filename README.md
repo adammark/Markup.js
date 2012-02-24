@@ -1058,10 +1058,17 @@ var result = Mark.up(template, context);
 
 ### Dates, numbers and currencies
 
-Web browsers provide no convenient way to format dates. You can either write
-your own pipes for this purpose (see an example in `src/extras/dates.js`) or
-do the formatting on the server side. Or simply use the localized date and
-time strings provided by the JavaScript Date object:
+Web browsers provide no convenient way to format dates, although there are 
+some good libraries that you can drop into a custom pipe, like
+[Moment.js](http://momentjs.com/):
+
+``` javascript
+Mark.pipes.moment = function (date, format) {
+    return moment(+date || date).format(format);
+};
+```
+
+Or you can simply use the browser's built-in locale methods:
 
 ``` javascript
 Mark.pipes.date = function (date) {
@@ -1077,25 +1084,21 @@ Mark.pipes.datetime = function (date) {
 };
 ```
 
-The same goes for numbers and currencies. You can handle this functionality on
-the server side or else write your own pipes:
+Numbers and currencies are also painful to format in JavaScript, but 
+[Accounting.js](http://josscrowcroft.github.com/accounting.js/) makes it
+simple:
 
 ``` javascript
-Mark.pipes.price = function (num, currency) {
-    var str;
+Mark.pipes.dollars = function (num) {
+    return accounting.formatMoney(+num);
+};
 
-    if (currency === "dollar") {
-        str = "$" + num.toFixed(2);
-    }
-    else if (currency === "euro") {
-        str = num.toFixed(2) + " \u20AC";
-    }
-
-    return str;
+Mark.pipes.euros = function (num) {
+    return accounting.formatMoney(+num, "€", 2, ".", ",");
 };
 ```
 
-See `src/extras/numbers.js` for additional examples.
+See `src/extras/dates.js` and `src/extras/numbers.js` for additional examples.
 
 ## Compatibility
 

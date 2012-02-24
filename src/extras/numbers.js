@@ -19,28 +19,29 @@ Mark.pipes.numberformat = function (num, precision, signed) {
 };
 
 /*
- * Format a number in dollars. Depends on numberformat, above.
+ * Format a number in dollars using Accounting.js.
+ *
+ * Requires Accounting.js: http://josscrowcroft.github.com/accounting.js/
  *
  * Example:
  *
  * {{price|dollars}}
  */
 Mark.pipes.dollars = function (num) {
-    return "$" + Mark.pipes.numberformat(num, 2);
+    return accounting.formatMoney(+num);
 };
 
 /*
- * Format a number in euros. Depends on numberformat, above.
+ * Format a number in euros using Accounting.js.
+ *
+ * Requires Accounting.js: http://josscrowcroft.github.com/accounting.js/
  *
  * Example:
  *
  * {{price|euros}}
  */
 Mark.pipes.euros = function (num) {
-    var str = Mark.pipes.numberformat(num, 2);
-    return str.replace(/[\.,]/g, function (s) {
-        return s === "." ? "," : ".";
-    }) + " \u20AC";
+    return accounting.formatMoney(+num, "€", 2, ".", ",");
 };
 
 /*
