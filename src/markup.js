@@ -1,5 +1,5 @@
 /*
-  Markup.js v1.5: http://github.com/adammark/Markup.js
+  Markup.js v1.5.1: http://github.com/adammark/Markup.js
   MIT License
   (c) 2011 Adam Mark
 */
@@ -12,16 +12,6 @@ var Mark = {
 
     // argument delimiter
     delimiter: ">",
-
-    // default language, for i18n
-    lang: "en",
-
-    // plural forms, for i18n
-    plurals: {
-        "en": function (msgs, n) {
-            return msgs[n === 1 ? 0 : 1];
-        }
-    },
 
     // return a copy of array A or copy array A into array B (returning B)
     _copy: function (a, b) {
@@ -420,9 +410,6 @@ Mark.pipes = {
     },
     last: function (iter) {
         return iter.idx === iter.size - 1;
-    },
-    pluralize: function (str, n) {
-        return Mark.plurals[Mark.lang](str.split(";;"), +n).trim();
     },
     call: function (obj, fn) {
         return obj[fn].apply(obj, [].slice.call(arguments, 2));

@@ -6,7 +6,7 @@ JavaScript.
 ## Why Markup.js?
 
 Markup.js takes the pain out of converting structured data into HTML markup or
-other text formats. Its intuitive syntax and small footprint (only 1.9KB
+other text formats. Its intuitive syntax and small footprint (only 1.8KB
 minified and gzipped) make it the perfect choice for your Javascript app. Plus
 there are *no dependencies.*
 
@@ -377,8 +377,6 @@ Markup.js comes with more than 40 built-in pipes:
 `first` (iterator): Test if an iterator is first. `{{if #|first}}`
 
 `last` (iterator): Test if an iterator is last. `{{if #|last}}`
-
-`pluralize` (str, n): Select a plural form. (See doc below.) `{{credit_msg|pluralize>100}}`
 
 `call` (obj, func [, arg1, arg2, ...]): Call an object function. (See doc below.) `{{doggy|call>bark>5}}`
 
@@ -995,35 +993,39 @@ var result = Mark.up(template, context);
 
 ### Pluralization
 
-The built-in `pluralize` pipe handles pluralized forms in any language you
-require. To prepare your app for pluralization:
+The `pluralize` pipe, provided in `src/extras/i18n.js`, handles pluralized
+forms in any language you require. To prepare your app for pluralization:
 
 First, add [pluralization functions](http://translate.sourceforge.net/wiki/l10n/pluralforms) 
-for the languages you intend to support (English is included by default). A
-pluralization function accepts an array of strings and a number, then returns
-one of the strings:
+to the `pluralize` pipe for the languages you intend to support (English is
+included by default). A pluralization function accepts an array of strings and
+a number, then returns one of the strings:
 
 ``` javascript
-// Spanish has two plural forms
-Mark.plurals.es = function (msgs, n) {
-    return msgs[n === 1 ? 0 : 1];
+...
+var plurals = {
+    // English has two plural forms
+    "en": function (msgs, n) {
+        return msgs[n === 1 ? 0 : 1];
+    },
+    // Czech has three plural forms
+    "cs": function (msgs, n) {
+        return msgs[n === 1 ? 0 : (n >= 2 && n <= 4) ? 1 : 2];
+    }
 };
-
-// Czech has three plural forms
-Mark.plurals.cs = function (msgs, n) {
-    return msgs[n === 1 ? 0 : (n >= 2 && n <= 4) ? 1 : 2];
-};
+...
 ```
 
-Next, set `Mark.lang` to the user's language (the default value is "en"). In a
-browser, you can set the language like this:
+Next, set the user's language, or detect it from the web browser:
 
 ``` javascript
-// get the user's language
+...
 var lang = navigator.language.split("-")[0];
 
-// now apply it, or fall back to a supported language
-Mark.lang = lang in Mark.plurals ? lang : "en";
+if (!lang in plurals) {
+    lang = "en";
+}
+...
 ```
 
 Next, create resource strings for the target language. For expressions that
