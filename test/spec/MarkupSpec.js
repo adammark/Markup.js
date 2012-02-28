@@ -861,6 +861,14 @@ describe("Markup core spec", function () {
         template = "{{zip|empty|choose>unzippy>zippy}}";
         result = Mark.up(template, context);
         expect(result).toEqual("zippy");
+
+        template = "{{gender|equals>male|choose>M}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("M");
+
+        template = "{{gender|equals>female|choose>F}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("");
     });
 
     it("resolves pipe: toggle", function () {
