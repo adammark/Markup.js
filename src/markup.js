@@ -1,5 +1,5 @@
 /*
-  Markup.js v1.5.2: http://github.com/adammark/Markup.js
+  Markup.js v1.5.3: http://github.com/adammark/Markup.js
   MIT License
   (c) 2011 Adam Mark
 */
@@ -182,6 +182,7 @@ Mark.up = function (template, context, options) {
 
     // loop through tags, e.g. {{a}}, {{b}}, {{c}}, {{/c}}
     while ((tag = tags[i++])) {
+        result = undefined;
         child = "";
         selfy = tag.indexOf("/}}") > -1;
         prop = tag.substr(2, tag.length - (selfy ? 5 : 4));
