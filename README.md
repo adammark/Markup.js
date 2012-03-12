@@ -837,59 +837,33 @@ Or, without jQuery:
 document.getElementById("sidebar").innerHTML = Mark.up(template, context);
 ```
 
-### 2. Embedding templates in HTML
+### 2. Embedding templates in &lt;script&gt; tags
 
 The above method can be unwieldy if you're dealing with large chunks of HTML.
-Instead, you might want to embed templates in the HTML code itself:
+Instead, you might want to embed templates inside `<script>` tags:
 
 ``` html
-<!-- menu.html -->
+<!-- people.html -->
 ...
-<div id="menu">
-    <h1>Menu</h1>
+<script id="persons-list" type="text/template">
+    <h1>People</h1>
     <ul>
-        {{menu|sort>price}}
-            <li>
-                {{desc}} - {{price|dollars}}
-                {{if .|onsale}}
-                    <span class="sale">(SALE! {{saleprice|dollars}})</span>
-                {{/if}}
-            </li>
-        {{/menu}}
-    </ul>
-</div>
-...
-```
-
-Then simply replace the element contents:
-
-``` javascript
-var elem = document.getElementById("menu");
-
-elem.innerHTML = Mark.up(elem.innerText, context);
-```
-
-To avoid a flicker of unformatted text, template elements should be hidden
-(via CSS) until formatting is applied.
-
-If you intend to evaluate embedded templates more than once during the
-lifetime of the HTML page, you'll need to store the original template text for
-later lookup.
-
-#### Using script tags
-
-A related technique is to embed templates in `<script>` tags like so:
-
-``` html
-<script type="text/template" id="main-menu">
-    <ul>
-        ...
+        {{persons|sort>lastName}}
+            <li>{{lastName}}, {{firstName}}</li>
+        {{/persons}}
     </ul>
 </script>
+...
 ```
 
-Be sure to specify `type="text/template"` or else browsers will interpret the
-contents as JavaScript.
+Then load the template by ID:
+
+``` javascript
+var template = document.getElementById("persons-list").innerText;
+```
+
+Be sure to specify `type="text/template"` on the script tag or else browsers
+will interpret the contents as JavaScript.
 
 ### 3. Loading templates with AJAX
 
