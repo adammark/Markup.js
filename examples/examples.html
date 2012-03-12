@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Markup.js Examples</title>
+
+<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Inconsolata|Open+Sans:400,600" />
+
+<style type="text/css">
+*        { }
+body     { font-family: Helvetica, Arial, sans-serif; margin: 15px; }
+h1       { font-size: 175%; color: #F60; }
+h2, th   { font-size: 110%; color: #06C; }
+.error   { color: #FFF; background-color: red; padding: 0 2px; }
+p        { margin: 0; }
+pre      { font-family: Inconsolata, Courier; }
+table    { width: 100%; border-spacing: 4px; }
+tr       { }
+td, th   { text-align: left; border-radius: 4px; }
+td       { width: 50%; padding: 8px; vertical-align: top; }
+.input   { background-color: #000; color: #FFF; white-space: pre; font-family: Inconsolata, Courier; }
+.output  { background-color: #EEE; }
+pre      { }
+.boy     { color: #36C; }
+.girl    { color: #F69; }
+.on      { color: #F00; }
+.off     { color: #999; }
+</style>
+
+<script src="../src/markup.min.js"></script>
+
+<script>
+function init() {
+    var context = {
+        name: { first: "John", last: "Doe", middle: null },
+        age: 21,
+        motto: "Lorem ipsum dolor sit amet",
+        siblings: ["Jack", "Jake", "Jim"],
+        friends: [
+            { name: "Justin", age: 12, gender: "M" },
+            { name: "Jenny", age: 15, gender: "F" },
+            { name: "Julie", age: 8, gender: "F" },
+            { name: "Jackie", age: 32, gender: "F" },
+            { name: "Joey", age: 14, gender: "M" }
+        ]
+    };
+
+    var elems = document.getElementsByClassName("template"),
+        results = document.getElementById("results"),
+        template,
+        row,
+        t1,
+        t2;
+
+    for (var i = 0; i < elems.length; i++) {
+        template = elems[i].firstChild.textContent.trim();
+        row = document.createElement("tr");
+
+        t1 = document.createElement("td");
+        t1.appendChild(document.createTextNode(template));
+        t1.className = "input";
+
+        t2 = document.createElement("td");
+        t2.innerHTML = Mark.up(template, context);
+        t2.className = "output";
+
+        row.appendChild(t1);
+        row.appendChild(t2);
+
+        results.appendChild(row);
+    }
+}
+</script>
+
+<script type="text/template" class="template">
+<p>{{name.first}}</p>
+</script>
+
+<script type="text/template" class="template">
+<p>{{name.last|upcase}}, {{name.first}}</p>
+</script>
+
+<script type="text/template" class="template">
+<p>
+    {{name}}
+        {{last|upcase}}, {{first}}
+    {{/name}}
+</p>
+</script>
+
+<script type="text/template" class="template">
+<p>{{name.middle|blank>N/A}}</p>
+</script>
+
+<script type="text/template" class="template">
+<p>{{motto|tease>3}}</p>
+</script>
+
+<script type="text/template" class="template">
+<p>{{motto|chop>10}}</p>
+</script>
+
+<script type="text/template" class="template">
+<p>{{age|ormore>18|choose>Adult>Minor}}</p>
+</script>
+
+<script type="text/template" class="template">
+<p>{{siblings|size}}</p>
+</script>
+
+<script type="text/template" class="template">
+<p>{{siblings|join>, }}</p>
+</script>
+
+<script type="text/template" class="template">
+<p>{{siblings|reverse|join> + }}</p>
+</script>
+
+<script type="text/template" class="template">
+<p>{{siblings.0}}</p>
+</script>
+
+<script type="text/template" class="template">
+<ol>
+    {{siblings}}
+        <li>{{.}}-{{#}}</li>
+    {{/siblings}}
+</ol>
+</script>
+
+<script type="text/template" class="template">
+<ol>
+    {{siblings|reverse}}
+        <li>{{.|upcase}}-{{##}}</li>
+    {{/siblings}}
+</ol>
+</script>
+
+<script type="text/template" class="template">
+<ol>
+    {{friends}}
+        <li>{{name}}, {{age}}</li>
+    {{/friends}}
+</ol>
+</script>
+
+<script type="text/template" class="template">
+<ol>
+    {{friends|sort>name}}
+        <li>{{name}}, {{age}}</li>
+    {{/friends}}
+</ol>
+</script>
+
+<script type="text/template" class="template">
+<ol>
+    {{friends|sort>age}}
+        <li>{{name}}, {{age}}</li>
+    {{/friends}}
+</ol>
+</script>
+
+<script type="text/template" class="template">
+<ol>
+    {{friends|sort>age|reverse}}
+        <li>{{name}}, {{age}}</li>
+    {{/friends}}
+</ol>
+</script>
+
+<script type="text/template" class="template">
+<ol>
+    {{friends|sort>gender}}
+        <li class="{{gender|toggle>M,F>boy,girl}}">
+            {{name}}, {{gender}}
+        </li>
+    {{/friends}}
+</ol>
+</script>
+
+<script type="text/template" class="template">
+<ol>
+    {{friends|limit>3}}
+        <li>{{name}}, {{age}}</li>
+    {{/friends}}
+</ol>
+</script>
+
+<script type="text/template" class="template">
+<ol>
+    {{friends}}
+        {{if gender|equals>F}}
+            <li class="girl">{{name}}, {{age}}</li>
+        {{/if}}
+    {{/friends}}
+</ol>
+</script>
+
+<script type="text/template" class="template">
+<ol>
+    {{friends}}
+        {{if name|like>Ju}}
+            <li>{{name}}, {{age}}</li>
+        {{/if}}
+    {{/friends}}
+</ol>
+</script>
+
+<script type="text/template" class="template">
+<ol>
+    {{friends|sort>age}}
+        <li>
+            {{name}}, {{age}}
+            {{if #|first}}
+                <b>(Youngest)</b>
+            {{/if}}
+            {{if #|last}}
+                <b>(Oldest)</b>
+            {{/if}}
+        </li>
+    {{/friends}}
+</ol>
+</script>
+
+<script type="text/template" class="template">
+<ol>
+    {{friends|sort>age}}
+        <li class="{{#|divisible>3|choose>on>off}}">
+            {{name}}, {{age|fix>2}}
+        </li>
+    {{/friends}}
+</ol>
+</script>
+
+</head>
+
+<body onload="init()">
+
+<h1>Markup.js: Examples</h1>
+
+<h2>context</h2>
+
+<pre id="foo">
+{
+    name: { first: "John", last: "Doe", middle: null },
+    age: 21,
+    motto: "Lorem ipsum dolor sit amet",
+    siblings: ["Jack", "Jake", "Jim"],
+    friends: [
+        { name: "Justin", age: 12, gender: "M" },
+        { name: "Jenny", age: 15, gender: "F" },
+        { name: "Julie", age: 8, gender: "F" },
+        { name: "Jackie", age: 32, gender: "F" },
+        { name: "Joey", age: 14, gender: "M" }
+    ]
+}
+</pre>
+
+<table>
+    <thead>
+        <tr>
+            <th>template</th>
+            <th>Mark.up(template, context)</th>
+        </tr>
+    </thead>
+    <tbody id="results">
+        <!-- wait for it -->
+    </tbody>
+</table>
+
+</body>
+
+</html>
