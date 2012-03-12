@@ -842,7 +842,7 @@ document.getElementById("sidebar").innerHTML = Mark.up(template, context);
 The above method can be unwieldy if you're dealing with large chunks of HTML.
 Instead, you might want to embed templates inside `<script>` tags:
 
-``` html
+``` text
 <!-- people.html -->
 ...
 <script id="persons-list" type="text/template">
