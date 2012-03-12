@@ -856,10 +856,10 @@ Instead, you might want to embed templates inside `<script>` tags:
 ...
 ```
 
-Then load the template by ID:
+Then extract the template from the `<script>` tag:
 
 ``` javascript
-var template = document.getElementById("persons-list").innerText;
+var template = document.getElementById("persons-list").firstChild.textContent;
 ```
 
 Be sure to specify `type="text/template"` on the script tag or else browsers
