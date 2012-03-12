@@ -6,7 +6,7 @@ JavaScript.
 ## Why Markup.js?
 
 Markup.js takes the pain out of converting structured data into HTML markup or
-other text formats. Its intuitive syntax and small footprint (only 1.8KB
+other text formats. Its intuitive syntax and small footprint (only 1.9KB
 minified and gzipped) make it the perfect choice for your Javascript app. Plus
 there are *no dependencies.*
 
@@ -707,6 +707,26 @@ application. Compare the readability of the following expressions:
 {{if user.age|more>`user.retirement_age`}}
 
 {{if user.retired}}
+```
+
+## White space
+
+White space between HTML or XML nodes is removed by default. For example,
+`<div>A</div> <div>B</div>` becomes `<div>A</div><div>B</div>`. You can
+easily override this behavior:
+
+``` javascript
+Mark.compact = false;
+```
+
+Or, via the `options` argument:
+
+``` javascript
+var options = {
+    compact: false
+};
+
+Mark.up(template, context, options);
 ```
 
 ## Gotchas

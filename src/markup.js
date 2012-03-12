@@ -1,5 +1,5 @@
 /*
-  Markup.js v1.5.3: http://github.com/adammark/Markup.js
+  Markup.js v1.5.4: http://github.com/adammark/Markup.js
   MIT License
   (c) 2011 Adam Mark
 */
@@ -12,6 +12,9 @@ var Mark = {
 
     // argument delimiter
     delimiter: ">",
+
+    // compact white space between HTML nodes
+    compact: true,
 
     // return a copy of array A or copy array A into array B (returning B)
     _copy: function (a, b) {
@@ -46,13 +49,13 @@ var Mark = {
         var filter = filters.shift(), parts, fn, args;
 
         if (filter) {
-            parts = filter.split(Mark.delimiter); // e.g. ["add", "10"]
+            parts = filter.split(this.delimiter); // e.g. ["add", "10"]
             fn = parts[0].trim(); // e.g. "add"
             args = parts.splice(1); // e.g. "10"
 
             try {
                 // apply the piped fn to val, then pipe again
-                val = Mark._pipe(Mark.pipes[fn].apply(null, [val].concat(args)), filters);
+                val = this._pipe(Mark.pipes[fn].apply(null, [val].concat(args)), filters);
             }
             catch (e) {
             }
@@ -64,7 +67,7 @@ var Mark = {
 
     // evaluate an array or object and process its child contents (if any)
     _eval: function (context, filters, child) {
-        var result = Mark._pipe(context, filters),
+        var result = this._pipe(context, filters),
             ctx = result,
             i = -1,
             j,
@@ -77,7 +80,7 @@ var Mark = {
 
             while (++i < j) {
                 opts = {
-                    iter: new Mark._iter(i, j)
+                    iter: new this._iter(i, j)
                 };
                 result += child ? Mark.up(child, ctx[i], opts) : ctx[i];
             }
@@ -167,17 +170,22 @@ Mark.up = function (template, context, options) {
 
     // set custom pipes, if any
     if (options.pipes) {
-        Mark._copy(options.pipes, Mark.pipes);
+        this._copy(options.pipes, this.pipes);
     }
 
     // set templates to include, if any
     if (options.includes) {
-        Mark._copy(options.includes, Mark.includes);
+        this._copy(options.includes, this.includes);
     }
 
     // override delimiter
     if (options.delimiter) {
-        Mark.delimiter = options.delimiter;
+        this.delimiter = options.delimiter;
+    }
+
+    // compact HTML?
+    if (options.compact !== undefined) {
+        this.compact = options.compact;
     }
 
     // loop through tags, e.g. {{a}}, {{b}}, {{c}}, {{/c}}
@@ -202,7 +210,7 @@ Mark.up = function (template, context, options) {
 
         // determine the full extent of a block tag and its child
         if (!selfy && template.indexOf("{{/" + token) > -1) {
-            result = Mark._bridge(template, token);
+            result = this._bridge(template, token);
             tag = result[0];
             child = result[1];
             i += tag.match(re).length - 1; // fast forward
@@ -214,27 +222,27 @@ Mark.up = function (template, context, options) {
         }
 
         // tag refers to setter
-        else if ((setter = Mark.setters[prop])) {
-            result = Mark._eval(setter, filters, child);
+        else if ((setter = this.setters[prop])) {
+            result = this._eval(setter, filters, child);
         }
 
         // tag refers to included template
-        else if ((include = Mark.includes[prop])) {
+        else if ((include = this.includes[prop])) {
             if (include instanceof Function) {
                 include = include();
             }
-            result = Mark._pipe(Mark.up(include, context), filters);
+            result = this._pipe(Mark.up(include, context), filters);
         }
 
         // tag refers to loop counter
         else if (prop.match(/#{1,2}/)) {
             options.iter.sign = prop;
-            result = Mark._pipe(options.iter, filters);
+            result = this._pipe(options.iter, filters);
         }
 
         // tag refers to current context
         else if (prop === ".") {
-            result = Mark._pipe(context, filters);
+            result = this._pipe(context, filters);
         }
 
         // tag has dot notation, e.g. "a.b.c"
@@ -247,17 +255,17 @@ Mark.up = function (template, context, options) {
                 ctx = ctx[prop[j]];
             }
 
-            result = Mark._eval(ctx, filters, child);
+            result = this._eval(ctx, filters, child);
         }
 
         // tag is otherwise testable
         else if (testy) {
-            result = Mark._pipe(ctx, filters);
+            result = this._pipe(ctx, filters);
         }
 
         // context is an array. loop through it
         else if (ctx instanceof Array) {
-            result = Mark._eval(ctx, filters, child);
+            result = this._eval(ctx, filters, child);
         }
 
         // tag is a block, e.g. {{foo}}child{{/foo}}
@@ -267,19 +275,19 @@ Mark.up = function (template, context, options) {
 
         // else all others
         else if (context.hasOwnProperty(prop)) {
-            result = Mark._pipe(ctx, filters);
+            result = this._pipe(ctx, filters);
         }
 
         // resolve "if" statements
         if (testy) {
-            result = Mark._test(result, child, context, options);
+            result = this._test(result, child, context, options);
         }
 
         // replace the tag, e.g. "{{name}}", with the result, e.g. "Adam"
         template = template.replace(tag, result === undefined ? "???" : result);
     }
 
-    return template;
+    return this.compact ? template.replace(/>\s+</g, "><") : template;
 };
 
 // "out of the box" pipes. see README

@@ -69,6 +69,20 @@ describe("Markup core spec", function () {
         expect(result).toEqual("\n J. Doe \n");
     });
 
+    it("compacts white space between xml elements", function () {
+        template = "<adam> </adam> <mark> </mark>";
+        result = Mark.up(template, {});
+        expect(result).toEqual("<adam></adam><mark></mark>");
+
+        template = "<adam>\n   \n   \n</mark>";
+        result = Mark.up(template, {});
+        expect(result).toEqual("<adam></mark>");
+
+        template = "<adam>\n   \n   \n</mark>";
+        result = Mark.up(template, {}, { "compact": false });
+        expect(result).toEqual("<adam>\n   \n   \n</mark>");
+    });
+
     it("resolves object dot notation", function () {
         template = "{{name.last}}, {{   name.first   }}";
         result = Mark.up(template, context);
