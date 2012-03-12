@@ -4,15 +4,15 @@
 
 <title>Markup.js Examples</title>
 
-<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Inconsolata|Open+Sans:400,600" />
+<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Inconsolata|Open+Sans:400,700" />
 
 <style type="text/css">
 *        { }
-body     { font-family: Helvetica, Arial, sans-serif; margin: 15px; }
-h1       { font-size: 175%; color: #F60; }
+body     { font-family: Open Sans, Helvetica, Arial, sans-serif; margin: 15px; }
+h1       { font-size: 200%; color: #F60; letter-spacing: -1px; }
 h2, th   { font-size: 110%; color: #06C; }
 .error   { color: #FFF; background-color: red; padding: 0 2px; }
-p        { margin: 0; }
+p, ol    { margin: 0; }
 pre      { font-family: Inconsolata, Courier; }
 table    { width: 100%; border-spacing: 4px; }
 tr       { }
@@ -240,7 +240,7 @@ function init() {
 
 <h2>context</h2>
 
-<pre id="foo">
+<pre id="ctx">
 {
     name: { first: "John", last: "Doe", middle: null },
     age: 21,
@@ -248,10 +248,10 @@ function init() {
     siblings: ["Jack", "Jake", "Jim"],
     friends: [
         { name: "Justin", age: 12, gender: "M" },
-        { name: "Jenny", age: 15, gender: "F" },
-        { name: "Julie", age: 8, gender: "F" },
+        { name: "Jenny",  age: 15, gender: "F" },
+        { name: "Julie",  age: 8,  gender: "F" },
         { name: "Jackie", age: 32, gender: "F" },
-        { name: "Joey", age: 14, gender: "M" }
+        { name: "Joey",   age: 14, gender: "M" }
     ]
 }
 </pre>
