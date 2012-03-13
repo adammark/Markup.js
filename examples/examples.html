@@ -2,25 +2,26 @@
 <html>
 <head>
 
-<title>Markup.js Examples</title>
+<title>Markup.js: Examples</title>
 
 <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Inconsolata|Open+Sans:400,700" />
 
 <style type="text/css">
-*        { }
 body     { font-family: Open Sans, Helvetica, Arial, sans-serif; margin: 15px; }
 h1       { font-size: 200%; color: #F60; letter-spacing: -1px; }
-h2, th   { font-size: 110%; color: #06C; }
+h2       { font-size: 140%; color: #F60; }
+h3, th   { font-size: 110%; color: #06C; }
 .error   { color: #FFF; background-color: red; padding: 0 2px; }
 p, ol    { margin: 0; }
 pre      { font-family: Inconsolata, Courier; }
-table    { width: 100%; border-spacing: 4px; }
+table    { width: 100%; border-spacing: 4px; margin: 25px 0; }
 tr       { }
 td, th   { text-align: left; border-radius: 4px; }
 td       { width: 50%; padding: 8px; vertical-align: top; }
 .input   { background-color: #000; color: #FFF; white-space: pre; font-family: Inconsolata, Courier; }
 .output  { background-color: #EEE; }
 pre      { }
+.note    { background-color: #FFC; }
 .boy     { color: #36C; }
 .girl    { color: #F69; }
 .on      { color: #F00; }
@@ -28,13 +29,19 @@ pre      { }
 </style>
 
 <script src="../src/markup.min.js"></script>
+<script src="../src/extras/strings.js"></script>
+<script src="../src/extras/dates.js"></script>
+<script src="../src/extras/arrays.js"></script>
+<script src="https://raw.github.com/timrwood/moment/1.4.0/moment.min.js"></script>
 
 <script>
 function init() {
     var context = {
         name: { first: "John", last: "Doe", middle: null },
         age: 21,
+        birthday: "Thu Aug 01 1991 00:00:00 GMT-0400 (EDT)",
         motto: "Lorem ipsum dolor sit amet",
+        post: "Check it out! http://bit.ly/9HpzwA",
         siblings: ["Jack", "Jake", "Jim"],
         friends: [
             { name: "Justin", age: 12, gender: "M" },
@@ -45,42 +52,50 @@ function init() {
         ]
     };
 
+    Mark.includes.greeting = "Welcome, <b>{{name.first}}!</b>";
+
+    Mark.includes.status = function () {
+        return "You are here: " + location.href;
+    };
+
     var elems = document.getElementsByClassName("template"),
-        results = document.getElementById("results"),
         template,
+        tbody,
         row,
         t1,
         t2;
 
     for (var i = 0; i < elems.length; i++) {
         template = elems[i].firstChild.textContent.trim();
+        tbody = document.getElementById("results-" + elems[i].dataset.idx);
+
         row = document.createElement("tr");
 
         t1 = document.createElement("td");
-        t1.appendChild(document.createTextNode(template));
         t1.className = "input";
+        t1.appendChild(document.createTextNode(template));
 
         t2 = document.createElement("td");
-        t2.innerHTML = Mark.up(template, context);
         t2.className = "output";
+        t2.innerHTML = Mark.up(template, context);
 
         row.appendChild(t1);
         row.appendChild(t2);
 
-        results.appendChild(row);
+        tbody.appendChild(row);
     }
 }
 </script>
 
-<script type="text/template" class="template">
+<script type="text/template" class="template" data-idx="0">
 <p>{{name.first}}</p>
 </script>
 
-<script type="text/template" class="template">
+<script type="text/template" class="template" data-idx="0">
 <p>{{name.last|upcase}}, {{name.first}}</p>
 </script>
 
-<script type="text/template" class="template">
+<script type="text/template" class="template" data-idx="0">
 <p>
     {{name}}
         {{last|upcase}}, {{first}}
@@ -88,39 +103,43 @@ function init() {
 </p>
 </script>
 
-<script type="text/template" class="template">
+<script type="text/template" class="template" data-idx="0">
 <p>{{name.middle|blank>N/A}}</p>
 </script>
 
-<script type="text/template" class="template">
+<script type="text/template" class="template" data-idx="0">
 <p>{{motto|tease>3}}</p>
 </script>
 
-<script type="text/template" class="template">
+<script type="text/template" class="template" data-idx="0">
 <p>{{motto|chop>10}}</p>
 </script>
 
-<script type="text/template" class="template">
+<script type="text/template" class="template" data-idx="0">
 <p>{{age|ormore>18|choose>Adult>Minor}}</p>
 </script>
 
-<script type="text/template" class="template">
+<script type="text/template" class="template" data-idx="0">
 <p>{{siblings|size}}</p>
 </script>
 
-<script type="text/template" class="template">
+<script type="text/template" class="template" data-idx="0">
 <p>{{siblings|join>, }}</p>
 </script>
 
-<script type="text/template" class="template">
+<script type="text/template" class="template" data-idx="0">
 <p>{{siblings|reverse|join> + }}</p>
 </script>
 
-<script type="text/template" class="template">
+<script type="text/template" class="template" data-idx="0">
 <p>{{siblings.0}}</p>
 </script>
 
-<script type="text/template" class="template">
+<script type="text/template" class="template" data-idx="0">
+<p>{{friends.0.name}}</p>
+</script>
+
+<script type="text/template" class="template" data-idx="0">
 <ol>
     {{siblings}}
         <li>{{.}}-{{#}}</li>
@@ -128,7 +147,7 @@ function init() {
 </ol>
 </script>
 
-<script type="text/template" class="template">
+<script type="text/template" class="template" data-idx="0">
 <ol>
     {{siblings|reverse}}
         <li>{{.|upcase}}-{{##}}</li>
@@ -136,7 +155,7 @@ function init() {
 </ol>
 </script>
 
-<script type="text/template" class="template">
+<script type="text/template" class="template" data-idx="0">
 <ol>
     {{friends}}
         <li>{{name}}, {{age}}</li>
@@ -144,7 +163,7 @@ function init() {
 </ol>
 </script>
 
-<script type="text/template" class="template">
+<script type="text/template" class="template" data-idx="0">
 <ol>
     {{friends|sort>name}}
         <li>{{name}}, {{age}}</li>
@@ -152,7 +171,7 @@ function init() {
 </ol>
 </script>
 
-<script type="text/template" class="template">
+<script type="text/template" class="template" data-idx="0">
 <ol>
     {{friends|sort>age}}
         <li>{{name}}, {{age}}</li>
@@ -160,7 +179,7 @@ function init() {
 </ol>
 </script>
 
-<script type="text/template" class="template">
+<script type="text/template" class="template" data-idx="0">
 <ol>
     {{friends|sort>age|reverse}}
         <li>{{name}}, {{age}}</li>
@@ -168,7 +187,7 @@ function init() {
 </ol>
 </script>
 
-<script type="text/template" class="template">
+<script type="text/template" class="template" data-idx="0">
 <ol>
     {{friends|sort>gender}}
         <li class="{{gender|toggle>M,F>boy,girl}}">
@@ -178,7 +197,7 @@ function init() {
 </ol>
 </script>
 
-<script type="text/template" class="template">
+<script type="text/template" class="template" data-idx="0">
 <ol>
     {{friends|limit>3}}
         <li>{{name}}, {{age}}</li>
@@ -186,7 +205,7 @@ function init() {
 </ol>
 </script>
 
-<script type="text/template" class="template">
+<script type="text/template" class="template" data-idx="0">
 <ol>
     {{friends}}
         {{if gender|equals>F}}
@@ -196,17 +215,19 @@ function init() {
 </ol>
 </script>
 
-<script type="text/template" class="template">
+<script type="text/template" class="template" data-idx="0">
 <ol>
     {{friends}}
         {{if name|like>Ju}}
-            <li>{{name}}, {{age}}</li>
+            <li><b>{{name|upcase}}, {{age}}</b></li>
+        {{else}}
+            <li>{{name}}</li>
         {{/if}}
     {{/friends}}
 </ol>
 </script>
 
-<script type="text/template" class="template">
+<script type="text/template" class="template" data-idx="0">
 <ol>
     {{friends|sort>age}}
         <li>
@@ -222,7 +243,7 @@ function init() {
 </ol>
 </script>
 
-<script type="text/template" class="template">
+<script type="text/template" class="template" data-idx="0">
 <ol>
     {{friends|sort>age}}
         <li class="{{#|divisible>3|choose>on>off}}">
@@ -232,19 +253,75 @@ function init() {
 </ol>
 </script>
 
+<script type="text/template" class="template" data-idx="1">
+{{greeting}} Thanks for visiting!
+</script>
+
+<script type="text/template" class="template" data-idx="1">
+{{greeting|upcase}} Have a great day!
+</script>
+
+<script type="text/template" class="template" data-idx="1">
+{{greeting}} {{status}}
+</script>
+
+<script type="text/template" class="template" data-idx="2">
+{{name.first|repeat>5>, }}
+</script>
+
+<script type="text/template" class="template" data-idx="2">
+{{post|links}}
+</script>
+
+<script type="text/template" class="template" data-idx="2">
+{{birthday|moment>M/D/YYYY}}
+</script>
+
+<script type="text/template" class="template" data-idx="2">
+<ol>
+    {{friends|sift>gender>F}}
+        <li class="girl">{{name}}</li>
+    {{/friends}}
+</ol>
+</script>
+
+<script type="text/template" class="template" data-idx="2">
+{{if friends|has>gender>F}}
+    Girls!
+{{/if}}
+</script>
+
+<script type="text/template" class="template" data-idx="3">
+{{birthday|moment>M/D/YYYY|set>bday}}
+
+Birthday: {{bday}}
+</script>
+
+<script type="text/template" class="template" data-idx="3">
+{{name.first|set>fname}}
+
+Name: {{fname|upcase}}
+</script>
+
 </head>
 
 <body onload="init()">
 
 <h1>Markup.js: Examples</h1>
 
-<h2>context</h2>
+<section>
 
-<pre id="ctx">
+<h2>Basic Usage</h2>
+
+<h3>context</h3>
+
+<pre>
 {
     name: { first: "John", last: "Doe", middle: null },
     age: 21,
+    birthday: "Thu Aug 01 1991 00:00:00 GMT-0400 (EDT)",
     motto: "Lorem ipsum dolor sit amet",
+    post: "Check it out! http://bit.ly/9HpzwA",
     siblings: ["Jack", "Jake", "Jim"],
     friends: [
         { name: "Justin", age: 12, gender: "M" },
@@ -263,10 +340,88 @@ function init() {
             <th>Mark.up(template, context)</th>
         </tr>
     </thead>
-    <tbody id="results">
-        <!-- wait for it -->
+    <tbody id="results-0">
     </tbody>
 </table>
+
+</section>
+
+<section>
+
+<h2>Includes</h2>
+
+<p><span class="note">You can include templates <em>inside</em> other templates:</span></p>
+
+<pre>
+Mark.includes.greeting = "Welcome, <b>{{name.first}}!</b>";
+
+Mark.includes.status = function () {
+    return "You are here: " + location.href;
+};
+</pre>
+
+<table>
+    <thead>
+        <tr>
+            <th>template</th>
+            <th>Mark.up(template, context)</th>
+        </tr>
+    </thead>
+    <tbody id="results-1">
+    </tbody>
+</table>
+
+</section>
+
+<section>
+
+<h2>Custom Pipes</h2>
+
+<p><span class="note">You can write your own pipes:</span></p>
+
+<pre>
+Mark.pipes.shout = function (str, n) {
+    return str + new Array(parseInt(n || 1) + 1).join("!");
+};
+</pre>
+
+<p>Here are some more examples. Check out the source code in <a href="../src/extras/">src/extras</a>.</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>template</th>
+            <th>Mark.up(template, context)</th>
+        </tr>
+    </thead>
+    <tbody id="results-2">
+    </tbody>
+</table>
+
+</section>
+
+<section>
+
+<h2>Setters</h2>
+
+<p><span class="note">You can set variables <em>inside</em> a template:</span></p>
+
+<table>
+    <thead>
+        <tr>
+            <th>template</th>
+            <th>Mark.up(template, context)</th>
+        </tr>
+    </thead>
+    <tbody id="results-3">
+    </tbody>
+</table>
+
+<!--
+<h3>Backtick expressions</h3>
+
+[TODO]
+-->
 
 </body>
 
