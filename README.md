@@ -711,19 +711,19 @@ application. Compare the readability of the following expressions:
 
 ## White space
 
-White space between HTML or XML nodes is removed by default. For example,
-`<div>A</div> <div>B</div>` becomes `<div>A</div><div>B</div>`. You can
-easily override this behavior:
+Sometimes it's convenient to remove all white space between HTML or XML nodes
+in the final output. For example, you might want `<div>A</div> <div>B</div>`
+to become `<div>A</div><div>B</div>`. To remove white space:
 
 ``` javascript
-Mark.compact = false;
+Mark.compact = true;
 ```
 
 Or, via the `options` argument:
 
 ``` javascript
 var options = {
-    compact: false
+    compact: true
 };
 
 Mark.up(template, context, options);

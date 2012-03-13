@@ -1,5 +1,5 @@
 /*
-  Markup.js v1.5.4: http://github.com/adammark/Markup.js
+  Markup.js v1.5.5: http://github.com/adammark/Markup.js
   MIT License
   (c) 2011 Adam Mark
 */
@@ -14,7 +14,7 @@ var Mark = {
     delimiter: ">",
 
     // compact white space between HTML nodes
-    compact: true,
+    compact: false,
 
     // return a copy of array A or copy array A into array B (returning B)
     _copy: function (a, b) {

@@ -33,6 +33,7 @@ describe("Markup core spec", function () {
 
     beforeEach(function () {
         Mark.delimiter = ">";
+        Mark.compact = false;
         template = "";
         result = "";
     });
@@ -70,6 +71,8 @@ describe("Markup core spec", function () {
     });
 
     it("compacts white space between xml elements", function () {
+        Mark.compact = true;
+
         template = "<adam> </adam> <mark> </mark>";
         result = Mark.up(template, {});
         expect(result).toEqual("<adam></adam><mark></mark>");
