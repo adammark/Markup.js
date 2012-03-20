@@ -8,13 +8,9 @@
  * {{/if}}
  */
 Mark.pipes.has = function (arr, prop, val) {
-    for (var i = 0, j = arr.length; i < j; i++) {
-        if (arr[i][prop] == val) {
-            return true;
-        }
-    }
-
-    return false;
+    return arr.some(function (item) {
+        return item[prop] == val;
+    });
 };
 
 /*
@@ -29,15 +25,9 @@ Mark.pipes.has = function (arr, prop, val) {
  * </ul>
  */
 Mark.pipes.sift = function (arr, prop, val) {
-    var result = [];
-
-    for (var i = 0, j = arr.length; i < j; i++) {
-        if (arr[i][prop] == val) {
-            result.push(arr[i]);
-        }
-    }
-
-    return result;
+    return arr.filter(function (item) {
+        return item[prop] == val;
+    });
 };
 
 /*
