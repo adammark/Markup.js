@@ -660,7 +660,8 @@ the same name, so be careful to avoid naming conflicts.*
 
 ## Global variables
 
-Global variables can be used anywhere inside a template. For example:
+You can create global variables for use anywhere inside a template. For
+example:
 
 ``` javascript
 Mark.globals.img_width = 200;
