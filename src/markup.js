@@ -1,5 +1,5 @@
 /*
-  Markup.js v1.5.5: http://github.com/adammark/Markup.js
+  Markup.js v1.5.6: http://github.com/adammark/Markup.js
   MIT License
   (c) 2011 Adam Mark
 */
@@ -7,8 +7,8 @@ var Mark = {
     // templates to include, by name
     includes: {},
 
-    // setters, by name
-    setters: {},
+    // global variables, by name
+    globals: {},
 
     // argument delimiter
     delimiter: ">",
@@ -159,8 +159,8 @@ Mark.up = function (template, context, options) {
         ctx,
         // the result string
         result,
-        // the setter being evaluated, or undefined
-        setter,
+        // the global being evaluated, or undefined
+        global,
         // the include being evaluated, or undefined
         include,
         // iterator variable
@@ -176,6 +176,11 @@ Mark.up = function (template, context, options) {
     // set templates to include, if any
     if (options.includes) {
         this._copy(options.includes, this.includes);
+    }
+
+    // set global variables, if any
+    if (options.globals) {
+        this._copy(options.globals, this.globals);
     }
 
     // override delimiter
@@ -221,9 +226,9 @@ Mark.up = function (template, context, options) {
             continue;
         }
 
-        // tag refers to setter
-        else if ((setter = this.setters[prop])) {
-            result = this._eval(setter, filters, child);
+        // tag refers to a global
+        else if ((global = this.globals[prop])) {
+            result = this._eval(global, filters, child);
         }
 
         // tag refers to included template
@@ -424,6 +429,6 @@ Mark.pipes = {
         return obj[fn].apply(obj, [].slice.call(arguments, 2));
     },
     set: function (obj, key) {
-        Mark.setters[key] = obj; return "";
+        Mark.globals[key] = obj; return "";
     }
 };

@@ -640,9 +640,8 @@ var result = Mark.up(template, context, options);
 
 ### Functions as includes
 
-Sometimes you need to perform operations or access data outside the scope of
-the `context` object. In such cases, you can include a *function* that returns
-a string when the template is processed:
+You can even include a *function* that returns a string when the template is
+processed:
 
 ``` javascript
 Mark.includes.status = function () {
@@ -655,9 +654,37 @@ var result = Mark.up(template, context);
 // "Welcome! You are here: http://www.example.com/"
 ```
 
-## Setters
+*Includes are accessible in the global scope of template execution and from
+one template to another. They take precedence over `context` variables with
+the same name, so be careful to avoid naming conflicts.*
 
-The special `set` pipe lets you set a variable *inside the template itself*:
+## Global variables
+
+Global variables can be used anywhere inside a template. For example:
+
+``` javascript
+Mark.globals.img_width = 200;
+
+var template = "{{images}} <img width='{{img_width}}'/> {{/images}}";
+```
+
+As with includes, global variables can be passed into the optional `options`
+argument of `Mark.up`:
+
+``` javascript
+var options = {
+    globals: {
+        img_width: 200,
+        img_height: 300
+    }
+};
+
+var result = Mark.up(template, context, options);
+```
+
+### The 'set' pipe
+
+The special `set` pipe lets you set a global variable *inside the template itself*:
 
 ``` text
 {{users|size|set>num_users}}
@@ -667,9 +694,9 @@ The special `set` pipe lets you set a variable *inside the template itself*:
 {{/if}}
 ```
 
-*Includes and setters are accessible in the global scope of template execution
-and from one template to another. They take precedence over `context`
-variables with the same name, so be careful to avoid naming conflicts.*
+*Global variables are accessible from one template to another. They take
+precedence over `context` variables with the same name, so be careful to avoid
+naming conflicts.*
 
 ## Backtick expressions
 
@@ -692,7 +719,7 @@ The statement within backticks can be a fully qualified expression, as in:
 {{if age|more>`spouse.age|times>2`}} Ewwwwww {{/if}}
 ```
 
-This technique also applies to variables created with the `set` pipe:
+This technique also applies to global variables:
 
 ``` text
 {{user.prefs.colors.0|set>favorite_color}}

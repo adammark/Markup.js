@@ -561,6 +561,18 @@ describe("Markup core spec", function () {
         expect(result).toEqual("ABC XYZ");
     });
 
+    it("resolves globals", function () {
+        Mark.globals.apple = "APPLE";
+
+        template = "{{brothers}}{{.}}-{{apple}} {{/brothers}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("Jack-APPLE Joe-APPLE Jim-APPLE ");
+
+        template = "{{brothers}}{{.}}-{{apple}}-{{orange}} {{/brothers}}";
+        result = Mark.up(template, context, { globals: { orange: "ORANGE" }});
+        expect(result).toEqual("Jack-APPLE-ORANGE Joe-APPLE-ORANGE Jim-APPLE-ORANGE ");
+    });
+
     it("resolves iteration counter", function () {
         template = "{{brothers}}{{#}}-{{.}} {{/brothers}}";
         result = Mark.up(template, context);
