@@ -571,6 +571,26 @@ describe("Markup core spec", function () {
         template = "{{brothers}}{{.}}-{{apple}}-{{orange}} {{/brothers}}";
         result = Mark.up(template, context, { globals: { orange: "ORANGE" }});
         expect(result).toEqual("Jack-APPLE-ORANGE Joe-APPLE-ORANGE Jim-APPLE-ORANGE ");
+
+        template = "{{fruits.0}}";
+        result = Mark.up(template, context, { globals: { fruits: ["apple", "orange"] }});
+        expect(result).toEqual("apple");
+
+        template = "{{alpha.beta}}";
+        result = Mark.up(template, context, { globals: { alpha: { beta: "delta" } }});
+        expect(result).toEqual("delta");
+
+        template = "{{alpha.beta|upcase}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("DELTA");
+
+        template = "{{alpha|set>_alpha}}{{_alpha.beta}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("delta");
+
+        template = "{{alpha}}{{.}},{{/alpha}}";
+        result = Mark.up(template, context, { globals: { alpha: ["a","b","c"] }});
+        expect(result).toEqual("a,b,c,");
     });
 
     it("resolves iteration counter", function () {
@@ -1130,6 +1150,10 @@ describe("Markup core spec", function () {
         template = "{{name}} ... {{age|plus>`base`}}";
         result = Mark.up(template, { name: "Adam", base: 999, age: 35 });
         expect(result).toEqual("Adam ... 10035");
+
+        template = "{{num|plus>1}}";
+        result = Mark.up(template, {}, { globals: { num: 1000 } });
+        expect(result).toEqual("1001");
 
         // whoa
         template = "{{age|`method`>1}}";

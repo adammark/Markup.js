@@ -1,5 +1,5 @@
 /*
-  Markup.js v1.5.6: http://github.com/adammark/Markup.js
+  Markup.js v1.5.7: http://github.com/adammark/Markup.js
   MIT License
   (c) 2011 Adam Mark
 */
@@ -253,11 +253,19 @@ Mark.up = function (template, context, options) {
         // tag has dot notation, e.g. "a.b.c"
         else if (prop.match(/\./)) {
             prop = prop.split(".");
-            ctx = context;
+            ctx = Mark.globals[prop[0]];
+
+            if (ctx) {
+                j = 1;
+            }
+            else {
+                j = 0;
+                ctx = context;
+            }
 
             // get the actual context
-            for (j = 0; j < prop.length; j++) {
-                ctx = ctx[prop[j]];
+            while (j < prop.length) {
+                ctx = ctx[prop[j++]];
             }
 
             result = this._eval(ctx, filters, child);

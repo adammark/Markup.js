@@ -669,8 +669,8 @@ Mark.globals.img_width = 200;
 var template = "{{images}} <img width='{{img_width}}'/> {{/images}}";
 ```
 
-As with includes, global variables can be passed into the optional `options`
-argument of `Mark.up`:
+A global variable can be any kind of object. As with includes, global
+variables can be passed into the optional `options` argument of `Mark.up`:
 
 ``` javascript
 var options = {
