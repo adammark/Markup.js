@@ -51,6 +51,19 @@ Mark.pipes.breaklines = function (str) {
 };
 
 /*
+ * Wrap text blocks (delimited by line breaks) in <p>...</p>.
+ *
+ * Example:
+ *
+ * {{content|clean|grafs}}
+ */
+Mark.pipes.grafs = function (str) {
+    return str.replace(/(.+)/g, function (s, p1) {
+        return "<p>" + p1 + "</p>";
+    });
+};
+
+/*
  * Wrap all URLs in links.
  *
  * Example:
