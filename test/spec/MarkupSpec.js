@@ -1129,6 +1129,10 @@ describe("Markup core spec", function () {
             return num + (+n);
         };
 
+        Mark.pipes.plusplus = function (num, n1, n2) {
+            return num + (+n1) + (+n2);
+        };
+
         Mark.pipes.times = function (num, n) {
             return num * (+n);
         };
@@ -1136,6 +1140,10 @@ describe("Markup core spec", function () {
         template = "{{name}} ... {{age|plus>`base`}}";
         result = Mark.up(template, { name: "Adam", base: 10, age: 35 });
         expect(result).toEqual("Adam ... 45");        
+
+        template = "{{name}} ... {{age|plusplus>`base`>`base`}}";
+        result = Mark.up(template, { name: "Adam", base: 10, age: 35 });
+        expect(result).toEqual("Adam ... 55");        
         
         template = "{{name}} ... {{age|plus>`base.n`}}";
         result = Mark.up(template, { name: "Adam", base: { n: 5 }, age: 35 });

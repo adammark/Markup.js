@@ -1,5 +1,5 @@
 /*
-  Markup.js v1.5.7: http://github.com/adammark/Markup.js
+  Markup.js v1.5.8: http://github.com/adammark/Markup.js
   MIT License
   (c) 2011 Adam Mark
 */
@@ -199,7 +199,7 @@ Mark.up = function (template, context, options) {
         child = "";
         selfy = tag.indexOf("/}}") > -1;
         prop = tag.substr(2, tag.length - (selfy ? 5 : 4));
-        prop = prop.replace(/`(.+)`/g, function (s, p1) {
+        prop = prop.replace(/`([^`]+)`/g, function (s, p1) {
             return Mark.up("{{" + p1 + "}}", context);
         });
         testy = prop.trim().indexOf("if ") === 0;
