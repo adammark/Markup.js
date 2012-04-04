@@ -591,6 +591,10 @@ describe("Markup core spec", function () {
         template = "{{alpha}}{{.}},{{/alpha}}";
         result = Mark.up(template, context, { globals: { alpha: ["a","b","c"] }});
         expect(result).toEqual("a,b,c,");
+
+        template = "{{bool}}";
+        result = Mark.up(template, {}, { globals: { bool: false } });
+        expect(result).toEqual("false");
     });
 
     it("resolves iteration counter", function () {

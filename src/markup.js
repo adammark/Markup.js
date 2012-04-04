@@ -227,7 +227,7 @@ Mark.up = function (template, context, options) {
         }
 
         // tag refers to a global
-        else if ((global = this.globals[prop])) {
+        else if ((global = this.globals[prop]) !== undefined) {
             result = this._eval(global, filters, child);
         }
 
