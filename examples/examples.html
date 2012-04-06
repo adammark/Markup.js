@@ -52,6 +52,11 @@ function init() {
         ]
     };
 
+    Mark.globals.app = {
+        name: "Example App",
+        version: "1.2.3"
+    };
+
     Mark.includes.greeting = "Welcome, <b>{{name.first}}!</b>";
 
     Mark.includes.status = function () {
@@ -292,12 +297,24 @@ function init() {
 </script>
 
 <script type="text/template" class="template" data-idx="3">
+{{app.name}} {{app.version}}
+</script>
+
+<script type="text/template" class="template" data-idx="3">
+<ul>
+    {{friends}}
+        <li>{{name}} {{app.version}}</li>
+    {{/friends}}
+</ul>
+</script>
+
+<script type="text/template" class="template" data-idx="4">
 {{birthday|moment>M/D/YYYY|set>bday}}
 
 Birthday: {{bday}}
 </script>
 
-<script type="text/template" class="template" data-idx="3">
+<script type="text/template" class="template" data-idx="4">
 {{name.first|set>fname}}
 
 Name: {{fname|upcase}}
@@ -402,9 +419,16 @@ Mark.pipes.shout = function (str, n) {
 
 <section>
 
-<h2>Setters</h2>
+<h2>Globals</h2>
 
-<p><span class="note">You can set variables <em>inside</em> a template:</span></p>
+<p><span class="note">You can create global variables for use anywhere in a template:</span></p>
+
+<pre>
+Mark.globals.app = {
+    name: "Example App",
+    version: "1.2.3"
+};
+</pre>
 
 <table>
     <thead>
@@ -414,6 +438,19 @@ Mark.pipes.shout = function (str, n) {
         </tr>
     </thead>
     <tbody id="results-3">
+    </tbody>
+</table>
+
+<p><span class="note">You can even set global variables <em>inside a template</em> with the 'set' pipe:</span></p>
+
+<table>
+    <thead>
+        <tr>
+            <th>template</th>
+            <th>Mark.up(template, context)</th>
+        </tr>
+    </thead>
+    <tbody id="results-4">
     </tbody>
 </table>
 
