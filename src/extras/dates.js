@@ -41,7 +41,7 @@ Mark.pipes.datetime = function (date) {
  * {{created_at|moment>M/D/YYYY}}
  */
 Mark.pipes.moment = function (date, format) {
-    return moment(+date || date).format(format);
+    return moment(new Date(+date || date)).format(format);
 };
 
 /*
@@ -54,7 +54,7 @@ Mark.pipes.moment = function (date, format) {
  * {{created_at|fromnow}}
  */
 Mark.pipes.fromnow = function (date) {
-    return moment(+date || date).fromNow();
+    return moment(new Date(+date || date)).fromNow();
 };
 
 /*
