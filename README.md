@@ -220,7 +220,7 @@ var result = Mark.up(template, context);
 ```
 
 A pipe can accept arguments. For example, the `blank` pipe accepts a value to
-display if the piped input is *null*, *false* or *undefined*:
+display if the piped input is null or empty:
 
 ``` javascript
 var template = "Phone: {{phone|blank>N/A}}";
