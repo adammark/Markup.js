@@ -1088,7 +1088,7 @@ some good libraries that you can drop into a custom pipe, like
 
 ``` javascript
 Mark.pipes.moment = function (date, format) {
-    return moment(+date || date).format(format);
+    return moment(new Date(date)).format(format);
 };
 ```
 
