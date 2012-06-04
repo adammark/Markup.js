@@ -517,7 +517,7 @@ var template = "{{if speed|more>65}} Too fast! {{else}} Too slow! {{/if}}"
 ```
 
 Pipes can be chained in IF statements, allowing for arbitrarily complex
-AND expressions:
+expressions:
 
 ``` javascript
 // test if weight in kgs is greater than 500
