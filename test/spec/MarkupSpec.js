@@ -260,6 +260,18 @@ describe("Markup core spec", function () {
         template = "whatever: {{whatever|reverse}}xxx{{/whatever}}";
         result = Mark.up(template, context);
         expect(result).toEqual("whatever: ???");
+
+        template = "123{{if parents}}..{{parents.0.name}}..{{/if}}789";
+        result = Mark.up(template, context);
+        expect(result).toEqual("123789");
+
+        template = "... {{cousin.name.middle}} {{cousin.name.middle.xxx}} ...";
+        result = Mark.up(template, context);
+        expect(result).toEqual("... ??? ??? ...");
+
+        template = "{{sisters}}{{color}}{{/sisters}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("??????");
     });
 
     it("resolves single pipe on scalar value", function () {

@@ -1,5 +1,5 @@
 /*
-  Markup.js v1.5.8: http://github.com/adammark/Markup.js
+  Markup.js v1.5.9: http://github.com/adammark/Markup.js
   MIT License
   (c) 2011 Adam Mark
 */
@@ -264,7 +264,7 @@ Mark.up = function (template, context, options) {
             }
 
             // get the actual context
-            while (j < prop.length) {
+            while (ctx && j < prop.length) {
                 ctx = ctx[prop[j++]];
             }
 
