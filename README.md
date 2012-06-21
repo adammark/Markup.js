@@ -449,9 +449,9 @@ var options = {
 var result = Mark.up(template, context, options);
 ```
 
-Note! All pipe arguments are passed as strings. For example, in the expression
-`{{num|add>23>45}}`, "23" and "45" are strings. Therefore, you should cast
-data types as necessary in your custom pipes:
+Note! All _optional_ pipe arguments are passed as strings. For example, in 
+the expression `{{num|add>23>45}}`, "23" and "45" are strings. Therefore, 
+you should cast data types as necessary in your custom pipes:
 
 ``` javascript
 // WRONG! 1 + "23" + "45" returns "12345"
