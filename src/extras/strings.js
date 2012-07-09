@@ -112,3 +112,14 @@ Mark.pipes.inject = function (str) {
         return args[+i + 1] || "";
     });
 };
+
+/*
+ * Highlight a pattern throughout a string.
+ *
+ * Example:
+ *
+ * {{article|highlight>`searchTerm`}}
+ */
+Mark.pipes.highlight = function (str, pattern) {
+    return str.replace(new RegExp("(" + pattern + ")", "g"), "<em>$1</em>");
+};
