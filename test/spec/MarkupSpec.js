@@ -241,6 +241,10 @@ describe("Markup core spec", function () {
         result = Mark.up(template, {foo: undefined});
         expect(result).toEqual("foo: ???");
 
+        template = "{{if foo}}{{foo|upcase}}{{else}}^^^{{/if}}";
+        result = Mark.up(template, {});
+        expect(result).toEqual("^^^");
+
         template = "La la {{la}}";
         result = Mark.up(template);
         expect(result).toEqual("La la ???");
