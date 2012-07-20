@@ -106,6 +106,10 @@ describe("Markup core spec", function () {
         template = "{{cousin}}{{name.first}}{{/cousin}}";
         result = Mark.up(template, context);
         expect(result).toEqual("Jake");
+
+        template = "{{cousin.name}}{{first}}{{/cousin.name}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("Jake");
     });
 
     it("resolves array index notation", function () {

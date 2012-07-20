@@ -1,5 +1,5 @@
 /*
-  Markup.js v1.5.10: http://github.com/adammark/Markup.js
+  Markup.js v1.5.11: http://github.com/adammark/Markup.js
   MIT License
   (c) 2011 Adam Mark
 */
@@ -84,6 +84,9 @@ var Mark = {
                 };
                 result += child ? Mark.up(child, ctx[i], opts) : ctx[i];
             }
+        }
+        else if (result instanceof Object) {
+            result = Mark.up(child, ctx);
         }
 
         return result;
