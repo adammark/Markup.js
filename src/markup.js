@@ -1,5 +1,5 @@
 /*
-  Markup.js v1.5.9: http://github.com/adammark/Markup.js
+  Markup.js v1.5.10: http://github.com/adammark/Markup.js
   MIT License
   (c) 2011 Adam Mark
 */
@@ -407,13 +407,13 @@ Mark.pipes = {
         return (+num) % (+n);
     },
     divisible: function (num, n) {
-        return num !== false && num % n === 0 ? num : false;
+        return num && (+num % n) === 0 ? num : false;
     },
     even: function (num) {
-        return num !== false && num % 2 === 0 ? num : false;
+        return num && (+num & 1) === 0 ? num : false;
     },
     odd: function (num) {
-        return num !== false && num % 2 === 1 ? num : false;
+        return num && (+num & 1) === 1 ? num : false;
     },
     number: function (str) {
         return parseFloat(str.replace(/[^\-\d\.]/g, ""));
