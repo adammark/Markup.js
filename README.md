@@ -378,11 +378,11 @@ Markup.js comes with more than 40 built-in pipes:
 
 `last` (iterator): Test if an iterator is last. `{{if #|last}}`
 
-`call` (obj, func [, arg1, arg2, ...]): Call an object function. (See doc below.) `{{doggy|call>bark>5}}`
+`call` (obj, func [, arg1, arg2, ...]): Call an object function. ([See doc below](#the-call-pipe)) `{{doggy|call>bark>5}}`
 
-`set` (obj, str): Set a variable for later use, outputting nothing. (See doc below.) `{{user.birthday|set>bday}}`
+`set` (obj, str): Set a variable for later use, outputting nothing. ([See doc below](#the-set-pipe)) `{{user.birthday|set>bday}}`
 
-`log` (obj): Log any variable to the console. (See doc below.) `{{article.title|log}}`
+`log` (obj): Log any variable to the console. ([See doc below](#logging)) `{{article.title|log}}`
 
 \* Arrays are copied first
 
