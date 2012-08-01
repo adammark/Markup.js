@@ -765,12 +765,12 @@ You can log any variable to the console for debugging purposes with the `log`
 pipe:
 
 ``` text
-&lt;!-- logs "LION" "TIGER" "BEAR" --&gt;
+<!-- logs "LION" "TIGER" "BEAR" -->
 {{animals}}
     {{name|upcase|log}}
 {{/animals}}
 
-&lt;!-- logs "lion" "tiger" "bear" --&gt;
+<!-- logs "lion" "tiger" "bear" -->
 {{animals}}
     {{name|log|upcase}}
 {{/animals}}
