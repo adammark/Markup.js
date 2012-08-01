@@ -7,7 +7,7 @@ JavaScript.
 
 Markup.js takes the pain out of converting structured data into HTML markup or
 other text formats. Its intuitive syntax and small footprint (only 1.9KB
-minified and gzipped) make it the perfect choice for your Javascript app. Plus
+minified and gzipped) make it the perfect choice for your JavaScript app. Plus
 there are *no dependencies.*
 
 ## Usage
@@ -61,19 +61,19 @@ var context = {
     }
 };
 
-var template = "{{name}} lives on {{addr.street}} in {{addr.city}}.";
+var template = "{{name}} lives at {{addr.street}} in {{addr.city}}.";
 
 var result = Mark.up(template, context);
-// "John Doe lives on 1 Maple Street in Pleasantville."
+// "John Doe lives at 1 Maple Street in Pleasantville."
 ```
 
 Or you can use nested tags:
 
 ``` javascript
-var template = "{{name}} lives on {{addr}}{{street}} in {{city}}.{{/addr}}";
+var template = "{{name}} lives at {{addr}}{{street}} in {{city}}.{{/addr}}";
 
 var result = Mark.up(template, context);
-// "John Doe lives on 1 Maple Street in Pleasantville."
+// "John Doe lives at 1 Maple Street in Pleasantville."
 ```
 
 Or you can use a combination of nested tags and dot notation:
@@ -381,6 +381,8 @@ Markup.js comes with more than 40 built-in pipes:
 `call` (obj, func [, arg1, arg2, ...]): Call an object function. (See doc below.) `{{doggy|call>bark>5}}`
 
 `set` (obj, str): Set a variable for later use, outputting nothing. (See doc below.) `{{user.birthday|set>bday}}`
+
+`log` (obj): Log any variable to the console. (See doc below.) `{{article.title|log}}`
 
 \* Arrays are copied first
 
@@ -755,6 +757,23 @@ var options = {
 };
 
 Mark.up(template, context, options);
+```
+
+## Logging
+
+You can log any variable to the console for debugging purposes with the `log` 
+pipe:
+
+``` text
+&lt;!-- logs "LION" "TIGER" "BEAR" --&gt;
+{{animals}}
+    {{name|upcase|log}}
+{{/animals}}
+
+&lt;!-- logs "lion" "tiger" "bear" --&gt;
+{{animals}}
+    {{name|log|upcase}}
+{{/animals}}
 ```
 
 ## Gotchas

@@ -1,5 +1,5 @@
 /*
-  Markup.js v1.5.11: http://github.com/adammark/Markup.js
+  Markup.js v1.5.12: http://github.com/adammark/Markup.js
   MIT License
   (c) 2011 Adam Mark
 */
@@ -441,5 +441,9 @@ Mark.pipes = {
     },
     set: function (obj, key) {
         Mark.globals[key] = obj; return "";
+    },
+    log: function (obj) {
+        console.log(obj);
+        return obj;
     }
 };
