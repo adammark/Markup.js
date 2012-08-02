@@ -300,15 +300,15 @@ Markup.js comes with more than 40 built-in pipes:
 
 `notempty` (obj): Test for the presence of a value. `{{if apples|notempty}}` or simply `{{if apples}}`
 
-`more` (obj, n): Test if a number, iterator, or array is greater than n. `{{if articles|more>100}}` `{{if #|more>10}}`
+`more` (obj, n): Test if a number, [iterator][1], or array is greater than n. `{{if articles|more>100}}` `{{if #|more>10}}`
 
-`less` (obj, n): Test if a number, iterator, or array is less than n. `{{if age|less>21}}`
+`less` (obj, n): Test if a number, [iterator][1], or array is less than n. `{{if age|less>21}}`
 
-`ormore` (obj, n): Test if a number, iterator, or array is greater than or equal to n. `{{if age|ormore>18}}`
+`ormore` (obj, n): Test if a number, [iterator][1], or array is greater than or equal to n. `{{if age|ormore>18}}`
 
-`orless` (obj, n): Test if a number, iterator, or array is less than or equal to n. `{{if age|orless>55}}`
+`orless` (obj, n): Test if a number, [iterator][1], or array is less than or equal to n. `{{if age|orless>55}}`
 
-`between` (obj, n1, n2): Test if a number, iterator or array is between n1 and n2, inclusive. `{{if age|between>18>35}}`
+`between` (obj, n1, n2): Test if a number, [iterator][1] or array is between n1 and n2, inclusive. `{{if age|between>18>35}}`
 
 `equals` (obj, str): Test for equality (==). `{{if name|equals>Adam}}` `{{if age|equals>35}}`
 
@@ -338,7 +338,7 @@ Markup.js comes with more than 40 built-in pipes:
 
 `clean` (str): Strip HTML/XML tags from a string. `{{article|clean}}`
 
-`length` (obj): Get the length of an array, string, or iterator. `{{apples|length}}` `{{#|length}}`
+`length` (obj): Get the length of an array, string, or [iterator][1]. `{{apples|length}}` `{{#|length}}`
 
 `size` (obj): Alias of length. `{{apples|size}}` `{{#|size}}`
 
@@ -350,21 +350,21 @@ Markup.js comes with more than 40 built-in pipes:
 
 `split` (str [, str]): Split a string on "," or by the given token. `{{names|split>;}} {{.}} {{/names}}`
 
-`choose` (bool, str [, str]): Output one value if true, another if false. `{{user.passed|choose>Passed!>Failed!}}`
+`choose` (bool, str [, str]): Output one value if true, another if false. `{{user.passed|choose>Passed>Failed}}`
 
-`toggle` (obj, str, str, [,str]): Switch one string value for another. `{{gender|toggle>M,F>Male,Female>Unknown}}`
+`toggle` (obj, str, str [,str]): Switch one string value for another. `{{gender|toggle>M,F>Boy,Girl>N/A}}`
 
 `sort` (arr [, str]): Sort an array, optionally by object property name.\* `{{users|sort>firstname}} ... {{/users}}`
 
 `fix` (num, n): Format a number to n decimal places. `{{weight|fix>1}}`
 
-`mod` (num, n): Get the remainder of a number or iterator divided by n. `{{rows|mod>10}}`
+`mod` (num, n): Get the remainder of a number or [iterator][1] divided by n. `{{rows|mod>10}}`
 
-`divisible` (num, n): Test if a number or iterator is perfectly divisible by n. `{{if #|divisible>3}}`
+`divisible` (num, n): Test if a number or [iterator][1] is perfectly divisible by n. `{{if #|divisible>3}}`
 
-`even` (num): Test if a number or iterator is even. `{{if #|even}}`
+`even` (num): Test if a number or [iterator][1] is even. `{{if #|even}}`
 
-`odd` (num): Test if a number or iterator is odd. `{{if #|odd}}`
+`odd` (num): Test if a number or [iterator][1] is odd. `{{if #|odd}}`
 
 `number` (str): Extract a number from a string (e.g. "$1,234.56" or "30px"). `{{price|number}}`
 
@@ -374,9 +374,9 @@ Markup.js comes with more than 40 built-in pipes:
 
 `falsy` (obj): Test for falseness. `{{if expired|falsy}}`
 
-`first` (iterator): Test if an iterator is first. `{{if #|first}}`
+`first` (iterator): Test if an [iterator][1] is first. `{{if #|first}}`
 
-`last` (iterator): Test if an iterator is last. `{{if #|last}}`
+`last` (iterator): Test if an [iterator][1] is last. `{{if #|last}}`
 
 `call` (obj, func [, arg1, arg2, ...]): Call an object function. ([See doc below](#the-call-pipe)) `{{doggy|call>bark>5}}`
 
@@ -384,7 +384,7 @@ Markup.js comes with more than 40 built-in pipes:
 
 `log` (obj): Log any variable to the console. ([See doc below](#logging)) `{{article.title|log}}`
 
-\* Arrays are copied first
+\* Source array is not modified.
 
 ### The 'call' pipe
 
@@ -1168,3 +1168,5 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+
+[1]: #loop-counters
