@@ -1,4 +1,20 @@
 /*
+ * Escape HTML in the input string.
+ *
+ * Example:
+ *
+ * {{comment|sanitize}}
+ */
+Mark.pipes.sanitize = function (str) {
+    var input = "<>&\"'\/";
+    var output = ["&lt;", "&gt;", "&amp;", "&quot;", "&#39;", "&#x2F;"];
+
+    return str.replace(new RegExp(input, "g"), function (s) {
+        return output[input.indexOf(s)];
+    });
+};
+
+/*
  * Capitalize the first character in each word, excluding some articles and
  * prepositions.
  *
