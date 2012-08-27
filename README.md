@@ -483,7 +483,7 @@ var options = {
     delimiter: ":"
 };
 
-Mark.up(template, context, options);
+var result = Mark.up(template, context, options);
 ```
 
 ### More pipes!
@@ -756,7 +756,7 @@ var options = {
     compact: true
 };
 
-Mark.up(template, context, options);
+var result = Mark.up(template, context, options);
 ```
 
 ## Logging
@@ -831,7 +831,7 @@ var template = "{{if name|like>'Adam'}} ...";
 var template = "{{if name|like>Adam}} ...";
 ```
 
-## Implementation
+## Browser implementation
 
 You can implement Markup.js in a few different ways. The right strategy
 depends on many factors, including the speed and size of your app, the number
@@ -959,6 +959,26 @@ $.get("user-templates.txt", function (text) {
 You can also cache templates in [Local Storage](http://diveintohtml5.info/storage.html) 
 or the [Application Cache](http://www.html5rocks.com/en/tutorials/appcache/beginner/) 
 for instantaneous retrieval.
+
+## Server implementation
+
+You can install Markup.js as a [Node.js](http://nodejs.org) package:
+
+```
+$ npm install markup-js
+```
+
+Then require `markup-js` and load template from the file system:
+
+``` javascript
+var Mark = require("markup-js"),
+    fs = require("fs");
+
+fs.readFile("some-template.txt", "utf8", function (err, data) {
+    var result = Mark.up(data, context);
+    ...
+});
+```
 
 ## Internationalization (i18n)
 
