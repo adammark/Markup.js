@@ -968,7 +968,7 @@ You can install Markup.js as a [Node.js](http://nodejs.org) package:
 $ npm install markup-js
 ```
 
-Then require `markup-js` and load template from the file system:
+Then require `markup-js` and load your templates from the file system:
 
 ``` javascript
 var Mark = require("markup-js"),
