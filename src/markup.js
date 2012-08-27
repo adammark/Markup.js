@@ -447,3 +447,7 @@ Mark.pipes = {
         return obj;
     }
 };
+
+if (typeof module !== "undefined" && module.exports) {
+    module.exports = Mark;
+}

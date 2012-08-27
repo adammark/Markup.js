@@ -1,0 +1,27 @@
+{
+    "name": "markup-js",
+    "version": "1.5.12",
+    "description": "Markup.js - Powerful JavaScript Templates",
+    "homepage": "https://github.com/adammark/Markup.js",
+    "author": {
+        "name": "Adam Mark"
+    },
+    "files": [
+        "src/markup.js",
+        "src/markup.min.js",
+        "README.md"
+    ],
+    "keywords": [
+        "markup",
+        "template",
+        "templating",
+        "html"
+    ],
+    "repository" : {
+        "type" : "git",
+        "url" : "https://github.com/adammark/Markup.js.git"
+    },
+    "bugs": {
+        "url" : "https://github.com/adammark/Markup.js/issues"
+    }
+}
