@@ -974,10 +974,14 @@ Then require `markup-js` and load your templates from the file system:
 var Mark = require("markup-js"),
     fs = require("fs");
 
+// load asynchronously
 fs.readFile("some-template.txt", "utf8", function (err, data) {
-    var result = Mark.up(data, context);
+    var template = data;
     ...
 });
+
+// or load synchronously
+var template = fs.readFileSync("some-template.txt", "utf-8");
 ```
 
 ## Internationalization (i18n)
