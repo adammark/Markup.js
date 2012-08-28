@@ -981,7 +981,7 @@ fs.readFile("some-template.txt", "utf8", function (err, data) {
 });
 
 // or load synchronously
-var template = fs.readFileSync("some-template.txt", "utf-8");
+var template = fs.readFileSync("some-template.txt", "utf8");
 ```
 
 ## Internationalization (i18n)
