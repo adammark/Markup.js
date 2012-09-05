@@ -962,7 +962,7 @@ for instantaneous retrieval.
 
 ## Server implementation
 
-You can install Markup.js as a [Node.js](http://nodejs.org) package:
+You can install Markup.js as a [Node.js package](https://npmjs.org/package/markup-js):
 
 ```
 $ npm install markup-js
