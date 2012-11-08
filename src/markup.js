@@ -1,5 +1,5 @@
 /*
-  Markup.js v1.5.12: http://github.com/adammark/Markup.js
+  Markup.js v1.5.13: http://github.com/adammark/Markup.js
   MIT License
   (c) 2011 Adam Mark
 */
@@ -46,16 +46,15 @@ var Mark = {
     // pipe an obj through filters. e.g. _pipe(123, ["add>10","times>5"])
     _pipe: function (val, filters) {
         // get the first filter, e.g. "add>10"
-        var filter = filters.shift(), parts, fn, args;
+        var filter = filters.shift(), parts, fn;
 
         if (filter) {
             parts = filter.split(this.delimiter); // e.g. ["add", "10"]
-            fn = parts[0].trim(); // e.g. "add"
-            args = parts.splice(1); // e.g. "10"
+            fn = parts.shift().trim(); // e.g. "add"
 
             try {
                 // apply the piped fn to val, then pipe again
-                val = this._pipe(Mark.pipes[fn].apply(null, [val].concat(args)), filters);
+                val = this._pipe(Mark.pipes[fn].apply(null, [val].concat(parts)), filters);
             }
             catch (e) {
             }
@@ -104,14 +103,16 @@ var Mark = {
     _bridge: function (tpl, tkn) {
         var exp = "{{\\s*" + tkn + "([^/}]+\\w*)?}}|{{/" + tkn + "\\s*}}",
             re = new RegExp(exp, "g"),
-            tags = tpl.match(re),
+            tags = tpl.match(re) || [],
             t,
+            i,
             a = 0,
             b = 0,
             c = -1,
             d = 0;
 
-        for (t in tags) {
+        for (i = 0; i < tags.length; i++) {
+            t = i;
             c = tpl.indexOf(tags[t], c + 1);
 
             if (tags[t].match("{{/")) {
@@ -206,7 +207,8 @@ Mark.up = function (template, context, options) {
             return Mark.up("{{" + p1 + "}}", context);
         });
         testy = prop.trim().indexOf("if ") === 0;
-        filters = prop.split("|").splice(1);
+        filters = prop.split("|");
+        filters.shift(); // instead of splice(1)
         prop = prop.replace(/^\s*if/, "").split("|").shift().trim();
         token = testy ? "if" : prop.split("|")[0];
         ctx = context[prop];
@@ -448,6 +450,14 @@ Mark.pipes = {
     }
 };
 
+// shim
+if (typeof String.prototype.trim !== "function") {
+    String.prototype.trim = function() {
+        return this.replace(/^\s+|\s+$/g, ""); 
+    }
+}
+
+// npm
 if (typeof module !== "undefined" && module.exports) {
     module.exports = Mark;
 }
