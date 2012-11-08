@@ -16,10 +16,10 @@ Mark.pipes.pluralize = function (str, n) {
     };
 
     // the user's language. you can replace this with your own code
-    var lang = navigator.language.split("-")[0];
+    var lang = (navigator.language || navigator.userLanguage).split("-")[0];
 
     // fall back to English
-    if (!lang in plurals) {
+    if (!plurals[lang]) {
         lang = "en";
     }
 
