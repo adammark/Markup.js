@@ -698,8 +698,8 @@ The special `set` pipe lets you set a global variable *inside the template itsel
 ```
 
 *Global variables are accessible from one template to another. They take
-precedence over `context` variables with the same name, so be careful to avoid
-naming conflicts.*
+precedence over includes and `context` variables with the same name, so be 
+careful to avoid naming conflicts.*
 
 ## Backtick expressions
 
