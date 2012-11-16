@@ -1168,8 +1168,9 @@ See `src/extras/dates.js` and `src/extras/numbers.js` for additional examples.
 
 ## Compatibility
 
-Tested in recent versions of Chrome, Safari, Firefox and various mobile WebKit
-implementations. Not compatible with older versions of Internet Explorer.
+Markup.js is compatible with Chrome, Safari, Firefox, Internet Explorer 9,
+Node.js, and various mobile WebKit browsers. Please [submit an issue][2] to 
+report incompatibilities or other bugs. 
 
 ## License
 
@@ -1194,3 +1195,4 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 [1]: #loop-counters
+[2]: https://github.com/adammark/Markup.js/issues
