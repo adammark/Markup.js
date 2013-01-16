@@ -1,7 +1,7 @@
 /*
   Markup.js v1.5.13: http://github.com/adammark/Markup.js
   MIT License
-  (c) 2011 Adam Mark
+  (c) 2011 - 2013 Adam Mark
 */
 var Mark = {
     // templates to include, by name
