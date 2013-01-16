@@ -457,7 +457,11 @@ if (typeof String.prototype.trim !== "function") {
     }
 }
 
-// npm
+// export
 if (typeof module !== "undefined" && module.exports) {
     module.exports = Mark;
+} else if (typeof define !== "undefined") {
+    define(function() {
+        return Mark;
+    });
 }
