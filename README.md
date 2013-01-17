@@ -350,7 +350,7 @@ Markup.js comes with more than 40 built-in pipes:
 
 `split` (str [, str]): Split a string on "," or by the given token. `{{names|split>;}} {{.}} {{/names}}`
 
-`choose` (bool, str [, str]): Output one value if true, another if false. `{{user.passed|choose>Passed>Failed}}`
+`choose` (bool, str [, str]): Output one value if truthy, another if falsy. `{{user.passed|choose>Pass>Fail}}`
 
 `toggle` (obj, str, str [,str]): Switch one string value for another. `{{gender|toggle>M,F>Boy,Girl>N/A}}`
 
