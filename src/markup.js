@@ -1,7 +1,7 @@
 /*
   Markup.js v1.5.13: http://github.com/adammark/Markup.js
   MIT License
-  (c) 2011 Adam Mark
+  (c) 2011 - 2013 Adam Mark
 */
 var Mark = {
     // templates to include, by name
@@ -457,7 +457,11 @@ if (typeof String.prototype.trim !== "function") {
     }
 }
 
-// npm
+// export
 if (typeof module !== "undefined" && module.exports) {
     module.exports = Mark;
+} else if (typeof define !== "undefined") {
+    define(function() {
+        return Mark;
+    });
 }

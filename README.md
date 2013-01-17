@@ -1174,7 +1174,7 @@ report incompatibilities or other bugs.
 
 ## License
 
-Copyright (C) 2011 by Adam Mark
+Copyright (C) 2011 - 2013 by Adam Mark
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
