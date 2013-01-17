@@ -1,5 +1,5 @@
 /*
-  Markup.js v1.5.13: http://github.com/adammark/Markup.js
+  Markup.js v1.5.14: http://github.com/adammark/Markup.js
   MIT License
   (c) 2011 - 2013 Adam Mark
 */
@@ -460,7 +460,8 @@ if (typeof String.prototype.trim !== "function") {
 // export
 if (typeof module !== "undefined" && module.exports) {
     module.exports = Mark;
-} else if (typeof define !== "undefined") {
+}
+else if (typeof define !== "undefined") {
     define(function() {
         return Mark;
     });
