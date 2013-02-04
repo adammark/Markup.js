@@ -1,5 +1,5 @@
 /*
-  Markup.js v1.5.14: http://github.com/adammark/Markup.js
+  Markup.js v1.5.15: http://github.com/adammark/Markup.js
   MIT License
   (c) 2011 - 2013 Adam Mark
 */
@@ -115,7 +115,7 @@ var Mark = {
             t = i;
             c = tpl.indexOf(tags[t], c + 1);
 
-            if (tags[t].match("{{/")) {
+            if (tags[t].indexOf("{{/") > -1) {
                 b++;
             }
             else {
@@ -142,7 +142,7 @@ Mark.up = function (template, context, options) {
     options = options || {};
 
     // pattern matching any tag, e.g. "{{apples}}" and "{{/apples}}"
-    var re = /\{\{\w*[^}]+\w*\}\}/g,
+    var re = /\{\{(.+?)\}\}/g,
         // an array of tags
         tags = template.match(re) || [],
         // the tag being evaluated
@@ -203,7 +203,7 @@ Mark.up = function (template, context, options) {
         child = "";
         selfy = tag.indexOf("/}}") > -1;
         prop = tag.substr(2, tag.length - (selfy ? 5 : 4));
-        prop = prop.replace(/`([^`]+)`/g, function (s, p1) {
+        prop = prop.replace(/`(.+?)`/g, function (s, p1) {
             return Mark.up("{{" + p1 + "}}", context);
         });
         testy = prop.trim().indexOf("if ") === 0;
@@ -245,7 +245,7 @@ Mark.up = function (template, context, options) {
         }
 
         // tag refers to loop counter
-        else if (prop.match(/#{1,2}/)) {
+        else if (prop.indexOf("#") > -1) {
             options.iter.sign = prop;
             result = this._pipe(options.iter, filters);
         }
@@ -256,7 +256,7 @@ Mark.up = function (template, context, options) {
         }
 
         // tag has dot notation, e.g. "a.b.c"
-        else if (prop.match(/\./)) {
+        else if (prop.indexOf(".") > -1) {
             prop = prop.split(".");
             ctx = Mark.globals[prop[0]];
 
