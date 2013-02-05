@@ -945,14 +945,15 @@ Then load and parse the file:
 var templates = {};
 
 $.get("user-templates.txt", function (text) {
-    text = text.split("=====").splice(1);
+    var chunks = text.split("=====").splice(1);
+    var i, key;
  
-    for (var t in text) {
-        var i = text[t].indexOf("\n");
-        var key = text[t].substr(0, i).trim();
-        var val = text[t].substr(i).trim();
-        templates[key] = val;
-    }
+    chunks.forEach(function (chunk) {
+        i = chunk.indexOf("\n");
+        key = chunk.substr(0, i).trim();
+        templates[key] = chunk.substr(i).trim();
+    });
+
 }, "html");
 ```
 
@@ -1022,16 +1023,16 @@ Then load and parse the file:
 var resources = {};
 
 $.get("en.txt", function (text) {
-    text = text.split("\n");
+    var lines = text.split("\n");
+    var i, key;
 
-    for (var t in text) {
-        var s = text[t].trim();
-        if (!s.length || s.charAt(0) === "#") {
-            continue;
+    lines.forEach(function (line) {
+        if (line.length && line.charAt(0) !== "#") {
+            i = line.indexOf("=");
+            key = line.substr(0, i).trim();
+            resources[key] = line.substr(i + 1).trim();
         }
-        s = s.split("=");
-        resources[s[0].trim()] = s[1].trim();
-    }
+    });
 
 }, "html");
 ```
