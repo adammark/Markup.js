@@ -1,22 +1,22 @@
 /*
-  Markup.js v1.5.15: http://github.com/adammark/Markup.js
+  Markup.js v1.5.16: http://github.com/adammark/Markup.js
   MIT License
   (c) 2011 - 2013 Adam Mark
 */
 var Mark = {
-    // templates to include, by name
+    // Templates to include, by name. A template is a string.
     includes: {},
 
-    // global variables, by name
+    // Global variables, by name. Global variables take precedence over context variables.
     globals: {},
 
-    // argument delimiter
+    // The delimiter to use in pipe expressions, e.g. {{if color|like>red}}.
     delimiter: ">",
 
-    // compact white space between HTML nodes
+    // Collapse white space between HTML elements in the resulting string.
     compact: false,
 
-    // return a copy of array A or copy array A into array B (returning B)
+    // Shallow-copy an object.
     _copy: function (a, b) {
         b = b || [];
 
@@ -27,44 +27,53 @@ var Mark = {
         return b;
     },
 
-    // get the length of array A, or simply return A. see pipes, below
+    // Get the value of a number or size of an array. This is a helper function for several pipes.
     _size: function (a) {
         return a instanceof Array ? a.length : (a || 0);
     },
 
-    // an object with an index (0...n-1) ("#") and size (n) ("##")
+    // This object represents an iteration. It has an index and length.
     _iter: function (idx, size) {
         this.idx = idx;
         this.size = size;
         this.length = size;
         this.sign = "#";
+
+        // Print the index if "#" or the count if "##".
         this.toString = function () {
             return this.idx + this.sign.length - 1;
         };
     },
 
-    // pipe an obj through filters. e.g. _pipe(123, ["add>10","times>5"])
-    _pipe: function (val, filters) {
-        // get the first filter, e.g. "add>10"
-        var filter = filters.shift(), parts, fn;
+    // Pass a value through a series of pipe expressions, e.g. _pipe(123, ["add>10","times>5"]).
+    _pipe: function (val, expressions) {
+        var expression, parts, fn, result;
 
-        if (filter) {
-            parts = filter.split(this.delimiter); // e.g. ["add", "10"]
-            fn = parts.shift().trim(); // e.g. "add"
+        // If we have expressions, pull out the first one, e.g. "add>10".
+        if ((expression = expressions.shift())) {
+
+            // Split the expression into its component parts, e.g. ["add", "10"].
+            parts = expression.split(this.delimiter);
+
+            // Pull out the function name, e.g. "add".
+            fn = parts.shift().trim();
 
             try {
-                // apply the piped fn to val, then pipe again
-                val = this._pipe(Mark.pipes[fn].apply(null, [val].concat(parts)), filters);
+                // Run the function, e.g. add(123, 10) ...
+                result = Mark.pipes[fn].apply(null, [val].concat(parts));
+
+                // ... then pipe again with remaining expressions.
+                val = this._pipe(result, expressions);
             }
             catch (e) {
             }
         }
 
-        // return the result of the piped value
+        // Return the piped value.
         return val;
     },
 
-    // evaluate an array or object and process its child contents (if any)
+    // TODO doc
     _eval: function (context, filters, child) {
         var result = this._pipe(context, filters),
             ctx = result,
@@ -72,7 +81,6 @@ var Mark = {
             j,
             opts;
 
-        // if result is array, iterate
         if (result instanceof Array) {
             result = "";
             j = ctx.length;
@@ -91,15 +99,16 @@ var Mark = {
         return result;
     },
 
-    // get "if" or "else" string from piped result
-    _test: function (result, child, context, options) {
-        var str = Mark.up(child, context, options).split(/\{\{\s*else\s*\}\}/),
-            res = (result === false ? str[1] : str[0]);
+    // Process the contents of an IF or IF/ELSE block.
+    _test: function (bool, child, context, options) {
+        // Process the child string, then split it into the IF and ELSE parts.
+        var str = Mark.up(child, context, options).split(/\{\{\s*else\s*\}\}/);
 
-        return Mark.up(res || "", context, options);
+        // Return the IF or ELSE part. If no ELSE, return an empty string.
+        return (bool === false ? str[1] : str[0]) || "";
     },
 
-    // get the full extent of a block tag given a template and token (e.g. "if")
+    // Determine the extent of a block expression, e.g. "{{foo}}...{{/foo}}"
     _bridge: function (tpl, tkn) {
         var exp = "{{\\s*" + tkn + "([^/}]+\\w*)?}}|{{/" + tkn + "\\s*}}",
             re = new RegExp(exp, "g"),
@@ -131,73 +140,72 @@ var Mark = {
         b = a + tags[0].length;
         d = c + tags[t].length;
 
-        // return "{{abc}}xyz{{/abc}}" and "xyz"
+        // Return the block, e.g. "{{foo}}bar{{/foo}}" and its child, e.g. "bar".
         return [tpl.substring(a, d), tpl.substring(b, c)];
     }
 };
 
-// fill a template string with context data. return transformed template
+// Inject a template string with contextual data and return a new string.
 Mark.up = function (template, context, options) {
     context = context || {};
     options = options || {};
 
-    // pattern matching any tag, e.g. "{{apples}}" and "{{/apples}}"
+    // Match all tags like "{{...}}".
     var re = /\{\{(.+?)\}\}/g,
-        // an array of tags
+        // All tags in the template.
         tags = template.match(re) || [],
-        // the tag being evaluated
+        // The tag being evaluated, e.g. "{{hamster|dance}}".
         tag,
-        // the string to evaluate, e.g. "hamster|dance"
+        // The expression to evaluate inside the tag, e.g. "hamster|dance".
         prop,
-        // the token that might be terminated by "{{/token}}"
+        // The token itself, e.g. "hamster".
         token,
-        // an array of filters, e.g. ["more>1", "less>2"]
+        // An array of pipe expressions, e.g. ["more>1", "less>2"].
         filters = [],
-        // is the tag self-closing? e.g. "{{stuff/}}"
+        // Does the tag close itself? e.g. "{{stuff/}}".
         selfy,
-        // is the tag an "if" statement?
+        // Is the tag an "if" statement?
         testy,
-        // the string inside a block tag, e.g. "{{a}}...{{/a}}"
+        // The contents of a block tag, e.g. "{{aa}}bb{{/aa}}" -> "bb".
         child,
-        // a shortcut for context[prop]
-        ctx,
-        // the result string
+        // The resulting string.
         result,
-        // the global being evaluated, or undefined
+        // The global variable being evaluated, or undefined.
         global,
-        // the include being evaluated, or undefined
+        // The included template being evaluated, or undefined.
         include,
-        // iterator variable
+        // A placeholder variable.
+        ctx,
+        // Iterators.
         i = 0,
-        // iterator variable
         j = 0;
 
-    // set custom pipes, if any
+    // Set custom pipes, if provided.
     if (options.pipes) {
         this._copy(options.pipes, this.pipes);
     }
 
-    // set templates to include, if any
+    // Set templates to include, if provided.
     if (options.includes) {
         this._copy(options.includes, this.includes);
     }
 
-    // set global variables, if any
+    // Set global variables, if provided.
     if (options.globals) {
         this._copy(options.globals, this.globals);
     }
 
-    // override delimiter
+    // Optionally override the delimiter.
     if (options.delimiter) {
         this.delimiter = options.delimiter;
     }
 
-    // compact HTML?
+    // Optionally collapse white space.
     if (options.compact !== undefined) {
         this.compact = options.compact;
     }
 
-    // loop through tags, e.g. {{a}}, {{b}}, {{c}}, {{/c}}
+    // Loop through tags, e.g. {{a}}, {{b}}, {{c}}, {{/c}}.
     while ((tag = tags[i++])) {
         result = undefined;
         child = "";
@@ -213,12 +221,12 @@ Mark.up = function (template, context, options) {
         token = testy ? "if" : prop.split("|")[0];
         ctx = context[prop];
 
-        // assume testing for empty
+        // If an "if" statement without filters, assume "{{if foo|notempty}}"
         if (testy && !filters.length) {
             filters = ["notempty"];
         }
 
-        // determine the full extent of a block tag and its child
+        // Does the tag have a corresponding closing tag? If so, find it and move the cursor.
         if (!selfy && template.indexOf("{{/" + token) > -1) {
             result = this._bridge(template, token);
             tag = result[0];
@@ -226,17 +234,17 @@ Mark.up = function (template, context, options) {
             i += tag.match(re).length - 1; // fast forward
         }
 
-        // skip "else" tags. these will be pulled out in _test()
+        // Skip "else" tags. These are pulled out in _test().
         if (/^\{\{\s*else\s*\}\}$/.test(tag)) {
             continue;
         }
 
-        // tag refers to a global
+        // Evaluating a global variable.
         else if ((global = this.globals[prop]) !== undefined) {
             result = this._eval(global, filters, child);
         }
 
-        // tag refers to included template
+        // Evaluating an included template.
         else if ((include = this.includes[prop])) {
             if (include instanceof Function) {
                 include = include();
@@ -244,18 +252,18 @@ Mark.up = function (template, context, options) {
             result = this._pipe(Mark.up(include, context), filters);
         }
 
-        // tag refers to loop counter
+        // Evaluating a loop counter ("#" or "##").
         else if (prop.indexOf("#") > -1) {
             options.iter.sign = prop;
             result = this._pipe(options.iter, filters);
         }
 
-        // tag refers to current context
+        // Evaluating the current context.
         else if (prop === ".") {
             result = this._pipe(context, filters);
         }
 
-        // tag has dot notation, e.g. "a.b.c"
+        // Evaluating a variable with dot notation, e.g. "a.b.c"
         else if (prop.indexOf(".") > -1) {
             prop = prop.split(".");
             ctx = Mark.globals[prop[0]];
@@ -268,7 +276,7 @@ Mark.up = function (template, context, options) {
                 ctx = context;
             }
 
-            // get the actual context
+            // Get the actual context
             while (ctx && j < prop.length) {
                 ctx = ctx[prop[j++]];
             }
@@ -276,39 +284,39 @@ Mark.up = function (template, context, options) {
             result = this._eval(ctx, filters, child);
         }
 
-        // tag is otherwise testable
+        // Evaluating an "if" statement.
         else if (testy) {
             result = this._pipe(ctx, filters);
         }
 
-        // context is an array. loop through it
+        // Evaluating an array, which might be a block expression.
         else if (ctx instanceof Array) {
             result = this._eval(ctx, filters, child);
         }
 
-        // tag is a block, e.g. {{foo}}child{{/foo}}
+        // Evaluating a block expression.
         else if (child) {
             result = ctx ? Mark.up(child, ctx) : undefined;
         }
 
-        // else all others
+        // Evaluating anything else.
         else if (context.hasOwnProperty(prop)) {
             result = this._pipe(ctx, filters);
         }
 
-        // resolve "if" statements
+        // Evaluating an "if" statement.
         if (testy) {
             result = this._test(result, child, context, options);
         }
 
-        // replace the tag, e.g. "{{name}}", with the result, e.g. "Adam"
+        // Replace the tag, e.g. "{{name}}", with the result, e.g. "Adam".
         template = template.replace(tag, result === undefined ? "???" : result);
     }
 
     return this.compact ? template.replace(/>\s+</g, "><") : template;
 };
 
-// "out of the box" pipes. see README
+// Freebie pipes. See usage in README.md
 Mark.pipes = {
     empty: function (obj) {
         return !obj || (obj + "").trim().length === 0 ? obj : false;
@@ -450,14 +458,14 @@ Mark.pipes = {
     }
 };
 
-// shim
+// Shim for IE.
 if (typeof String.prototype.trim !== "function") {
     String.prototype.trim = function() {
         return this.replace(/^\s+|\s+$/g, ""); 
     }
 }
 
-// export
+// Export for Node.js and AMD.
 if (typeof module !== "undefined" && module.exports) {
     module.exports = Mark;
 }
