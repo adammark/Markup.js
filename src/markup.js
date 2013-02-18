@@ -469,7 +469,7 @@ if (typeof String.prototype.trim !== "function") {
 if (typeof module !== "undefined" && module.exports) {
     module.exports = Mark;
 }
-else if (typeof define !== "undefined") {
+else if (typeof define === "function" && define.amd) {
     define(function() {
         return Mark;
     });
