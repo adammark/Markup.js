@@ -10,6 +10,10 @@ other text formats. Its intuitive syntax and small footprint (only 1.9KB
 minified and gzipped) make it the perfect choice for your JavaScript app. Plus
 there are *no dependencies.*
 
+### Ports
+
+Markup.js is also available for [PHP][3].
+
 ## Usage
 
 Include `<script src="markup.min.js"></script>`.
@@ -1197,3 +1201,4 @@ THE SOFTWARE.
 
 [1]: #loop-counters
 [2]: https://github.com/adammark/Markup.js/issues
+[3]: https://github.com/mattparlane/Markup.php
