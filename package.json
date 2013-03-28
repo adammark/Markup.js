@@ -11,6 +11,7 @@
         "src/markup.min.js",
         "README.md"
     ],
+    "main": "src/markup.min.js",
     "keywords": [
         "markup",
         "template",
