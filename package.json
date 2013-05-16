@@ -21,6 +21,8 @@
         "type" : "git",
         "url" : "https://github.com/adammark/Markup.js.git"
     },
+    "main": "./src/markup.js",
+    "bin": "./src/markup.js",
     "bugs": {
         "url" : "https://github.com/adammark/Markup.js/issues"
     }
