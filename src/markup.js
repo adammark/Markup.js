@@ -304,6 +304,10 @@ Mark.up = function (template, context, options) {
             result = this._pipe(ctx, filters);
         }
 
+        // Evaluating special case: if the resulting context is actually an Array
+        if (result instanceof Array)
+            result = this._eval(result, filters, child);
+
         // Evaluating an "if" statement.
         if (testy) {
             result = this._test(result, child, context, options);
