@@ -1144,6 +1144,12 @@ describe("Markup core spec", function () {
         expect(result).toEqual("a,b,c,-d,e,f,-");
     });
 
+    it("resolves multidimensional array", function () {
+        template = "{{chars}}{{.|reverse}}{{.|upcase}}{{/.}}{{/chars}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("CBAFED");
+    });
+
     it("resolves backtick expressions", function () {
         Mark.pipes.plus = function (num, n) {
             return num + (+n);

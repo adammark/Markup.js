@@ -1,5 +1,5 @@
 /*
-  Markup.js v1.5.16: http://github.com/adammark/Markup.js
+  Markup.js v1.5.17: http://github.com/adammark/Markup.js
   MIT License
   (c) 2011 - 2013 Adam Mark
 */
@@ -305,8 +305,9 @@ Mark.up = function (template, context, options) {
         }
 
         // Evaluating special case: if the resulting context is actually an Array
-        if (result instanceof Array)
+        if (result instanceof Array) {
             result = this._eval(result, filters, child);
+        }
 
         // Evaluating an "if" statement.
         if (testy) {
