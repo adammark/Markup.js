@@ -10,10 +10,6 @@ other text formats. Its intuitive syntax and small footprint (only 1.9KB
 minified and gzipped) make it the perfect choice for your JavaScript app. Plus
 there are *no dependencies.*
 
-### Ports
-
-Markup.js is also available for [PHP][3].
-
 ## Usage
 
 Include `<script src="markup.min.js"></script>`.
@@ -1176,6 +1172,10 @@ See `src/extras/dates.js` and `src/extras/numbers.js` for additional examples.
 Markup.js is compatible with Chrome, Safari, Firefox, Internet Explorer 9,
 Node.js, and various mobile WebKit browsers. Please [submit an issue][2] to 
 report incompatibilities or other bugs. 
+
+### Ports
+
+Markup.js is also available for [PHP][3].
 
 ## License
 
