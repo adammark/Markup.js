@@ -395,7 +395,7 @@ Mark.pipes = {
         return obj.length;
     },
     reverse: function (arr) {
-        return Mark._copy(arr).reverse();
+        return [].concat(arr).reverse();
     },
     join: function (arr, separator) {
         return arr.join(separator);
@@ -416,7 +416,7 @@ Mark.pipes = {
         var fn = function (a, b) {
             return a[prop] > b[prop] ? 1 : -1;
         };
-        return Mark._copy(arr).sort(prop ? fn : undefined);
+        return [].concat(arr).sort(prop ? fn : undefined);
     },
     fix: function (num, n) {
         return (+num).toFixed(n);
