@@ -1,7 +1,7 @@
 /*
-  Markup.js v1.5.17: http://github.com/adammark/Markup.js
+  Markup.js v1.5.18: http://github.com/adammark/Markup.js
   MIT License
-  (c) 2011 - 2013 Adam Mark
+  (c) 2011 - 2014 Adam Mark
 */
 var Mark = {
     // Templates to include, by name. A template is a string.
@@ -367,7 +367,7 @@ Mark.pipes = {
         return String(str).toLowerCase();
     },
     capcase: function (str) {
-        return str.replace(/\b\w/g, function (s) { return s.toUpperCase(); });
+        return str.replace(/(?:^|\s)\S/g, function (a) { return a.toUpperCase(); });
     },
     chop: function (str, n) {
         return str.length > n ? str.substr(0, n) + "..." : str;
