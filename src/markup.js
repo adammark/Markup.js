@@ -1,5 +1,5 @@
 /*
-  Markup.js v1.5.18: http://github.com/adammark/Markup.js
+  Markup.js v1.5.19: http://github.com/adammark/Markup.js
   MIT License
   (c) 2011 - 2014 Adam Mark
 */
