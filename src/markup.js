@@ -249,7 +249,7 @@ Mark.up = function (template, context, options) {
             if (include instanceof Function) {
                 include = include();
             }
-            result = this._pipe(Mark.up(include, context), filters);
+            result = this._pipe(Mark.up(include, context, options), filters);
         }
 
         // Evaluating a loop counter ("#" or "##").

@@ -581,6 +581,15 @@ describe("Markup core spec", function () {
         expect(result).toEqual("ABC XYZ");
     });
 
+    it("resolves iterator in included templates", function () {
+        Mark.includes.iterIndex = "{{#}} ";
+
+        template = "{{brothers}}{{iterIndex}}{{/brothers}}";
+        result = Mark.up(template, context);
+        
+        expect(result).toEqual("0 1 2 ");
+    });
+
     it("resolves globals", function () {
         Mark.globals.apple = "APPLE";
 
