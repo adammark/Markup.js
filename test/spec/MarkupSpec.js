@@ -1158,6 +1158,12 @@ describe("Markup core spec", function () {
         result = Mark.up(template, context);
         expect(result).toEqual("CBAFED");
     });
+    
+    it("resolves self-reference iteration without overshooting", function() {
+        template = "{{.}}{{name}} {{/.}}{{lala}}";
+        result = Mark.up(template, context.sisters);
+        expect(result).toEqual("Jill Jen xyz");
+    });
 
     it("resolves backtick expressions", function () {
         Mark.pipes.plus = function (num, n) {
