@@ -110,6 +110,8 @@ var Mark = {
 
     // Determine the extent of a block expression, e.g. "{{foo}}...{{/foo}}"
     _bridge: function (tpl, tkn) {
+        if (tkn == ".")
+            tkn = "\\.";    // regex-safe
         var exp = "{{\\s*" + tkn + "([^/}]+\\w*)?}}|{{/" + tkn + "\\s*}}",
             re = new RegExp(exp, "g"),
             tags = tpl.match(re) || [],
