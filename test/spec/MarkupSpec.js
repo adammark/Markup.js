@@ -28,7 +28,8 @@ describe("Markup core spec", function () {
         foods: { fruits: [ {"name":"apple"}, {"name":"orange"} ] },
         motto: "life is like a box of chocolates",
         obj: { truthy: true, falsy: false },
-        chars: [ ["a","b","c"], ["d","e","f"] ]
+        chars: [ ["a","b","c"], ["d","e","f"] ],
+        $price: "$123,456.78"
     };
 
     beforeEach(function () {
@@ -54,6 +55,10 @@ describe("Markup core spec", function () {
         template = "gender: {{ gender | upcase | downcase }}";
         result = Mark.up(template, context);
         expect(result).toEqual("gender: male");
+
+        template = "price: {{$price}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("price: $123,456.78");
     });
 
     it("preserves white space", function () {
