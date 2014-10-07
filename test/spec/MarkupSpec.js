@@ -28,8 +28,9 @@ describe("Markup core spec", function () {
         foods: { fruits: [ {"name":"apple"}, {"name":"orange"} ] },
         motto: "life is like a box of chocolates",
         obj: { truthy: true, falsy: false },
-        chars: [ ["a","b","c"], ["d","e","f"] ],
-        $price: "$123,456.78"
+        _chars: [ ["a","b","c"], ["d","e","f"] ],
+        $price: "$123,456.78",
+        $products: ["apple", "orange"]
     };
 
     beforeEach(function () {
@@ -129,6 +130,10 @@ describe("Markup core spec", function () {
         template = "First sister: {{sisters.0.name|upcase}}";
         result = Mark.up(template, context);
         expect(result).toEqual("First sister: JILL");
+
+        template = "{{$products}}*{{.}}*{{/$products}}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("*apple**orange*");
     });
 
     it("resolves template with no context object", function () {
@@ -1153,13 +1158,13 @@ describe("Markup core spec", function () {
         result = Mark.up(template, context);
         expect(result).toEqual("MALE male");
 
-        template = "{{chars}}{{.|set>char}}{{char}}{{.}},{{/char}}-{{/chars}}";
+        template = "{{_chars}}{{.|set>char}}{{char}}{{.}},{{/char}}-{{/_chars}}";
         result = Mark.up(template, context);
         expect(result).toEqual("a,b,c,-d,e,f,-");
     });
 
     it("resolves multidimensional array", function () {
-        template = "{{chars}}{{.|reverse}}{{.|upcase}}{{/.}}{{/chars}}";
+        template = "{{_chars}}{{.|reverse}}{{.|upcase}}{{/.}}{{/_chars}}";
         result = Mark.up(template, context);
         expect(result).toEqual("CBAFED");
     });

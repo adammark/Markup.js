@@ -1,5 +1,5 @@
 /*
-  Markup.js v1.5.20: http://github.com/adammark/Markup.js
+  Markup.js v1.5.21: http://github.com/adammark/Markup.js
   MIT License
   (c) 2011 - 2014 Adam Mark
 */
@@ -110,8 +110,8 @@ var Mark = {
 
     // Determine the extent of a block expression, e.g. "{{foo}}...{{/foo}}"
     _bridge: function (tpl, tkn) {
-        if (tkn == ".")
-            tkn = "\\.";    // regex-safe
+        tkn = tkn == "." ? "\\." : tkn.replace(/\$/g, "\\$");
+
         var exp = "{{\\s*" + tkn + "([^/}]+\\w*)?}}|{{/" + tkn + "\\s*}}",
             re = new RegExp(exp, "g"),
             tags = tpl.match(re) || [],
