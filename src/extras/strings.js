@@ -6,11 +6,19 @@
  * {{comment|sanitize}}
  */
 Mark.pipes.sanitize = function (str) {
-    var input = "<>&\"'\/";
-    var output = ["&lt;", "&gt;", "&amp;", "&quot;", "&#39;", "&#x2F;"];
+  	var entityMap = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+    '/': '&#x2F;',
+    '`': '&#x60;',
+    '=': '&#x3D;'
+  	};
 
-    return str.replace(new RegExp(input, "g"), function (s) {
-        return output[input.indexOf(s)];
+    return String(str).replace(/[&<>"'`=\/]/g, function (s) {
+        return entityMap[s];
     });
 };
 
